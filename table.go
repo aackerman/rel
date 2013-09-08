@@ -11,9 +11,10 @@ type Table struct {
 	Aliases    []string
 }
 
-func TableNew(name string) *Table {
+func TableNew(name string, engine string) *Table {
 	return &Table{
-		Name: name,
+		Name:   name,
+		Engine: engine,
 	}
 }
 
