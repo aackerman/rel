@@ -17,7 +17,7 @@ type Connection interface {
 	Columns(string) []string
 	QuoteTableName(string) string
 	QuoteColumnName(string) string
-	Quote()
+	Quote(interface{}) string
 }
 
 type ConnectionPool interface {
