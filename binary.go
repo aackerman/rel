@@ -2,6 +2,6 @@ package arel
 
 type BinaryNode ArelNode
 
-func BinaryNodeNew() *BinaryNode {
+func NewBinaryNode() *BinaryNode {
 	return &BinaryNode{}
 }

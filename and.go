@@ -2,6 +2,6 @@ package arel
 
 type AndNode ArelNode
 
-func AndNodeNew() *AndNode {
+func NewAndNode() *AndNode {
 	return &AndNode{}
 }

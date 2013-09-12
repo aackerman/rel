@@ -8,7 +8,7 @@ type SqlLiteralNode struct {
 	*Predicator
 }
 
-func SqlLiteralNodeNew(str string) *SqlLiteralNode {
+func NewSqlLiteralNode(str string) *SqlLiteralNode {
 	return &SqlLiteralNode{
 		str,
 		&Predicator{},

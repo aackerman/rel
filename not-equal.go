@@ -2,6 +2,6 @@ package arel
 
 type NotEqualNode BinaryNode
 
-func NotEqualNodeNew() *NotEqualNode {
+func NewNotEqualNode() *NotEqualNode {
 	return &NotEqualNode{}
 }

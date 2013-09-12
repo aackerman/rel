@@ -3,6 +3,6 @@ package arel
 type DeleteManager struct {
 }
 
-func DeleteManagerNew() *DeleteManager {
+func NewDeleteManager() *DeleteManager {
 	return &DeleteManager{}
 }

@@ -3,6 +3,6 @@ package arel
 type ToSqlVisitor struct {
 }
 
-func ToSqlVisitorNew(c Connection) ToSqlVisitor {
-	return ToSqlVisitor{}
+func NewToSqlVisitor(c Connection) *ToSqlVisitor {
+	return &ToSqlVisitor{}
 }
