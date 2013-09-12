@@ -5,7 +5,7 @@ type Attribute struct {
 	Table *Table
 }
 
-func AttributeNew(t *Table, name string) *Attribute {
+func NewAttribute(t *Table, name string) *Attribute {
 	return &Attribute{
 		Name:  name,
 		Table: t,
@@ -13,5 +13,5 @@ func AttributeNew(t *Table, name string) *Attribute {
 }
 
 func (a *Attribute) IsEqual(name string) *EqualityNode {
-	return EqualityNodeNew()
+	return NewEqualityNode()
 }

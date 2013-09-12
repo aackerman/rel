@@ -3,6 +3,6 @@ package arel
 type SelectStatementNode struct {
 }
 
-func SelectStatementNodeNew() *SelectStatementNode {
+func NewSelectStatementNode() *SelectStatementNode {
 	return &SelectStatementNode{}
 }

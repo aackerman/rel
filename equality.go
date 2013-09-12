@@ -2,6 +2,6 @@ package arel
 
 type EqualityNode BinaryNode
 
-func EqualityNodeNew() *EqualityNode {
+func NewEqualityNode() *EqualityNode {
 	return &EqualityNode{}
 }

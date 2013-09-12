@@ -4,6 +4,6 @@ type Context struct {
 	Wheres []string
 }
 
-func ContextNew() *Context {
+func NewContext() *Context {
 	return &Context{}
 }

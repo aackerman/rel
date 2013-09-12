@@ -6,14 +6,12 @@ type SelectManager struct {
 	*TreeManager
 }
 
-func SelectManagerNew(engine string, t *Table) *SelectManager {
-	// TODO: handle super call to TreeManager
-
+func NewSelectManager(e Engine, t *Table) *SelectManager {
 	return &SelectManager{
-		SelectStatementNodeNew(),
-		ContextNew(),
+		NewSelectStatementNode(),
+		NewContext(),
 		&TreeManager{
-			Engine: engine,
+			Engine: e,
 		},
 	}
 }

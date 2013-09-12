@@ -1,17 +1,13 @@
 package arel
 
 type Engine interface {
-	QuoteTableName()
-	QuoteColumnName()
-	Quote()
-	Columns()
-	TableExists(string) bool
-	Tables()
-	Visitor()
+	Connection
 	Execute(string) []string
 }
 
 type Connection interface {
+	Visitor()
+	Tables()
 	PrimaryKey(string) string
 	TableExists(string) bool
 	Columns(string) []string

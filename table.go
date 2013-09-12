@@ -6,15 +6,15 @@ import (
 
 type Table struct {
 	Name       string
-	Engine     string
+	Engine     Engine
 	TableAlias string
 	Aliases    []string
 }
 
-func TableNew(name string, engine string) *Table {
+func NewTable(name string, e Engine) *Table {
 	return &Table{
 		Name:   name,
-		Engine: engine,
+		Engine: e,
 	}
 }
 
@@ -23,7 +23,7 @@ func (t *Table) From() *SelectManager {
 }
 
 func (t *Table) Alias(name string) {
-	alias := TableAliasNodeNew(t, name)
+	alias := NewTableAliasNode(t, name)
 	t.Aliases = append(t.Aliases, alias.Name)
 }
 
@@ -84,15 +84,15 @@ func (t *Table) Having(expr ...interface{}) *SelectManager {
 }
 
 func (t *Table) SelectManager() *SelectManager {
-	return SelectManagerNew(t.Engine, t)
+	return NewSelectManager(t.Engine, t)
 }
 
 func (t *Table) InsertManager() *InsertManager {
-	return InsertManagerNew(t.Engine)
+	return NewInsertManager(t.Engine)
 }
 
 func (t *Table) Attr(name string) *Attribute {
-	return AttributeNew(t, name)
+	return NewAttribute(t, name)
 }
 
 // TODO: handle equality of []Aliases

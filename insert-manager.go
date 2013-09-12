@@ -4,10 +4,10 @@ type InsertManager struct {
 	*TreeManager
 }
 
-func InsertManagerNew(engine string) *InsertManager {
+func NewInsertManager(e Engine) *InsertManager {
 	return &InsertManager{
 		&TreeManager{
-			Engine: engine,
+			Engine: e,
 		},
 	}
 }
