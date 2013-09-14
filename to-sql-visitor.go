@@ -7,7 +7,7 @@ type ToSqlVisitor struct {
 
 func NewToSqlVisitor(c *Connection) *Visitor {
 	return &ToSqlVisitor{
-		connection: c,
+		c,
 		BaseVisitor{},
 	}
 }

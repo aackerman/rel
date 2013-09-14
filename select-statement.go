@@ -10,6 +10,10 @@ type SelectStatementNode struct {
 
 func NewSelectStatementNode() *SelectStatementNode {
 	return &SelectStatementNode{
+		make([]ArelNode, 10),
+		0,
+		make([]ArelNode, 10),
+		false,
 		FactoryMethods{},
 	}
 }
