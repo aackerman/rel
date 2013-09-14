@@ -5,9 +5,9 @@ type ToSqlVisitor struct {
 	BaseVisitor
 }
 
-func NewToSqlVisitor(c *Connection) *Visitor {
+func NewToSqlVisitor(c *Connection) *ToSqlVisitor {
 	return &ToSqlVisitor{
-		c,
-		BaseVisitor{},
+		connection:  c,
+		BaseVisitor: BaseVisitor{},
 	}
 }

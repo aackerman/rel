@@ -11,7 +11,7 @@ type SelectStatementNode struct {
 func NewSelectStatementNode() *SelectStatementNode {
 	return &SelectStatementNode{
 		ArelNode: ArelNode{
-			NodeCreator: NodeCreator{},
+			BaseNodeCreator: BaseNodeCreator{},
 		},
 	}
 }

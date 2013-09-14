@@ -7,7 +7,9 @@ type ConnectionPool struct {
 
 func NewConnectionPool() *ConnectionPool {
 	connection := &Connection{}
-	connection.visitor = NewToSqlVisitor(connection)
+	connection.visitor = &ToSqlVisitor{
+		connection: connection,
+	}
 
 	return &ConnectionPool{
 		connection: connection,

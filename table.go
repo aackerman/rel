@@ -9,7 +9,7 @@ type Table struct {
 	Engine     *Engine
 	TableAlias string
 	Aliases    []string
-	NodeCreator
+	BaseNodeCreator
 }
 
 func NewTable(name string, e *Engine) *Table {

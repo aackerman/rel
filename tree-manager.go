@@ -9,13 +9,14 @@ type AstManager interface {
 
 type TreeManager struct {
 	Engine *Engine
-	Ast    *SqlAst
-	NodeCreator
+	Ast    NodeCreator
+	BaseNodeCreator
 }
 
 func NewTreeManager(e *Engine) *TreeManager {
 	return &TreeManager{
-		NodeCreator: NodeCreator{},
+		Engine:          e,
+		BaseNodeCreator: BaseNodeCreator{},
 	}
 }
 

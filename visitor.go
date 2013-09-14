@@ -1,26 +1,20 @@
 package arel
 
 type Visitor interface {
-	Accept(*SqlAst) string
-	Visit(*SqlAst) string
+	Accept(*NodeCreator) string
+	Visit(*NodeCreator) string
 }
 
-type BaseVisitor struct {
-	funcs map[ArelNode]func(*Table, *Attribute)
-}
+type BaseVisitor struct{}
 
-func NewVisitor() *BaseVisitor {
-	return &BaseVisitor{}
-}
-
-func (v *BaseVisitor) dispatch() string {
+func (v *Visitor) dispatch() string {
 	return ""
 }
 
-func (v *BaseVisitor) Accept(s *SqlAst) string {
-	return v.Visit(s)
+func (v *BaseVisitor) Accept(n *NodeCreator) string {
+	return v.Visit(n)
 }
 
-func (v *BaseVisitor) Visit(t *SqlAst) string {
+func (v *BaseVisitor) Visit(n *NodeCreator) string {
 	return v.dispatch()
 }
