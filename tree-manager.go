@@ -1,14 +1,21 @@
 package arel
 
+type AstManager interface {
+	ToDot() string
+	Visitor() *Visitor
+	ToSql() string
+	Where(...interface{}) *AstManager
+}
+
 type TreeManager struct {
-	Ast    *SqlStatement
+	FactoryMethods
 	Engine *Engine
-	ctx    Context
+	Ast    *SqlAst
 }
 
 func NewTreeManager(e *Engine) *TreeManager {
 	return &TreeManager{
-		Engine: e,
+		FactoryMethods{},
 	}
 }
 

@@ -1,8 +1,8 @@
 package arel
 
 type Visitor interface {
-	Accept(*SqlStatement) string
-	Visit(*SqlStatement) string
+	Accept(*SqlAst) string
+	Visit(*SqlAst) string
 }
 
 type BaseVisitor struct {
@@ -17,10 +17,10 @@ func (v *BaseVisitor) dispatch() string {
 	return ""
 }
 
-func (v *BaseVisitor) Accept(s *SqlStatement) string {
+func (v *BaseVisitor) Accept(s *SqlAst) string {
 	return v.Visit(s)
 }
 
-func (v *BaseVisitor) Visit(t *SqlStatement) string {
+func (v *BaseVisitor) Visit(t *SqlAst) string {
 	return v.dispatch()
 }

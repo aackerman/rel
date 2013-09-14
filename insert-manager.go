@@ -6,6 +6,8 @@ type InsertManager struct {
 
 func NewInsertManager(e *Engine) *InsertManager {
 	return &InsertManager{
-		Engine: e,
+		TreeManager{
+			Engine: e,
+		},
 	}
 }

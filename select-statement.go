@@ -9,5 +9,7 @@ type SelectStatementNode struct {
 }
 
 func NewSelectStatementNode() *SelectStatementNode {
-	return &SelectStatementNode{}
+	return &SelectStatementNode{
+		FactoryMethods{},
+	}
 }

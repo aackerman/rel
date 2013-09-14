@@ -1,14 +1,15 @@
 package arel
 
 type SelectManager struct {
-	Ast *SelectStatementNode
 	TreeManager
 }
 
 func NewSelectManager(e *Engine, t *Table) *SelectManager {
 	return &SelectManager{
-		Engine: e,
-		Ast:    NewSelectStatementNode(),
+		TreeManager{
+			Ast:    NewSelectStatementNode(),
+			Engine: e,
+		},
 	}
 }
 
