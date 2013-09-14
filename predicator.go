@@ -4,7 +4,7 @@ type Predicator struct{}
 
 // TODO: fix interface type
 func (p *Predicator) NotEqual(other ...interface{}) *NotEqualNode {
-	return NotEqualNodeNew()
+	return NewNotEqualNode()
 }
 
 func (p *Predicator) NotEqualAny() {

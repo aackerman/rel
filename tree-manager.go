@@ -17,5 +17,5 @@ func (t *TreeManager) ToSql() string {
 }
 
 func (t *TreeManager) Visitor() *Visitor {
-	return t.Engine.Connection.Visitor
+	return t.Engine.Connection().Visitor()
 }

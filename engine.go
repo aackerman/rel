@@ -1,21 +1,15 @@
 package arel
 
-type Engine interface {
-	Connection
-	Execute(string) []string
+type Engine struct {
+	pool *ConnectionPool
 }
 
-type Connection interface {
-	Visitor()
-	Tables()
-	PrimaryKey(string) string
-	TableExists(string) bool
-	Columns(string) []string
-	QuoteTableName(string) string
-	QuoteColumnName(string) string
-	Quote(interface{}) string
+func NewEngine() *Engine {
+	return &Engine{
+		pool: NewConnectionPool(),
+	}
 }
 
-type ConnectionPool interface {
-	TableExists(string) bool
+func (e *Engine) Connection() *Connection {
+	return e.pool.Connection()
 }

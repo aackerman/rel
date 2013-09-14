@@ -5,7 +5,8 @@ import (
 )
 
 func TableNaiveTest() {
-	users := TableNew("users", "postgresql")
+	engine := Engine{}
+	users := NewTable("users", engine)
 	query := users.Select(Sql("*"))
 	fmt.Println(query.ToSql)
 }
