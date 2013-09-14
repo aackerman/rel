@@ -8,14 +8,14 @@ type AstManager interface {
 }
 
 type TreeManager struct {
-	FactoryMethods
 	Engine *Engine
 	Ast    *SqlAst
+	NodeCreator
 }
 
 func NewTreeManager(e *Engine) *TreeManager {
 	return &TreeManager{
-		FactoryMethods{},
+		NodeCreator: NodeCreator{},
 	}
 }
 
