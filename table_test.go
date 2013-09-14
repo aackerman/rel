@@ -1,12 +1,12 @@
 package arel
 
 import (
-	"fmt"
+	"testing"
 )
 
-func TableNaiveTest() {
-	engine := &Engine{}
-	users := NewTable("users", engine)
-	query := users.Select(Sql("*"))
-	fmt.Println(query.ToSql)
+func TestTable(t *testing.T) {
+	engine := NewEngine()
+	relation := NewTable("users", engine)
+	query := relation.Select(Sql("*"))
+	t.Log(query.ToSql())
 }

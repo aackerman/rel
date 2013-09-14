@@ -7,14 +7,10 @@ type Visitor interface {
 
 type BaseVisitor struct{}
 
-func (v *Visitor) dispatch() string {
-	return ""
-}
-
 func (v *BaseVisitor) Accept(n *NodeCreator) string {
 	return v.Visit(n)
 }
 
 func (v *BaseVisitor) Visit(n *NodeCreator) string {
-	return v.dispatch()
+	return "hello world!"
 }

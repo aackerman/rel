@@ -1,13 +1,13 @@
 package arel
 
 type Connection struct {
-	visitor     *Visitor
+	visitor     Visitor
 	Tables      []string
 	primaryKeys []string
 	columns     []string
 }
 
-func NewConnection(v *Visitor) *Connection {
+func NewConnection(v Visitor) *Connection {
 	return &Connection{
 		visitor: v,
 	}
@@ -30,7 +30,7 @@ func QuoteColumnName(name string) string {
 	return "\"" + name + "\""
 }
 
-func (c *Connection) Visitor() *Visitor {
+func (c *Connection) Visitor() Visitor {
 	return c.visitor
 }
 

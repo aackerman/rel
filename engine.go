@@ -1,15 +1,17 @@
 package arel
 
 type Engine struct {
-	pool *ConnectionPool
+	Connector *Connector
 }
 
 func NewEngine() *Engine {
 	return &Engine{
-		pool: NewConnectionPool(),
+		Connector: &Connector{
+			ConnectionPool: NewConnectionPool(),
+		},
 	}
 }
 
 func (e *Engine) Connection() *Connection {
-	return e.pool.Connection()
+	return e.Connector.Connection()
 }

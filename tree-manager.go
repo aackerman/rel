@@ -2,7 +2,7 @@ package arel
 
 type AstManager interface {
 	ToDot() string
-	Visitor() *Visitor
+	Visitor() Visitor
 	ToSql() string
 	Where(...interface{}) *AstManager
 }
@@ -21,9 +21,9 @@ func NewTreeManager(e *Engine) *TreeManager {
 }
 
 func (t *TreeManager) ToSql() string {
-	return t.Visitor().Accept(t.Ast)
+	return t.Visitor().Accept(&t.Ast)
 }
 
-func (t *TreeManager) Visitor() *Visitor {
+func (t *TreeManager) Visitor() Visitor {
 	return t.Engine.Connection().Visitor()
 }
