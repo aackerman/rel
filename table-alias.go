@@ -1,6 +1,9 @@
 package arel
 
-type TableAliasNode BinaryNode
+type TableAliasNode struct {
+	Name string
+	BinaryNode
+}
 
 func NewTableAliasNode(t *Table, name string) *TableAliasNode {
 	return &TableAliasNode{Name: name}

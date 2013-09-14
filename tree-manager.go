@@ -1,12 +1,12 @@
 package arel
 
 type TreeManager struct {
-	Ast    ArelNode
-	Engine Engine
+	Ast    *SqlStatement
+	Engine *Engine
 	ctx    Context
 }
 
-func NewTreeManager(e Engine) *TreeManager {
+func NewTreeManager(e *Engine) *TreeManager {
 	return &TreeManager{
 		Engine: e,
 	}

@@ -6,12 +6,12 @@ import (
 
 type Table struct {
 	Name       string
-	Engine     Engine
+	Engine     *Engine
 	TableAlias string
 	Aliases    []string
 }
 
-func NewTable(name string, e Engine) *Table {
+func NewTable(name string, e *Engine) *Table {
 	return &Table{
 		Name:   name,
 		Engine: e,

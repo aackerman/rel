@@ -2,17 +2,13 @@ package arel
 
 type SelectManager struct {
 	Ast *SelectStatementNode
-	Ctx *Context
-	*TreeManager
+	TreeManager
 }
 
-func NewSelectManager(e Engine, t *Table) *SelectManager {
+func NewSelectManager(e *Engine, t *Table) *SelectManager {
 	return &SelectManager{
-		NewSelectStatementNode(),
-		NewContext(),
-		&TreeManager{
-			Engine: e,
-		},
+		Engine: e,
+		Ast:    NewSelectStatementNode(),
 	}
 }
 

@@ -2,12 +2,11 @@ package arel
 
 type ToSqlVisitor struct {
 	connection *Connection
-	*Visitor
+	BaseVisitor
 }
 
-func NewToSqlVisitor(c *Connection) *ToSqlVisitor {
+func NewToSqlVisitor(c *Connection) *Visitor {
 	return &ToSqlVisitor{
-		c,
-		NewVisitor(),
+		connection: c,
 	}
 }
