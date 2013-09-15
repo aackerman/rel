@@ -8,9 +8,7 @@ type Connection struct {
 }
 
 func NewConnection(v Visitor) *Connection {
-	return &Connection{
-		visitor: v,
-	}
+	return &Connection{visitor: v}
 }
 
 func (c *Connection) TableExists(tableName string) bool {

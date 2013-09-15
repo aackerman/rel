@@ -1,24 +1,43 @@
 package arel
 
+import (
+	"log"
+)
+
 type SelectManager struct {
 	TreeManager
 }
 
 func NewSelectManager(e *Engine, t *Table) *SelectManager {
+	selectstmt := NewSelectStatementNode()
+	context := selectstmt.Cores[len(selectstmt.Cores)-1]
 	return &SelectManager{
 		TreeManager{
-			Ast:    NewSelectStatementNode(),
+			Ast:    selectstmt,
+			ctx:    context,
 			Engine: e,
 		},
 	}
 }
 
-func (s *SelectManager) Project(things ...interface{}) *SelectManager {
+// Append to internally held projections
+func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
+	for _, p := range projections {
+		// For convenience we accept strings and convert them to sql literals
+		switch p.(type) {
+		case string:
+			p = Sql(p.(string))
+		case SqlLiteralNode:
+		default:
+			log.Fatal("Can't accept this projection type")
+		}
+		append(s.ctx.Projections, p)
+	}
 	return s
 }
 
-func (s *SelectManager) Select(things ...interface{}) *SelectManager {
-	return s
+func (s *SelectManager) Projections() []*SqlLiteralNode {
+	return s.ctx.Projections
 }
 
 func (s *SelectManager) Join(things ...interface{}) *SelectManager {

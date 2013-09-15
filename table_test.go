@@ -4,9 +4,16 @@ import (
 	"testing"
 )
 
+// func TestCreateJoin(t *testing.T) {
+
+// }
+
 func TestTable(t *testing.T) {
 	engine := NewEngine()
 	relation := NewTable("users", engine)
-	query := relation.Select(Sql("*"))
-	t.Log(query.ToSql())
+	query := relation.Project(Sql("*"))
+	if query.ToSql() != "SELECT * FROM users" {
+		t.Log(query.ToSql())
+		t.Fail()
+	}
 }
