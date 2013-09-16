@@ -1,5 +1,5 @@
 package arel
 
-type OrderNode struct {
-	ArelNode
-}
+type Order struct{}
+
+func (o Order) NodeInterface() {}

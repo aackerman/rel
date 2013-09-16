@@ -9,7 +9,11 @@ type SelectManager struct {
 }
 
 func NewSelectManager(e *Engine, t *Table) *SelectManager {
-	selectstmt := NewSelectStatementNode()
+	selectstmt := SelectStatement{
+		Cores:  make([]SelectCore, 10),
+		Limit:  0,
+		Orders: make([]Order, 10),
+	}
 	context := selectstmt.Cores[len(selectstmt.Cores)-1]
 	return &SelectManager{
 		TreeManager{

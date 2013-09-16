@@ -1,3 +1,5 @@
 package arel
 
-type SqlStatement struct{}
+type SqlStatement interface {
+	SqlStatementInterface()
+}

@@ -1,5 +1,5 @@
 package arel
 
-type SelectCoreNode struct {
-	ArelNode
-}
+type SelectCore struct{}
+
+func (s SelectCore) NodeInterface() {}

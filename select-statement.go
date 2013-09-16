@@ -1,20 +1,11 @@
 package arel
 
-type SelectStatementNode struct {
-	Cores  []SelectCoreNode
+type SelectStatement struct {
+	Cores  []SelectCore
 	Limit  int
-	Orders []OrderNode
+	Orders []Order
 	Lock   bool
-	ArelNode
-	SqlStatement
 }
 
-func NewSelectStatementNode() *SelectStatementNode {
-	return &SelectStatementNode{
-		Cores:        make([]SelectCoreNode, 10),
-		Limit:        0,
-		Orders:       make([]OrderNode, 10),
-		ArelNode:     ArelNode{},
-		SqlStatement: SqlStatement{},
-	}
-}
+func (s SelectStatement) NodeInterface()         {}
+func (s SelectStatement) SqlStatementInterface() {}
