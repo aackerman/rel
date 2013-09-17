@@ -1,7 +1,7 @@
 package arel
 
 type SelectStatement struct {
-	Cores  []SelectCore
+	cores  []SelectCore
 	Limit  int
 	Orders []Order
 	Lock   bool

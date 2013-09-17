@@ -5,23 +5,29 @@ import (
 )
 
 type SelectManager struct {
+	Ast Node
+	ctx Node
 	TreeManager
 }
 
 func NewSelectManager(e *Engine, t *Table) *SelectManager {
-	selectstmt := SelectStatement{
-		Cores:  make([]SelectCore, 10),
+	stmt := SelectStatement{
+		cores:  make([]SelectCore, 10),
 		Limit:  0,
 		Orders: make([]Order, 10),
 	}
-	context := selectstmt.Cores[len(selectstmt.Cores)-1]
+	ctx := stmt.cores[len(stmt.cores)-1]
 	return &SelectManager{
 		TreeManager{
-			Ast:    selectstmt,
-			ctx:    context,
-			Engine: e,
+			Ast:    stmt,
+			ctx:    ctx,
+			engine: e,
 		},
 	}
+}
+
+func (s *SelectManager) Cores() []*SelectCore {
+	return s.cores
 }
 
 // Append to internally held projections

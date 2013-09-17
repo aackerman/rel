@@ -1,6 +1,7 @@
 package arel
 
 type DeleteManager struct {
+	Ast Node
 	TreeManager
 }
 
