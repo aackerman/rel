@@ -40,6 +40,11 @@ func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 	return s
 }
 
+func (s *SelectManager) From(t *Table) *SelectManager {
+	s.ctx.Source.Left = t
+	return s
+}
+
 func (s *SelectManager) Projections() []*SqlLiteralNode {
 	return s.ctx.Projections
 }
