@@ -3,17 +3,17 @@ package arel
 // An engine handles connections and string quoting
 // ActiveRecord is an example of an engine used in Arel
 type Engine struct {
-	Connector *Connector
+	connector *Connector
 }
 
 func NewEngine() *Engine {
 	return &Engine{
-		Connector: &Connector{
+		connector: &Connector{
 			ConnectionPool: NewConnectionPool(),
 		},
 	}
 }
 
 func (e *Engine) Connection() *Connection {
-	return e.Connector.Connection()
+	return e.connector.Connection()
 }
