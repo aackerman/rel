@@ -9,3 +9,7 @@ type SelectStatement struct {
 
 func (s SelectStatement) NodeInterface()         {}
 func (s SelectStatement) SqlStatementInterface() {}
+
+func (s *SelectStatement) Cores() []*SelectCore {
+	return s.cores
+}

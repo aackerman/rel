@@ -1,7 +1,7 @@
 package arel
 
 type TreeManager struct {
-	Engine *Engine
+	engine *Engine
 	ctx    Node
 	Ast    SqlStatement
 }
@@ -11,7 +11,7 @@ func (t *TreeManager) ToSql() string {
 }
 
 func (t *TreeManager) Visitor() Visitor {
-	return t.Engine.Connection().Visitor()
+	return t.engine.Connection().Visitor()
 }
 
 func (t *TreeManager) Where(expr string) *TreeManager {

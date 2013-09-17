@@ -7,6 +7,6 @@ type DeleteManager struct {
 
 func NewDeleteManager() *DeleteManager {
 	return &DeleteManager{
-		Ast: &DeleteStatement{},
+		Ast: DeleteStatement{},
 	}
 }
