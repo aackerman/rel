@@ -2,7 +2,7 @@ package arel
 
 type Table struct {
 	Name       string
-	Engine     *Engine
+	engine     *Engine
 	TableAlias string
 	Aliases    []string
 	*SelectManager
@@ -11,7 +11,7 @@ type Table struct {
 func NewTable(name string, e *Engine) *Table {
 	table := &Table{
 		Name:   name,
-		Engine: e,
+		engine: e,
 	}
 
 	table.SelectManager = NewSelectManager(e, table)
