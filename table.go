@@ -23,7 +23,7 @@ func (t *Table) Alias(name string) {
 	t.Aliases = append(t.Aliases, alias.Name)
 }
 
-func (t *Table) Attr(name string) *Attribute {
+func (t *Table) Attr(name string) Attribute {
 	return NewAttribute(t, name)
 }
 
