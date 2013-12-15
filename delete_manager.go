@@ -1,7 +1,7 @@
 package arel
 
 type DeleteManager struct {
-	Ast SqlStatement
+	Ast AstNode
 	TreeManager
 }
 

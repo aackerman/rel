@@ -5,7 +5,7 @@ import (
 )
 
 type SelectManager struct {
-	Ast SqlStatement
+	Ast SelectStatement
 	ctx AstNode
 	TreeManager
 }
@@ -26,7 +26,6 @@ func NewSelectManager(e *Engine, t *Table) SelectManager {
 	}
 }
 
-// Append to internally held projections
 func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 	for _, p := range projections {
 		// For convenience we accept strings and convert them to sql literals

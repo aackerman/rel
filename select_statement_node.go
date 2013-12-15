@@ -5,11 +5,10 @@ type SelectStatement struct {
 	Limit  int
 	Orders []Order
 	Lock   bool
-	SqlStatement
 	AstNode
 }
 
-func (s *SelectStatement) Cores() []*SelectCore {
+func (s *SelectStatement) Cores() []SelectCore {
 	return s.cores
 }
 

@@ -3,7 +3,7 @@ package arel
 type TreeManager struct {
 	engine *Engine
 	ctx    AstNode
-	Ast    SqlStatement
+	Ast    AstNode
 }
 
 func (t *TreeManager) ToSql() string {
