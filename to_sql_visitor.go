@@ -23,17 +23,16 @@ func (t ToSqlVisitor) Accept(v Visitor) string {
 }
 
 func (t ToSqlVisitor) Visit(n AstNode, v Visitor) string {
-	deletestr := "DELETE FROM " + t.Visit(n.Relation, t)
-	var wherestr string
+	deleteStmt := "DELETE FROM " + t.Visit(n.Relation, t)
+	var whereStmt string
 
-	// compile where string
 	if len(n.Wheres) > 0 {
 		for i, x := range n.Wheres {
-			wherestr += t.Visit(x)
+			whereStmt += t.Visit(x)
 			if i != len(n.Wheres)-1 {
-				wherestr += AND
+				whereStmt += AND
 			}
 		}
 	}
-	return deletestr + " " + wherestr
+	return deleteStmt + " " + whereStmt
 }
