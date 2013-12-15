@@ -12,8 +12,8 @@ type SelectManager struct {
 
 func NewSelectManager(e *Engine, t *Table) *SelectManager {
 	stmt := SelectStatement{
-		cores:  make([]*SelectCore, 10),
-		Orders: make([]*Order, 10),
+		cores:  make([]SelectCore, 10),
+		Orders: make([]Order, 10),
 	}
 
 	ctx := stmt.cores[len(stmt.cores)-1]
