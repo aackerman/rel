@@ -3,11 +3,11 @@ package arel
 type BinaryNode struct {
 	Right *Table
 	Left  *Table
-	ArelNode
+	AstNode
 }
 
-func NewBinaryNode(left *Table, right *Table) *BinaryNode {
-	return &BinaryNode{
+func NewBinaryNode(left *Table, right *Table) BinaryNode {
+	return BinaryNode{
 		Left:  left,
 		Right: right,
 	}
