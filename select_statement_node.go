@@ -5,11 +5,14 @@ type SelectStatement struct {
 	Limit  int
 	Orders []Order
 	Lock   bool
+	SqlStatement
+	AstNode
 }
-
-func (s SelectStatement) NodeInterface()         {}
-func (s SelectStatement) SqlStatementInterface() {}
 
 func (s *SelectStatement) Cores() []*SelectCore {
 	return s.cores
+}
+
+func (s *SelectStatement) IsEqual(s2 SelectStatement) bool {
+	return false
 }

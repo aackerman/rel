@@ -9,6 +9,5 @@ type SelectCore struct {
 	Groups       []GroupingNode
 	Having       interface{}
 	Windows      []AstNode
+	AstNode
 }
-
-func (s SelectCore) NodeInterface() {}

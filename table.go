@@ -5,22 +5,22 @@ type Table struct {
 	engine     *Engine
 	TableAlias string
 	Aliases    []string
-	*SelectManager
+	SelectManager
 }
 
-func NewTable(name string, e *Engine) *Table {
-	table := &Table{
+func NewTable(name string, engine *Engine) *Table {
+	relation := &Table{
 		Name:   name,
-		engine: e,
+		engine: engine,
 	}
 
-	table.SelectManager = NewSelectManager(e, table)
-	return table
+	relation.SelectManager = NewSelectManager(engine, relation)
+	return relation
 }
 
-func (t *Table) Alias(name string) {
-	alias := NewTableAliasNode(t, name)
-	t.Aliases = append(t.Aliases, alias.Name)
+func (relation *Table) Alias(name string) {
+	alias := NewTableAliasNode(relation, name)
+	relation.Aliases = append(relation.Aliases, alias.Name)
 }
 
 func (t *Table) Attr(name string) Attribute {
