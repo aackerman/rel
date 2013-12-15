@@ -2,7 +2,7 @@ package arel
 
 type TreeManager struct {
 	engine *Engine
-	ctx    Node
+	ctx    AstNode
 	Ast    SqlStatement
 }
 

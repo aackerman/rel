@@ -1,7 +1,7 @@
 package arel
 
 type ToSqlVisitor struct {
-	connection *Connection
+	conn *Connection
 }
 
 const (
@@ -14,15 +14,15 @@ const (
 	DISTINCT = "DISTINCT"
 )
 
-func NewToSqlVisitor(c *Connection) *ToSqlVisitor {
-	return &ToSqlVisitor{connection: c}
+func NewToSqlVisitor(c *Connection) ToSqlVisitor {
+	return ToSqlVisitor{conn: c}
 }
 
 func (t ToSqlVisitor) Accept(v Visitor) string {
 	return ""
 }
 
-func (t ToSqlVisitor) Visit(n Node, v Visitor) string {
+func (t ToSqlVisitor) Visit(n AstNode, v Visitor) string {
 	deletestr := "DELETE FROM " + t.Visit(n.Relation, t)
 	var wherestr string
 

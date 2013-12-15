@@ -3,12 +3,12 @@ package arel
 type SelectCore struct {
 	Source       JoinSource
 	Top          int
-	Projections  []Node
+	Projections  []AstNode
 	SetQuanifier interface{}
-	Wheres       []Node
+	Wheres       []AstNode
 	Groups       []GroupingNode
 	Having       interface{}
-	Windows      []Node
+	Windows      []AstNode
 }
 
 func (s SelectCore) NodeInterface() {}

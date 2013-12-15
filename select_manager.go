@@ -5,8 +5,8 @@ import (
 )
 
 type SelectManager struct {
-	Ast Node
-	ctx Node
+	Ast SqlStatement
+	ctx AstNode
 	TreeManager
 }
 
