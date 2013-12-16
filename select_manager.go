@@ -16,6 +16,8 @@ func NewSelectManager(e *Engine, t *Table) SelectManager {
 		Orders: make([]Order, 10),
 	}
 
+	stmt.cores = append(stmt.cores, SelectCore{})
+
 	ctx := stmt.cores[len(stmt.cores)-1]
 	return SelectManager{
 		TreeManager: TreeManager{
