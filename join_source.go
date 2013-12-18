@@ -1,3 +1,5 @@
 package arel
 
-type JoinSource struct{}
+type JoinSource struct {
+	BinaryNode
+}
