@@ -6,7 +6,7 @@ import (
 
 type SelectManager struct {
 	Ast SelectStatement
-	ctx AstNode
+	ctx SelectCore
 	TreeManager
 }
 
@@ -38,7 +38,7 @@ func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 		default:
 			log.Fatal("Can't accept this projection type")
 		}
-		append(s.ctx.Projections, p)
+		s.ctx.Projections = append(s.ctx.Projections, p)
 	}
 	return s
 }
