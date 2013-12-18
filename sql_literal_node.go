@@ -9,13 +9,14 @@ func Star() SqlLiteralNode {
 }
 
 type SqlLiteralNode struct {
-	Str string
-	*Predicator
+	Raw string
+	Predicator
+	AstNode
 }
 
 func NewSqlLiteralNode(raw string) SqlLiteralNode {
 	return SqlLiteralNode{
-		raw,
-		&Predicator{},
+		Raw:        raw,
+		Predicator: Predicator{},
 	}
 }

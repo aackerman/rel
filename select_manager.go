@@ -48,7 +48,7 @@ func (s *SelectManager) From(t *Table) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Projections() []*SqlLiteralNode {
+func (s *SelectManager) Projections() []AstNode {
 	return s.ctx.Projections
 }
 

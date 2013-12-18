@@ -1,7 +1,8 @@
 package arel
 
 type TableAliasNode struct {
-	Name string
+	Name  string
+	Table *Table
 	BinaryNode
 }
 
