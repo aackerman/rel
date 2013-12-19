@@ -1,3 +1,3 @@
 package arel
 
-type AstNode interface{}
+type AstNode struct{}
