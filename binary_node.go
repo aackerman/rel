@@ -3,7 +3,6 @@ package arel
 type BinaryNode struct {
 	Right *Table
 	Left  *Table
-	AstNode
 }
 
 func NewBinaryNode(left *Table, right *Table) BinaryNode {

@@ -11,6 +11,7 @@ type AstNode interface {
 	CreateOuterJoin() OuterJoinNode
 	CreateAnd() AndNode
 	CreateOn() OnNode
+	CreateNot() NotNode
 	CreateGrouping() GroupingNode
 	CreateLower() NamedFunctionNode
 }
