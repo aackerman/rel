@@ -20,9 +20,9 @@ func NewSelectManager(e *Engine, t *Table) SelectManager {
 
 	ctx := stmt.cores[len(stmt.cores)-1]
 	return SelectManager{
+		Ast: stmt,
+		ctx: ctx,
 		TreeManager: TreeManager{
-			Ast:    stmt,
-			ctx:    ctx,
 			engine: e,
 		},
 	}
