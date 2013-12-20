@@ -1,7 +1,6 @@
 package arel
 
-type BaseVisitor struct {
-}
+type BaseVisitor struct{}
 
 func (b BaseVisitor) Accept(a AstNode) string {
 	return b.Visit(a)

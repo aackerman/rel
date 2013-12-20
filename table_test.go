@@ -8,8 +8,9 @@ func TestTable(t *testing.T) {
 	engine := NewEngine()
 	table := NewTable("users", engine)
 	query := table.Project(Sql("*"))
-	if query.ToSql() != "SELECT * FROM users" {
-		// t.Log(query.ToSql())
+	sql := query.ToSql()
+	if sql != "SELECT * FROM users" {
+		// t.Log(sql)
 		t.Fail()
 	}
 }

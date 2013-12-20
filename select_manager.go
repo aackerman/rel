@@ -19,7 +19,7 @@ func NewSelectManager(t *Table) SelectManager {
 	return SelectManager{
 		stmt,
 		ctx,
-		BaseNode{},
+		CreateBaseNode(),
 		TreeManager{
 			engine: &t.Engine,
 		},

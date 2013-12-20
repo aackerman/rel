@@ -1,14 +1,14 @@
 package arel
 
 type Connection struct {
-	visitor     Visitor
+	Visitor     Visitor
 	Tables      []string
 	primaryKeys []string
 	columns     []string
 }
 
 func NewConnection(v Visitor) *Connection {
-	return &Connection{visitor: v}
+	return &Connection{Visitor: v}
 }
 
 func (c *Connection) TableExists(tableName string) bool {
@@ -26,10 +26,6 @@ func QuoteTableName(name string) string {
 
 func QuoteColumnName(name string) string {
 	return "\"" + name + "\""
-}
-
-func (c *Connection) Visitor() Visitor {
-	return c.visitor
 }
 
 func (c *Connection) PrimaryKey(name string) {

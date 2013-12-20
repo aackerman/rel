@@ -7,7 +7,7 @@ type TableAliasNode struct {
 }
 
 func NewTableAliasNode(t *Table, name string) TableAliasNode {
-	return TableAliasNode{Name: name}
+	return TableAliasNode{Name: name, Table: t}
 }
 
 func (t *TableAliasNode) Attr(name string) Attribute {

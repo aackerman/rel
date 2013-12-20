@@ -18,6 +18,6 @@ func NewSqlLiteralNode(raw string) SqlLiteralNode {
 	return SqlLiteralNode{
 		raw,
 		Predicator{},
-		BaseNode{},
+		CreateBaseNode(),
 	}
 }

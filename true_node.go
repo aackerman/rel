@@ -1,8 +1,7 @@
 package arel
 
-type TrueNode struct {
-}
+type TrueNode struct{}
 
-func NewTrueNode() *TrueNode {
-	return &TrueNode{}
+func NewTrueNode() TrueNode {
+	return TrueNode{}
 }

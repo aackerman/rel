@@ -10,6 +10,6 @@ func (t *TreeManager) ToSql() string {
 	return t.Visitor().Accept(t.Ast)
 }
 
-func (t *TreeManager) Visitor() Visitor {
-	return t.engine.Connection().Visitor()
+func (t *TreeManager) Visitor() *Visitor {
+	return &t.engine.Connection().Visitor
 }
