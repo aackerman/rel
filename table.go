@@ -2,20 +2,20 @@ package arel
 
 type Table struct {
 	Name       string
-	engine     *Engine
+	Engine     Engine
 	TableAlias string
 	Aliases    []string
 	SelectManager
 }
 
-func NewTable(name string, engine *Engine) *Table {
-	relation := &Table{
+func NewTable(name string, e Engine) Table {
+	table := Table{
 		Name:   name,
-		engine: engine,
+		Engine: e,
 	}
 
-	relation.SelectManager = NewSelectManager(engine, relation)
-	return relation
+	table.SelectManager = NewSelectManager(&table)
+	return table
 }
 
 func (relation *Table) Alias(name string) {

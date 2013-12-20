@@ -6,8 +6,8 @@ type Engine struct {
 	connector *Connector
 }
 
-func NewEngine() *Engine {
-	return &Engine{
+func NewEngine() Engine {
+	return Engine{
 		connector: &Connector{
 			ConnectionPool: NewConnectionPool(),
 		},
