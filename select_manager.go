@@ -1,9 +1,5 @@
 package arel
 
-import (
-	"log"
-)
-
 type SelectManager struct {
 	Ast SelectStatement
 	ctx SelectCore
@@ -39,7 +35,6 @@ func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 			projection = Sql(p.(string))
 		default:
 			projection = Sql("*")
-			log.Fatal("Can't accept this projection type")
 		}
 		s.ctx.Projections = append(s.ctx.Projections, projection)
 	}
