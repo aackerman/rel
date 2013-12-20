@@ -29,7 +29,6 @@ func NewSelectManager(t *Table) SelectManager {
 func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 	var projection SqlLiteralNode
 	for _, p := range projections {
-		// For convenience we accept strings and convert them to sql literals
 		switch p.(type) {
 		case string:
 			projection = Sql(p.(string))
