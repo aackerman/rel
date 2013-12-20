@@ -1,5 +1,7 @@
 package arel
 
+import "log"
+
 type BaseVisitor struct{}
 
 func (b BaseVisitor) Accept(a AstNode) string {
@@ -19,15 +21,15 @@ func (b BaseVisitor) Visit(a AstNode) string {
 }
 
 func VisitAndNode(a AndNode) string {
-	return ""
+	return "AndNode"
 }
 
 func VisitInNode(a InNode) string {
-	return ""
+	return "InNode"
 }
 
 func VisitSqlLiteralNode(a SqlLiteralNode) string {
-	return ""
+	return a.Raw
 }
 
 type Visitor interface {

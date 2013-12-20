@@ -1,10 +1,10 @@
 package arel
 
 type SelectManager struct {
-	Ast SelectStatement
-	ctx SelectCore
+	Engine *Engine
+	Ast    SelectStatement
+	Ctx    SelectCore
 	BaseNode
-	TreeManager
 }
 
 func NewSelectManager(t *Table) SelectManager {
@@ -12,18 +12,18 @@ func NewSelectManager(t *Table) SelectManager {
 		cores:  make([]SelectCore, 10),
 		Orders: make([]Order, 10),
 	}
-
-	stmt.cores = append(stmt.cores, SelectCore{})
-
+	stmt.cores = append(stmt.cores, CreateSelectCore())
 	ctx := stmt.cores[len(stmt.cores)-1]
 	return SelectManager{
-		stmt,
-		ctx,
-		CreateBaseNode(),
-		TreeManager{
-			engine: &t.Engine,
-		},
+		Engine:   &t.Engine,
+		Ast:      stmt,
+		Ctx:      ctx,
+		BaseNode: CreateBaseNode(),
 	}
+}
+
+func (s *SelectManager) ToSql() string {
+	return s.Engine.Connection().Visitor.Accept(s.Ast)
 }
 
 func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
@@ -35,19 +35,19 @@ func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 		default:
 			projection = Sql("*")
 		}
-		s.ctx.Projections = append(s.ctx.Projections, projection)
+		s.Ctx.Projections = append(s.Ctx.Projections, projection)
 	}
 	return s
 }
 
-func (s *SelectManager) From(t *Table) *SelectManager {
-	s.ctx.Source.Left = t
-	return s
-}
+// func (s *SelectManager) From(t *Table) *SelectManager {
+// 	s.ctx.Source.Left = t
+// 	return s
+// }
 
-func (s *SelectManager) Projections() []AstNode {
-	return s.ctx.Projections
-}
+// func (s *SelectManager) Projections() []AstNode {
+// 	return s.ctx.Projections
+// }
 
 func (s *SelectManager) Join(things ...interface{}) *SelectManager {
 	return s
