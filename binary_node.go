@@ -3,12 +3,14 @@ package arel
 type BinaryNode struct {
 	Right *Table
 	Left  *Table
+	BaseNode
 }
 
 func NewBinaryNode(left *Table, right *Table) BinaryNode {
 	return BinaryNode{
-		Left:  left,
-		Right: right,
+		Left:     left,
+		Right:    right,
+		BaseNode: BaseNode{},
 	}
 }
 

@@ -36,9 +36,9 @@ func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 		// For convenience we accept strings and convert them to sql literals
 		switch p.(type) {
 		case string:
-			projection := Sql(p.(string))
+			projection = Sql(p.(string))
 		default:
-			projection := Sql("*")
+			projection = Sql("*")
 			log.Fatal("Can't accept this projection type")
 		}
 		s.ctx.Projections = append(s.ctx.Projections, projection)

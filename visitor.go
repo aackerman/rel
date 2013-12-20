@@ -1,9 +1,37 @@
 package arel
 
-type Visitor interface {
-	Accept(Visitor) string
-	Visit(Visitor) string
+type BaseVisitor struct {
 }
 
-// Visitors accept an AST of nodes
-// A visitor is a method and/or field on the connection
+func (b BaseVisitor) Accept(a AstNode) string {
+	return b.Visit(a)
+}
+
+func (b BaseVisitor) Visit(a AstNode) string {
+	switch val := a.(type) {
+	case AndNode:
+		return VisitAndNode(val)
+	case InNode:
+		return VisitInNode(val)
+	case SqlLiteralNode:
+		return VisitSqlLiteralNode(val)
+	}
+	return ""
+}
+
+func VisitAndNode(a AndNode) string {
+	return ""
+}
+
+func VisitInNode(a InNode) string {
+	return ""
+}
+
+func VisitSqlLiteralNode(a SqlLiteralNode) string {
+	return ""
+}
+
+type Visitor interface {
+	Accept(AstNode) string
+	Visit(AstNode) string
+}
