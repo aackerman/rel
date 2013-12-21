@@ -9,7 +9,10 @@ func (b BaseVisitor) Accept(a AstNode) string {
 }
 
 func (b BaseVisitor) Visit(a AstNode) string {
+	log.Printf("%T", a)
 	switch val := a.(type) {
+	case SelectStatement:
+		return VisitSelectStatement(val)
 	case AndNode:
 		return VisitAndNode(val)
 	case InNode:
@@ -17,6 +20,10 @@ func (b BaseVisitor) Visit(a AstNode) string {
 	case SqlLiteralNode:
 		return VisitSqlLiteralNode(val)
 	}
+	return ""
+}
+
+func VisitSelectStatement(s SelectStatement) string {
 	return ""
 }
 
