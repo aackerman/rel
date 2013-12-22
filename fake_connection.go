@@ -24,11 +24,11 @@ func (c *Connection) TableExists(tableName string) bool {
 	return false
 }
 
-func QuoteTableName(name string) string {
+func (c *Connection) QuoteTableName(name string) string {
 	return "\"" + name + "\""
 }
 
-func QuoteColumnName(name string) string {
+func (c *Connection) QuoteColumnName(name string) string {
 	return "\"" + name + "\""
 }
 

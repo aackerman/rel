@@ -79,9 +79,29 @@ func (v ToSqlVisitor) VisitOrderNode(a OrderNode) string {
 	return "OrderNode"
 }
 
+func (v ToSqlVisitor) VisitTable(t *Table) string {
+	var buf bytes.Buffer
+	if len(t.TableAlias) > 0 {
+		buf.WriteString(v.QuoteTableName(t.Name))
+		buf.WriteString(SPACE)
+		buf.WriteString(v.QuoteTableName(t.TableAlias))
+	} else {
+		buf.WriteString(v.QuoteTableName(t.Name))
+	}
+	return buf.String()
+}
+
+func (v ToSqlVisitor) QuoteTableName(name string) string {
+	return v.conn.QuoteTableName(name)
+}
+
 func (v ToSqlVisitor) VisitJoinSourceNode(a JoinSource) string {
-	log.Printf("VisitJoinSourceNode: %v", a.Left.Name)
-	return a.Left.Name
+	var buf bytes.Buffer
+	if a.Left != nil {
+		log.Printf("VisitJoinSourceNode: %v", a.Left.Name)
+		buf.WriteString(v.VisitTable(a.Left))
+	}
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitSqlLiteralNode(a SqlLiteralNode) string {
@@ -204,7 +224,6 @@ func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 		}
 	}
 
-	// if s.Orders is not empty
 	if s.Orders != nil && len(*s.Orders) > 0 {
 		buf.WriteString(SPACE)
 		buf.WriteString(ORDER_BY)
