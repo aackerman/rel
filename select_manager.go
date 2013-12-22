@@ -3,17 +3,17 @@ package arel
 type SelectManager struct {
 	Engine *Engine
 	Ast    SelectStatement
-	Ctx    SelectCore
+	Ctx    SelectCoreNode
 	BaseNode
 }
 
 func NewSelectManager(t *Table) SelectManager {
 	stmt := SelectStatement{
-		cores:  make([]SelectCore, 10),
-		Orders: make([]Order, 10),
+		Cores:  make([]SelectCoreNode, 10),
+		Orders: make([]OrderNode, 10),
 	}
-	stmt.cores = append(stmt.cores, CreateSelectCore())
-	ctx := stmt.cores[len(stmt.cores)-1]
+	stmt.Cores = append(stmt.Cores, CreateSelectCoreNode())
+	ctx := stmt.Cores[len(stmt.Cores)-1]
 	return SelectManager{
 		Engine:   &t.Engine,
 		Ast:      stmt,

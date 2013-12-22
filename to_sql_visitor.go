@@ -8,7 +8,6 @@ import (
 
 type ToSqlVisitor struct {
 	conn *Connection
-	BaseVisitor
 }
 
 const (
@@ -23,7 +22,7 @@ const (
 )
 
 func NewToSqlVisitor(c *Connection) ToSqlVisitor {
-	return ToSqlVisitor{conn: c, BaseVisitor: BaseVisitor{}}
+	return ToSqlVisitor{conn: c}
 }
 
 func (v ToSqlVisitor) Accept(a AstNode) string {
@@ -34,13 +33,13 @@ func (v ToSqlVisitor) Visit(a AstNode) string {
 	log.Printf("%T", a)
 	switch val := a.(type) {
 	case SelectStatement:
-		return VisitSelectStatement(val)
+		return v.VisitSelectStatement(val)
 	case AndNode:
-		return VisitAndNode(val)
+		return v.VisitAndNode(val)
 	case InNode:
-		return VisitInNode(val)
+		return v.VisitInNode(val)
 	case SqlLiteralNode:
-		return VisitSqlLiteralNode(val)
+		return v.VisitSqlLiteralNode(val)
 	}
 	return ""
 }
@@ -57,6 +56,72 @@ func (v ToSqlVisitor) VisitSqlLiteralNode(a SqlLiteralNode) string {
 	return a.Raw
 }
 
+func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
+	var buf bytes.Buffer
+
+	if s.Top > 0 {
+		buf.WriteString(SPACE)
+		buf.WriteString(v.VisitTopNode(s))
+	}
+
+	if s.SetQuanifier != nil {
+		buf.WriteString(SPACE)
+		buf.WriteString(v.VisitDistinctOnNode(s))
+	}
+
+	if len(s.Projections) > 0 {
+		buf.WriteString(SPACE)
+		for i, projection := range s.Projections {
+			buf.WriteString(v.Visit(projection))
+			if (len(s.Projections) - 1) != i {
+				buf.WriteString(COMMA)
+			}
+		}
+	}
+
+	if s.Source != nil {
+		buf.WriteString(" FROM ")
+		buf.WriteString(v.Visit(s))
+	}
+
+	if len(s.Wheres) > 0 {
+		buf.WriteString(WHERE)
+		for i, where := range s.Wheres {
+			buf.WriteString(v.Visit(where))
+			if (len(s.Wheres) - 1) != i {
+				buf.WriteString(COMMA)
+			}
+		}
+	}
+
+	if len(s.Groups) > 0 {
+		buf.WriteString(WHERE)
+		for i, group := range s.Groups {
+			buf.WriteString(v.Visit(group))
+			if (len(s.Groups) - 1) != i {
+				buf.WriteString(COMMA)
+			}
+		}
+	}
+
+	if s.Having != nil {
+		buf.WriteString(SPACE)
+		buf.WriteString(v.Visit(s.Having))
+	}
+
+	if len(s.Windows) > 0 {
+		buf.WriteString(WINDOW)
+		for i, window := range s.Windows {
+			buf.WriteString(v.Visit(window))
+			if (len(s.Windows) - 1) != i {
+				buf.WriteString(COMMA)
+			}
+		}
+	}
+
+	return buf.String()
+}
+
 func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 	var buf bytes.Buffer
 	if s.With != nil {
@@ -64,7 +129,7 @@ func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 	}
 
 	for _, core := range s.Cores() {
-		v.VisitSelectCore(core)
+		v.VisitSelectCoreNode(core)
 	}
 
 	// if s.Orders is not empty

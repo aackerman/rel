@@ -1,6 +1,6 @@
 package arel
 
-type SelectCore struct {
+type SelectCoreNode struct {
 	Source       JoinSource
 	Top          int
 	Projections  []AstNode
@@ -12,8 +12,8 @@ type SelectCore struct {
 	AstNode
 }
 
-func CreateSelectCore() SelectCore {
-	return SelectCore{
+func CreateSelectCoreNode() SelectCoreNode {
+	return SelectCoreNode{
 		Source:      JoinSource{BinaryNode{}},
 		Projections: make([]AstNode, 10),
 		Wheres:      make([]AstNode, 10),

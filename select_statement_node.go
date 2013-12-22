@@ -1,15 +1,11 @@
 package arel
 
 type SelectStatement struct {
-	cores  []SelectCore
+	Cores  []SelectCoreNode
 	Limit  int
-	Orders []Order
+	Orders []OrderNode
 	Lock   bool
 	AstNode
-}
-
-func (s *SelectStatement) Cores() []SelectCore {
-	return s.cores
 }
 
 func (s *SelectStatement) IsEqual(s2 SelectStatement) bool {
