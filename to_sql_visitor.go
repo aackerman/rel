@@ -30,7 +30,7 @@ func (v ToSqlVisitor) Accept(a AstNode) string {
 }
 
 func (v ToSqlVisitor) Visit(a AstNode) string {
-	log.Printf("%T", a)
+	log.Printf("type of AstNode: %T", a)
 	switch val := a.(type) {
 	case SelectStatement:
 		return v.VisitSelectStatement(val)
@@ -77,11 +77,18 @@ func (v ToSqlVisitor) VisitOrderNode(a OrderNode) string {
 }
 
 func (v ToSqlVisitor) VisitSqlLiteralNode(a SqlLiteralNode) string {
-	return a.Raw
+	if len(a.Raw) > 0 {
+		return a.Raw
+	} else {
+		return ""
+	}
 }
 
 func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 	var buf bytes.Buffer
+
+	log.Printf("value of SelectCoreNode: %v", s)
+	log.Printf("SelectCoreNode projections: %v", s.Projections)
 
 	if s.Top != nil {
 		buf.WriteString(SPACE)
@@ -93,12 +100,18 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		buf.WriteString(v.Visit(*s.SetQuanifier))
 	}
 
-	if len(*s.Projections) > 0 {
-		buf.WriteString(SPACE)
+	if s.Projections != nil && len(*s.Projections) > 0 {
+		claused := false
 		for i, projection := range *s.Projections {
-			buf.WriteString(v.Visit(projection))
-			if (len(*s.Projections) - 1) != i {
-				buf.WriteString(COMMA)
+			if projection != nil {
+				if !claused {
+					buf.WriteString(SPACE)
+					claused = true
+				}
+				buf.WriteString(v.Visit(projection))
+				if (len(*s.Projections) - 1) != i {
+					buf.WriteString(COMMA)
+				}
 			}
 		}
 	}
@@ -108,11 +121,11 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		buf.WriteString(v.Visit(s.Source))
 	}
 
-	if len(*s.Wheres) > 0 {
+	if s.Wheres != nil && len(*s.Wheres) > 0 {
 		claused := false
 		for i, where := range *s.Wheres {
 			if where != nil {
-				if claused != true {
+				if !claused {
 					buf.WriteString(WHERE)
 					claused = true
 				}
@@ -124,11 +137,11 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		}
 	}
 
-	if len(*s.Groups) > 0 {
+	if s.Groups != nil && len(*s.Groups) > 0 {
 		claused := false
 		for i, group := range *s.Groups {
 			if group != nil {
-				if claused != true {
+				if !claused {
 					buf.WriteString(GROUP_BY)
 					claused = true
 				}
@@ -145,11 +158,11 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		buf.WriteString(v.Visit(s.Having))
 	}
 
-	if len(*s.Windows) > 0 {
+	if s.Windows != nil && len(*s.Windows) > 0 {
 		claused := false
 		for i, window := range *s.Windows {
 			if window != nil {
-				if claused != true {
+				if !claused {
 					buf.WriteString(WINDOW)
 					claused = true
 				}
@@ -166,16 +179,21 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 
 func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 	var buf bytes.Buffer
+
 	if s.With != nil {
 		buf.WriteString(v.Visit(s.With))
 	}
 
-	for _, core := range s.Cores {
-		v.VisitSelectCoreNode(*core)
+	if s.Cores != nil {
+		for _, core := range s.Cores {
+			if core != nil {
+				v.VisitSelectCoreNode(*core)
+			}
+		}
 	}
 
 	// if s.Orders is not empty
-	if len(*s.Orders) > 0 {
+	if s.Orders != nil && len(*s.Orders) > 0 {
 		buf.WriteString(SPACE)
 		buf.WriteString(ORDER_BY)
 		for i, order := range *s.Orders {
