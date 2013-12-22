@@ -9,7 +9,7 @@ func TestTable(t *testing.T) {
 	table := NewTable("users", engine)
 	query := table.Project(Sql("*"))
 	sql := query.ToSql()
-	if sql != "SELECT * FROM users" {
+	if sql != "SELECT * FROM \"users\"" {
 		t.Logf("TestTable sql: %s", sql)
 		t.Fail()
 	}
