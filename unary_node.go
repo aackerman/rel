@@ -15,3 +15,5 @@ type OrderingNode UnaryNode
 type TopNode UnaryNode
 type LockNode UnaryNode
 type DistinctOnNode UnaryNode
+type WithNode UnaryNode
+type WithRecursiveNode UnaryNode

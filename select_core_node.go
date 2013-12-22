@@ -2,12 +2,12 @@ package arel
 
 type SelectCoreNode struct {
 	Source       JoinSource
-	Top          int
+	Top          TopNode
 	Projections  []AstNode
-	SetQuanifier interface{}
+	SetQuanifier AstNode
 	Wheres       []AstNode
 	Groups       []GroupNode
-	Having       interface{}
+	Having       HavingNode
 	Windows      []AstNode
 	AstNode
 }

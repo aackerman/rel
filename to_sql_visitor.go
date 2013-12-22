@@ -44,12 +44,36 @@ func (v ToSqlVisitor) Visit(a AstNode) string {
 	return ""
 }
 
+func (v ToSqlVisitor) VisitTopNode(a TopNode) string {
+	return "TopNode"
+}
+
+func (v ToSqlVisitor) VisitLimitNode(a LimitNode) string {
+	return "LimitNode"
+}
+
+func (v ToSqlVisitor) VisitLockNode(a LockNode) string {
+	return "LockNode"
+}
+
+func (v ToSqlVisitor) VisitOffsetNode(a OffsetNode) string {
+	return "OffsetNode"
+}
+
+func (v ToSqlVisitor) VisitDistinctOnNode(a DistinctOnNode) string {
+	return "DistinctOnNode"
+}
+
 func (v ToSqlVisitor) VisitAndNode(a AndNode) string {
 	return "AndNode"
 }
 
 func (v ToSqlVisitor) VisitInNode(a InNode) string {
 	return "InNode"
+}
+
+func (v ToSqlVisitor) VisitOrderNode(a OrderNode) string {
+	return "OrderNode"
 }
 
 func (v ToSqlVisitor) VisitSqlLiteralNode(a SqlLiteralNode) string {
@@ -59,14 +83,14 @@ func (v ToSqlVisitor) VisitSqlLiteralNode(a SqlLiteralNode) string {
 func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 	var buf bytes.Buffer
 
-	if s.Top > 0 {
+	if s.Top != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitTopNode(s))
+		buf.WriteString(v.VisitTopNode(s.Top))
 	}
 
 	if s.SetQuanifier != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitDistinctOnNode(s))
+		buf.WriteString(v.Visit(s.SetQuanifier))
 	}
 
 	if len(s.Projections) > 0 {
@@ -81,7 +105,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 
 	if s.Source != nil {
 		buf.WriteString(" FROM ")
-		buf.WriteString(v.Visit(s))
+		buf.WriteString(v.Visit(s.Source))
 	}
 
 	if len(s.Wheres) > 0 {
@@ -128,7 +152,7 @@ func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 		buf.WriteString(v.Visit(s.With))
 	}
 
-	for _, core := range s.Cores() {
+	for _, core := range s.Cores {
 		v.VisitSelectCoreNode(core)
 	}
 
@@ -137,7 +161,7 @@ func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 		buf.WriteString(SPACE)
 		buf.WriteString(ORDER_BY)
 		for i, order := range s.Orders {
-			buf.WriteString(s.VisitOrderNode(order))
+			buf.WriteString(v.VisitOrderNode(order))
 			if (len(s.Orders) - 1) != i {
 				buf.WriteString(COMMA)
 			}
@@ -146,17 +170,17 @@ func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 
 	if s.Limit != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(s.VisitLimitNode(s.Limit))
+		buf.WriteString(v.VisitLimitNode(s.Limit))
 	}
 
 	if s.Offset != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(s.VisitOffsetNode(s.Offset))
+		buf.WriteString(v.VisitOffsetNode(s.Offset))
 	}
 
 	if s.Lock != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(s.VisitLockNode(s.Lock))
+		buf.WriteString(v.VisitLockNode(s.Lock))
 	}
 
 	return strings.TrimSpace(buf.String())

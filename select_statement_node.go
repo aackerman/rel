@@ -2,9 +2,11 @@ package arel
 
 type SelectStatement struct {
 	Cores  []SelectCoreNode
-	Limit  int
+	Limit  LimitNode
 	Orders []OrderNode
-	Lock   bool
+	Lock   LockNode
+	With   WithNode
+	Offset OffsetNode
 	AstNode
 }
 
