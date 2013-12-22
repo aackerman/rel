@@ -12,6 +12,7 @@ type SelectCoreNode struct {
 	AstNode
 }
 
-func CreateSelectCoreNode() *SelectCoreNode {
-	return new(SelectCoreNode)
+func CreateSelectCoreNode(t *Table) *SelectCoreNode {
+	core := SelectCoreNode{Source: new(JoinSource)}
+	return &core
 }

@@ -5,13 +5,20 @@ type Table struct {
 	Engine     Engine
 	TableAlias string
 	Aliases    []string
-	SelectManager
 }
 
 func NewTable(name string, e Engine) Table {
 	table := Table{Name: name, Engine: e}
-	table.SelectManager = NewSelectManager(&table)
 	return table
+}
+
+func (t *Table) From() *SelectManager {
+	manager := NewSelectManager(t)
+	return &manager
+}
+
+func (t *Table) Project(a ...interface{}) *SelectManager {
+	return t.From().Project(a...)
 }
 
 func (t *Table) Alias(name string) {

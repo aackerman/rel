@@ -13,14 +13,16 @@ type SelectManager struct {
 
 func NewSelectManager(t *Table) SelectManager {
 	stmt := SelectStatement{Cores: make([]*SelectCoreNode, 0)}
-	stmt.Cores = append(stmt.Cores, CreateSelectCoreNode())
+	stmt.Cores = append(stmt.Cores, CreateSelectCoreNode(t))
 	ctx := stmt.Cores[len(stmt.Cores)-1]
-	return SelectManager{
+	manager := SelectManager{
 		Engine:   &t.Engine,
 		Ast:      stmt,
 		Ctx:      ctx,
 		BaseNode: CreateBaseNode(),
 	}
+	manager.From(t)
+	return manager
 }
 
 func (s *SelectManager) ToSql() string {
@@ -50,14 +52,10 @@ func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 	return s
 }
 
-// func (s *SelectManager) From(t *Table) *SelectManager {
-// 	s.ctx.Source.Left = t
-// 	return s
-// }
-
-// func (s *SelectManager) Projections() []AstNode {
-// 	return s.ctx.Projections
-// }
+func (s *SelectManager) From(t *Table) *SelectManager {
+	s.Ctx.Source.Left = t
+	return s
+}
 
 func (s *SelectManager) Join(things ...interface{}) *SelectManager {
 	return s

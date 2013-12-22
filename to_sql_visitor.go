@@ -40,6 +40,8 @@ func (v ToSqlVisitor) Visit(a AstNode) string {
 		ret = v.VisitInNode(val)
 	case SqlLiteralNode:
 		ret = v.VisitSqlLiteralNode(val)
+	case JoinSource:
+		ret = v.VisitJoinSourceNode(val)
 	}
 	log.Printf("ToSqlVisitor#Visit; type of node: %T, return: %v", a, ret)
 	return ret
@@ -77,6 +79,11 @@ func (v ToSqlVisitor) VisitOrderNode(a OrderNode) string {
 	return "OrderNode"
 }
 
+func (v ToSqlVisitor) VisitJoinSourceNode(a JoinSource) string {
+	log.Printf("VisitJoinSourceNode: %v", a.Left.Name)
+	return a.Left.Name
+}
+
 func (v ToSqlVisitor) VisitSqlLiteralNode(a SqlLiteralNode) string {
 	if len(a.Raw) > 0 {
 		return a.Raw
@@ -87,6 +94,8 @@ func (v ToSqlVisitor) VisitSqlLiteralNode(a SqlLiteralNode) string {
 
 func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 	var buf bytes.Buffer
+
+	buf.WriteString("SELECT")
 
 	log.Printf("value of SelectCoreNode: %v", s)
 	log.Printf("SelectCoreNode projections: %v", s.Projections)
@@ -121,7 +130,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 
 	if s.Source != nil {
 		buf.WriteString(" FROM ")
-		buf.WriteString(v.Visit(s.Source))
+		buf.WriteString(v.Visit(*s.Source))
 	}
 
 	if s.Wheres != nil && len(*s.Wheres) > 0 {
