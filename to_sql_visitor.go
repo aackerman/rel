@@ -30,18 +30,19 @@ func (v ToSqlVisitor) Accept(a AstNode) string {
 }
 
 func (v ToSqlVisitor) Visit(a AstNode) string {
-	log.Printf("type of AstNode: %T", a)
+	ret := ""
 	switch val := a.(type) {
 	case SelectStatement:
-		return v.VisitSelectStatement(val)
+		ret = v.VisitSelectStatement(val)
 	case AndNode:
-		return v.VisitAndNode(val)
+		ret = v.VisitAndNode(val)
 	case InNode:
-		return v.VisitInNode(val)
+		ret = v.VisitInNode(val)
 	case SqlLiteralNode:
-		return v.VisitSqlLiteralNode(val)
+		ret = v.VisitSqlLiteralNode(val)
 	}
-	return ""
+	log.Printf("ToSqlVisitor#Visit; type of node: %T, return: %v", a, ret)
+	return ret
 }
 
 func (v ToSqlVisitor) VisitTopNode(a TopNode) string {
@@ -100,9 +101,11 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		buf.WriteString(v.Visit(*s.SetQuanifier))
 	}
 
+	log.Printf("Projections: %v, Length: %v", s.Projections, len(*s.Projections))
 	if s.Projections != nil && len(*s.Projections) > 0 {
 		claused := false
 		for i, projection := range *s.Projections {
+
 			if projection != nil {
 				if !claused {
 					buf.WriteString(SPACE)
@@ -187,7 +190,7 @@ func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 	if s.Cores != nil {
 		for _, core := range s.Cores {
 			if core != nil {
-				v.VisitSelectCoreNode(*core)
+				buf.WriteString(v.VisitSelectCoreNode(*core))
 			}
 		}
 	}

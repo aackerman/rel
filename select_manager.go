@@ -1,7 +1,7 @@
 package arel
 
 import (
-// "log"
+	"log"
 )
 
 type SelectManager struct {
@@ -12,9 +12,7 @@ type SelectManager struct {
 }
 
 func NewSelectManager(t *Table) SelectManager {
-	stmt := SelectStatement{
-		Cores: make([]*SelectCoreNode, 1),
-	}
+	stmt := SelectStatement{Cores: make([]*SelectCoreNode, 0)}
 	stmt.Cores = append(stmt.Cores, CreateSelectCoreNode())
 	ctx := stmt.Cores[len(stmt.Cores)-1]
 	return SelectManager{
@@ -40,7 +38,7 @@ func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 		}
 
 		if s.Ctx.Projections == nil {
-			slice := make([]AstNode, 5)
+			slice := make([]AstNode, 0)
 			s.Ctx.Projections = &slice
 		}
 
@@ -48,6 +46,7 @@ func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 			*s.Ctx.Projections = append(*s.Ctx.Projections, projection)
 		}
 	}
+	log.Printf("SelectManager#Project current Projections: %v", s.Ctx.Projections)
 	return s
 }
 
