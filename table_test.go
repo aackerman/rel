@@ -4,7 +4,15 @@ import (
 	"testing"
 )
 
-func TestTable(t *testing.T) {
+func TestTableName(t *testing.T) {
+	engine := NewEngine()
+	table := NewTable("users", engine)
+	if table.Name != "users" {
+		t.Fail()
+	}
+}
+
+func TestTableProjection(t *testing.T) {
 	engine := NewEngine()
 	table := NewTable("users", engine)
 	query := table.Project(Sql("*"))
@@ -15,15 +23,7 @@ func TestTable(t *testing.T) {
 	}
 }
 
-func TestTableName(t *testing.T) {
-	engine := NewEngine()
-	table := NewTable("users", engine)
-	if table.Name != "users" {
-		t.Fail()
-	}
-}
-
-func TestTableProjections(t *testing.T) {
+func TestTableMultipleProjections(t *testing.T) {
 	engine := NewEngine()
 	table := NewTable("users", engine)
 	query := table.Project(Sql("*"), Sql("*"))
