@@ -3,6 +3,7 @@ package arel
 import (
 	"bytes"
 	"log"
+	"strings"
 )
 
 type ToSqlVisitor struct {
@@ -61,5 +62,37 @@ func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 	if s.With != nil {
 		buf.WriteString(v.Visit(s.With))
 	}
-	return buf.String()
+
+	for _, core := range s.Cores() {
+		v.VisitSelectCore(core)
+	}
+
+	// if s.Orders is not empty
+	if len(s.Orders) > 0 {
+		buf.WriteString(SPACE)
+		buf.WriteString(ORDER_BY)
+		for i, order := range s.Orders {
+			buf.WriteString(s.VisitOrderNode(order))
+			if (len(s.Orders) - 1) != i {
+				buf.WriteString(COMMA)
+			}
+		}
+	}
+
+	if s.Limit != nil {
+		buf.WriteString(SPACE)
+		buf.WriteString(s.VisitLimitNode(s.Limit))
+	}
+
+	if s.Offset != nil {
+		buf.WriteString(SPACE)
+		buf.WriteString(s.VisitOffsetNode(s.Offset))
+	}
+
+	if s.Lock != nil {
+		buf.WriteString(SPACE)
+		buf.WriteString(s.VisitLockNode(s.Lock))
+	}
+
+	return strings.TrimSpace(buf.String())
 }
