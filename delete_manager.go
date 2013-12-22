@@ -1,14 +1,9 @@
 package arel
 
-// type DeleteManager struct {
-// 	Ast AstNode
-// 	TreeManager
-// }
+type DeleteManager struct {
+	AstNode
+}
 
-// func NewDeleteManager() *DeleteManager {
-// 	return &DeleteManager{
-// 		Ast: DeleteStatement{
-// 			AstNode: AstNode{},
-// 		},
-// 	}
-// }
+func NewDeleteManager() *DeleteManager {
+	return new(DeleteManager)
+}

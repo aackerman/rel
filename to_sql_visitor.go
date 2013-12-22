@@ -42,6 +42,8 @@ func (v ToSqlVisitor) Visit(a AstNode) string {
 		ret = v.VisitSqlLiteralNode(val)
 	case JoinSource:
 		ret = v.VisitJoinSourceNode(val)
+	default:
+		panic("ToSqlVisitor#Visit AstNode not handled")
 	}
 	log.Printf("ToSqlVisitor#Visit; type of node: %T, return: %v", a, ret)
 	return ret

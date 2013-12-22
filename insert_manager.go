@@ -1,13 +1,9 @@
 package arel
 
 type InsertManager struct {
-	TreeManager
+	AstNode
 }
 
 func NewInsertManager(e *Engine) *InsertManager {
-	return &InsertManager{
-		TreeManager{
-			engine: e,
-		},
-	}
+	return new(InsertManager)
 }

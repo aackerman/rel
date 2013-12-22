@@ -1,5 +1,9 @@
 package arel
 
 type UpdateManager struct {
-	TreeManager
+	AstNode
+}
+
+func NewUpdateManager() *UpdateManager {
+	return new(UpdateManager)
 }
