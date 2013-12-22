@@ -1,6 +1,9 @@
 package arel
 
-import "log"
+import (
+	"bytes"
+	"log"
+)
 
 type ToSqlVisitor struct {
 	conn *Connection
@@ -54,5 +57,9 @@ func (v ToSqlVisitor) VisitSqlLiteralNode(a SqlLiteralNode) string {
 }
 
 func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
-	return ""
+	var buf bytes.Buffer
+	if s.With != nil {
+		buf.WriteString(v.Visit(s.With))
+	}
+	return buf.String()
 }
