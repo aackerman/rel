@@ -1,12 +1,12 @@
 package arel
 
 type SelectStatement struct {
-	Cores  []SelectCoreNode
-	Limit  LimitNode
-	Orders []OrderNode
-	Lock   LockNode
-	With   WithNode
-	Offset OffsetNode
+	Cores  []*SelectCoreNode
+	Limit  *LimitNode
+	Orders *[]OrderNode
+	Lock   *LockNode
+	With   *WithNode
+	Offset *OffsetNode
 	AstNode
 }
 

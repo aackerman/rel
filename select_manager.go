@@ -1,16 +1,19 @@
 package arel
 
+import (
+// "log"
+)
+
 type SelectManager struct {
 	Engine *Engine
 	Ast    SelectStatement
-	Ctx    SelectCoreNode
+	Ctx    *SelectCoreNode
 	BaseNode
 }
 
 func NewSelectManager(t *Table) SelectManager {
 	stmt := SelectStatement{
-		Cores:  make([]SelectCoreNode, 10),
-		Orders: make([]OrderNode, 10),
+		Cores: make([]*SelectCoreNode, 1),
 	}
 	stmt.Cores = append(stmt.Cores, CreateSelectCoreNode())
 	ctx := stmt.Cores[len(stmt.Cores)-1]
@@ -35,7 +38,15 @@ func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 		default:
 			projection = Sql("*")
 		}
-		s.Ctx.Projections = append(s.Ctx.Projections, projection)
+
+		if s.Ctx.Projections == nil {
+			slice := make([]AstNode, 5)
+			s.Ctx.Projections = &slice
+		}
+
+		if s.Ctx.Projections != nil {
+			*s.Ctx.Projections = append(*s.Ctx.Projections, projection)
+		}
 	}
 	return s
 }

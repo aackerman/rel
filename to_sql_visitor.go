@@ -85,19 +85,19 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 
 	if s.Top != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitTopNode(s.Top))
+		buf.WriteString(v.VisitTopNode(*s.Top))
 	}
 
 	if s.SetQuanifier != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.Visit(s.SetQuanifier))
+		buf.WriteString(v.Visit(*s.SetQuanifier))
 	}
 
-	if len(s.Projections) > 0 {
+	if len(*s.Projections) > 0 {
 		buf.WriteString(SPACE)
-		for i, projection := range s.Projections {
+		for i, projection := range *s.Projections {
 			buf.WriteString(v.Visit(projection))
-			if (len(s.Projections) - 1) != i {
+			if (len(*s.Projections) - 1) != i {
 				buf.WriteString(COMMA)
 			}
 		}
@@ -108,22 +108,34 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		buf.WriteString(v.Visit(s.Source))
 	}
 
-	if len(s.Wheres) > 0 {
-		buf.WriteString(WHERE)
-		for i, where := range s.Wheres {
-			buf.WriteString(v.Visit(where))
-			if (len(s.Wheres) - 1) != i {
-				buf.WriteString(COMMA)
+	if len(*s.Wheres) > 0 {
+		claused := false
+		for i, where := range *s.Wheres {
+			if where != nil {
+				if claused != true {
+					buf.WriteString(WHERE)
+					claused = true
+				}
+				buf.WriteString(v.Visit(where))
+				if (len(*s.Wheres) - 1) != i {
+					buf.WriteString(COMMA)
+				}
 			}
 		}
 	}
 
-	if len(s.Groups) > 0 {
-		buf.WriteString(WHERE)
-		for i, group := range s.Groups {
-			buf.WriteString(v.Visit(group))
-			if (len(s.Groups) - 1) != i {
-				buf.WriteString(COMMA)
+	if len(*s.Groups) > 0 {
+		claused := false
+		for i, group := range *s.Groups {
+			if group != nil {
+				if claused != true {
+					buf.WriteString(GROUP_BY)
+					claused = true
+				}
+				buf.WriteString(v.Visit(group))
+				if (len(*s.Groups) - 1) != i {
+					buf.WriteString(COMMA)
+				}
 			}
 		}
 	}
@@ -133,12 +145,18 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		buf.WriteString(v.Visit(s.Having))
 	}
 
-	if len(s.Windows) > 0 {
-		buf.WriteString(WINDOW)
-		for i, window := range s.Windows {
-			buf.WriteString(v.Visit(window))
-			if (len(s.Windows) - 1) != i {
-				buf.WriteString(COMMA)
+	if len(*s.Windows) > 0 {
+		claused := false
+		for i, window := range *s.Windows {
+			if window != nil {
+				if claused != true {
+					buf.WriteString(WINDOW)
+					claused = true
+				}
+				buf.WriteString(v.Visit(window))
+				if (len(*s.Windows) - 1) != i {
+					buf.WriteString(COMMA)
+				}
 			}
 		}
 	}
@@ -153,16 +171,16 @@ func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 	}
 
 	for _, core := range s.Cores {
-		v.VisitSelectCoreNode(core)
+		v.VisitSelectCoreNode(*core)
 	}
 
 	// if s.Orders is not empty
-	if len(s.Orders) > 0 {
+	if len(*s.Orders) > 0 {
 		buf.WriteString(SPACE)
 		buf.WriteString(ORDER_BY)
-		for i, order := range s.Orders {
+		for i, order := range *s.Orders {
 			buf.WriteString(v.VisitOrderNode(order))
-			if (len(s.Orders) - 1) != i {
+			if (len(*s.Orders) - 1) != i {
 				buf.WriteString(COMMA)
 			}
 		}
@@ -170,17 +188,17 @@ func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 
 	if s.Limit != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitLimitNode(s.Limit))
+		buf.WriteString(v.VisitLimitNode(*s.Limit))
 	}
 
 	if s.Offset != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitOffsetNode(s.Offset))
+		buf.WriteString(v.VisitOffsetNode(*s.Offset))
 	}
 
 	if s.Lock != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitLockNode(s.Lock))
+		buf.WriteString(v.VisitLockNode(*s.Lock))
 	}
 
 	return strings.TrimSpace(buf.String())
