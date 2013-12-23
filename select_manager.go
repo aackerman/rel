@@ -36,8 +36,8 @@ func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 		}
 
 		if s.Ctx.Projections == nil {
-			slice := make([]AstNode, 0)
-			s.Ctx.Projections = &slice
+			nodeslice := make([]AstNode, 0)
+			s.Ctx.Projections = &nodeslice
 		}
 
 		if s.Ctx.Projections != nil {

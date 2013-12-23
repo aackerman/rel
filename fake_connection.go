@@ -9,7 +9,7 @@ type Engine interface {
 }
 
 type BaseEngine struct {
-	Pool        ConnectionPool
+	pool        ConnectionPool
 	visitor     Visitor
 	tables      []string
 	primaryKeys []string
@@ -23,7 +23,7 @@ type ConnectionPool struct {
 type Connection struct{}
 
 func (e BaseEngine) Connection() *Connection {
-	return e.Pool.Connection()
+	return e.pool.Connection()
 }
 
 func (e BaseEngine) Visitor() Visitor {
@@ -34,8 +34,8 @@ var DefaultEngine BaseEngine = CreateDefaultEngine()
 
 func CreateDefaultEngine() BaseEngine {
 	e := BaseEngine{}
-	e.Pool = ConnectionPool{conn: new(Connection)}
-	e.visitor = ToSqlVisitor{conn: e.Pool.Connection()}
+	e.pool = ConnectionPool{conn: new(Connection)}
+	e.visitor = ToSqlVisitor{conn: e.pool.Connection()}
 	return e
 }
 
