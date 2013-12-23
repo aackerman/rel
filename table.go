@@ -13,12 +13,16 @@ func NewTable(name string, e Engine) Table {
 }
 
 func (t *Table) From() *SelectManager {
-	manager := NewSelectManager(t)
-	return &manager
+	return t.SelectManager()
 }
 
 func (t *Table) Project(a ...interface{}) *SelectManager {
 	return t.From().Project(a...)
+}
+
+func (t *Table) SelectManager() *SelectManager {
+	manager := NewSelectManager(t)
+	return &manager
 }
 
 func (t *Table) Alias(name string) {

@@ -1,11 +1,7 @@
 package arel
 
-import (
-	"log"
-)
-
 type SelectManager struct {
-	Engine *Engine
+	Engine Engine
 	Ast    SelectStatement
 	Ctx    *SelectCoreNode
 	BaseNode
@@ -16,7 +12,7 @@ func NewSelectManager(t *Table) SelectManager {
 	stmt.Cores = append(stmt.Cores, CreateSelectCoreNode(t))
 	ctx := stmt.Cores[len(stmt.Cores)-1]
 	manager := SelectManager{
-		Engine:   &t.Engine,
+		Engine:   t.Engine,
 		Ast:      stmt,
 		Ctx:      ctx,
 		BaseNode: CreateBaseNode(),
@@ -26,7 +22,7 @@ func NewSelectManager(t *Table) SelectManager {
 }
 
 func (s *SelectManager) ToSql() string {
-	return s.Engine.Connection().Visitor.Accept(s.Ast)
+	return s.Engine.Visitor().Accept(s.Ast)
 }
 
 func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
@@ -48,7 +44,6 @@ func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
 			*s.Ctx.Projections = append(*s.Ctx.Projections, projection)
 		}
 	}
-	log.Printf("SelectManager#Project current Projections: %v", s.Ctx.Projections)
 	return s
 }
 

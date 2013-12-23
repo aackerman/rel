@@ -45,7 +45,7 @@ func (v ToSqlVisitor) Visit(a AstNode) string {
 	default:
 		panic("ToSqlVisitor#Visit AstNode not handled")
 	}
-	log.Printf("ToSqlVisitor#Visit; type of node: %T, return: %v", a, ret)
+	// log.Printf("ToSqlVisitor#Visit; type of node: %T, return: %v", a, ret)
 	return ret
 }
 
@@ -77,8 +77,8 @@ func (v ToSqlVisitor) VisitInNode(a InNode) string {
 	return "InNode"
 }
 
-func (v ToSqlVisitor) VisitOrderNode(a OrderNode) string {
-	return "OrderNode"
+func (v ToSqlVisitor) VisitOrderingNode(a OrderingNode) string {
+	return "OrderingNode"
 }
 
 func (v ToSqlVisitor) VisitTable(t *Table) string {
@@ -119,9 +119,6 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 
 	buf.WriteString("SELECT")
 
-	log.Printf("value of SelectCoreNode: %v", s)
-	log.Printf("SelectCoreNode projections: %v", s.Projections)
-
 	if s.Top != nil {
 		buf.WriteString(SPACE)
 		buf.WriteString(v.VisitTopNode(*s.Top))
@@ -132,7 +129,6 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		buf.WriteString(v.Visit(*s.SetQuanifier))
 	}
 
-	log.Printf("Projections: %v, Length: %v", s.Projections, len(*s.Projections))
 	if s.Projections != nil && len(*s.Projections) > 0 {
 		claused := false
 		for i, projection := range *s.Projections {
@@ -230,7 +226,7 @@ func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 		buf.WriteString(SPACE)
 		buf.WriteString(ORDER_BY)
 		for i, order := range *s.Orders {
-			buf.WriteString(v.VisitOrderNode(order))
+			buf.WriteString(v.VisitOrderingNode(order))
 			if (len(*s.Orders) - 1) != i {
 				buf.WriteString(COMMA)
 			}

@@ -1,27 +1,50 @@
 package arel
 
-type Connector struct {
-	ConnectionPool *ConnectionPool
+type Engine interface {
+	Visitor() Visitor
+	Connection() *Connection
+	QuoteTableName(string) string
+	QuoteColumnName(string) string
+	TableExists(string) bool
 }
 
-func (c *Connector) Connection() *Connection {
-	return c.ConnectionPool.Connection()
-}
-
-type Connection struct {
-	Visitor     Visitor
-	Tables      []string
+type BaseEngine struct {
+	Pool        ConnectionPool
+	visitor     Visitor
+	tables      []string
 	primaryKeys []string
 	columns     []string
 }
 
-func (c *Connection) TableExists(tableName string) bool {
-	for _, name := range c.Tables {
-		if tableName == name {
-			return true
-		}
-	}
-	return false
+type ConnectionPool struct {
+	conn *Connection
+}
+
+type Connection struct{}
+
+func (e BaseEngine) Connection() *Connection {
+	return e.Pool.Connection()
+}
+
+func (e BaseEngine) Visitor() Visitor {
+	return e.visitor
+}
+
+var DefaultEngine BaseEngine = CreateDefaultEngine()
+
+func CreateDefaultEngine() BaseEngine {
+	e := BaseEngine{}
+	e.Pool = ConnectionPool{conn: new(Connection)}
+	e.visitor = ToSqlVisitor{conn: e.Pool.Connection()}
+	return e
+}
+
+func (e BaseEngine) QuoteTableName(name string) string {
+	return "\"" + name + "\""
+}
+
+func (e BaseEngine) QuoteColumnName(name string) string {
+	return "\"" + name + "\""
 }
 
 func (c *Connection) QuoteTableName(name string) string {
@@ -32,20 +55,15 @@ func (c *Connection) QuoteColumnName(name string) string {
 	return "\"" + name + "\""
 }
 
-type ConnectionPool struct {
-	conn *Connection
+func (e BaseEngine) TableExists(tableName string) bool {
+	for _, name := range e.tables {
+		if tableName == name {
+			return true
+		}
+	}
+	return false
 }
 
-func NewConnectionPool() *ConnectionPool {
-	conn := Connection{}
-	conn.Visitor = ToSqlVisitor{conn: &conn}
-	return &ConnectionPool{conn: &conn}
-}
-
-func (c *ConnectionPool) Connection() *Connection {
-	return c.conn
-}
-
-func (c *ConnectionPool) TableExists(name string) bool {
-	return c.Connection().TableExists(name)
+func (p *ConnectionPool) Connection() *Connection {
+	return p.conn
 }
