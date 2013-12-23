@@ -146,7 +146,9 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		}
 	}
 
-	if s.Source != nil && s.Source.Left != nil && len(s.Source.Left.Name) > 0 {
+	if s.Source != nil &&
+		s.Source.Left != nil &&
+		len(s.Source.Left.Name) > 0 {
 		buf.WriteString(" FROM ")
 		buf.WriteString(v.Visit(*s.Source))
 	}
