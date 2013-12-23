@@ -1,7 +1,7 @@
 package arel
 
 type UpdateManager struct {
-	AstNode
+	BaseNode
 }
 
 func NewUpdateManager() *UpdateManager {
