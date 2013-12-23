@@ -1,3 +1,5 @@
 package arel
 
-type TrueNode struct{}
+type TrueNode struct {
+	BaseNode
+}
