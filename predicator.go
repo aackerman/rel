@@ -1,6 +1,12 @@
 package arel
 
-type Predicator struct{}
+type BasePredicator struct {
+}
+
+type Predicator interface {
+	NotEqual(...interface{}) NotEqualNode
+	NotEqualAny()
+}
 
 // TODO: fix interface type
 func (p *Predicator) NotEqual(other ...interface{}) *NotEqualNode {

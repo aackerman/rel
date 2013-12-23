@@ -212,10 +212,12 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 	var buf bytes.Buffer
 
+	// add WITH statement to the buffer
 	if s.With != nil {
 		buf.WriteString(v.Visit(s.With))
 	}
 
+	// add SELECT core to the buffer
 	if s.Cores != nil {
 		for _, core := range s.Cores {
 			if core != nil {
@@ -224,7 +226,8 @@ func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 		}
 	}
 
-	if s.Orders != nil && len(*s.Orders) > 0 {
+	// add ORDER BY clauses to the buffer
+	if s.Orders != nil {
 		buf.WriteString(SPACE)
 		buf.WriteString(ORDER_BY)
 		for i, order := range *s.Orders {
@@ -235,16 +238,19 @@ func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
 		}
 	}
 
+	// add LIMIT clause to the buffer
 	if s.Limit != nil {
 		buf.WriteString(SPACE)
 		buf.WriteString(v.VisitLimitNode(*s.Limit))
 	}
 
+	// add OFFSET clause to the buffer
 	if s.Offset != nil {
 		buf.WriteString(SPACE)
 		buf.WriteString(v.VisitOffsetNode(*s.Offset))
 	}
 
+	// add LOCK clause to the buffer
 	if s.Lock != nil {
 		buf.WriteString(SPACE)
 		buf.WriteString(v.VisitLockNode(*s.Lock))

@@ -1,13 +1,5 @@
 package arel
 
-type BaseNode struct {
-	NodeFactory
-}
-
-func CreateBaseNode() BaseNode {
-	return BaseNode{NodeFactory{}}
-}
-
 type AstNode interface {
 	CreateTrue() TrueNode
 	CreateFalse() FalseNode
@@ -20,4 +12,12 @@ type AstNode interface {
 	CreateNot() NotNode
 	CreateGrouping() GroupingNode
 	CreateLower() NamedFunctionNode
+}
+
+type BaseNode struct {
+	NodeFactory
+}
+
+func CreateBaseNode() BaseNode {
+	return BaseNode{NodeFactory{}}
 }
