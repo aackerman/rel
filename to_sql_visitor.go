@@ -62,7 +62,7 @@ func (v ToSqlVisitor) VisitLockNode(a LockNode) string {
 }
 
 func (v ToSqlVisitor) VisitOffsetNode(a OffsetNode) string {
-	return "OffsetNode"
+	return "OFFSET " + v.Visit(a.expr)
 }
 
 func (v ToSqlVisitor) VisitDistinctOnNode(a DistinctOnNode) string {
