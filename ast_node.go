@@ -1,23 +1,22 @@
 package arel
 
 type AstNode interface {
-	CreateTrue() TrueNode
-	CreateFalse() FalseNode
-	CreateTableAlias(*Table, string) TableAliasNode
-	CreateStringJoin() StringJoinNode
-	CreateInnerJoin() InnerJoinNode
-	CreateOuterJoin() OuterJoinNode
-	CreateAnd() AndNode
-	CreateOn() OnNode
-	CreateNot() NotNode
-	CreateGrouping() GroupingNode
-	CreateLower() NamedFunctionNode
+	NewTrueNode() TrueNode
+	NewFalseNode() FalseNode
+	NewTableAliasNode(*Table, string) TableAliasNode
+	NewStringJoinNode() StringJoinNode
+	NewInnerJoinNode() InnerJoinNode
+	NewOuterJoinNode() OuterJoinNode
+	NewAndNode() AndNode
+	NewOnNode() OnNode
+	NewNotNode() NotNode
+	NewGroupingNode() GroupingNode
 }
 
 type BaseNode struct {
 	NodeFactory
 }
 
-func CreateBaseNode() BaseNode {
+func NewBaseNode() BaseNode {
 	return BaseNode{NodeFactory{}}
 }

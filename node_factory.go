@@ -2,46 +2,46 @@ package arel
 
 type NodeFactory struct{}
 
-func (n NodeFactory) CreateTrue() TrueNode {
+func (n NodeFactory) NewTrueNode() TrueNode {
 	return TrueNode{}
 }
 
-func (n NodeFactory) CreateFalse() FalseNode {
+func (n NodeFactory) NewFalseNode() FalseNode {
 	return FalseNode{}
 }
 
-func (n NodeFactory) CreateTableAlias(t *Table, name string) TableAliasNode {
+func (n NodeFactory) NewTableAliasNode(t *Table, name string) TableAliasNode {
 	return TableAliasNode{Name: name, Table: t}
 }
 
-func (n NodeFactory) CreateStringJoin() StringJoinNode {
+func (n NodeFactory) NewStringJoinNode() StringJoinNode {
 	return StringJoinNode{}
 }
 
-func (n NodeFactory) CreateInnerJoin() InnerJoinNode {
+func (n NodeFactory) NewInnerJoinNode() InnerJoinNode {
 	return InnerJoinNode{}
 }
 
-func (n NodeFactory) CreateOuterJoin() OuterJoinNode {
+func (n NodeFactory) NewOuterJoinNode() OuterJoinNode {
 	return OuterJoinNode{}
 }
 
-func (n NodeFactory) CreateAnd() AndNode {
+func (n NodeFactory) NewAndNode() AndNode {
 	return AndNode{}
 }
 
-func (n NodeFactory) CreateOn() OnNode {
+func (n NodeFactory) NewOnNode() OnNode {
 	return OnNode{}
 }
 
-func (n NodeFactory) CreateNot() NotNode {
+func (n NodeFactory) NewNotNode() NotNode {
 	return NotNode{}
 }
 
-func (n NodeFactory) CreateGrouping() GroupingNode {
+func (n NodeFactory) NewGroupingNode() GroupingNode {
 	return GroupingNode{}
 }
 
-func (n NodeFactory) CreateLower() NamedFunctionNode {
+func (n NodeFactory) NewNamedFunctionNode() NamedFunctionNode {
 	return NamedFunctionNode{}
 }

@@ -16,6 +16,6 @@ type SqlLiteralNode struct {
 func NewSqlLiteralNode(raw string) SqlLiteralNode {
 	return SqlLiteralNode{
 		raw,
-		CreateBaseNode(),
+		NewBaseNode(),
 	}
 }

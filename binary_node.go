@@ -10,7 +10,7 @@ func NewBinaryNode(left *Table, right *Table) BinaryNode {
 	return BinaryNode{
 		Left:     left,
 		Right:    right,
-		BaseNode: CreateBaseNode(),
+		BaseNode: NewBaseNode(),
 	}
 }
 

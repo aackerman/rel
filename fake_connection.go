@@ -1,13 +1,5 @@
 package arel
 
-type Engine interface {
-	Visitor() Visitor
-	Connection() *Connection
-	QuoteTableName(string) string
-	QuoteColumnName(string) string
-	TableExists(string) bool
-}
-
 type BaseEngine struct {
 	pool        ConnectionPool
 	visitor     Visitor
@@ -30,9 +22,9 @@ func (e BaseEngine) Visitor() Visitor {
 	return e.visitor
 }
 
-var DefaultEngine BaseEngine = CreateDefaultEngine()
+var DefaultEngine BaseEngine = NewDefaultEngine()
 
-func CreateDefaultEngine() BaseEngine {
+func NewDefaultEngine() BaseEngine {
 	e := BaseEngine{}
 	e.pool = ConnectionPool{conn: new(Connection)}
 	e.visitor = ToSqlVisitor{conn: e.pool.Connection()}

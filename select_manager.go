@@ -13,13 +13,13 @@ type SelectManager struct {
 
 func NewSelectManager(t *Table) SelectManager {
 	stmt := SelectStatement{Cores: make([]*SelectCoreNode, 0)}
-	stmt.Cores = append(stmt.Cores, CreateSelectCoreNode(t))
+	stmt.Cores = append(stmt.Cores, NewSelectCoreNode(t))
 	ctx := stmt.Cores[len(stmt.Cores)-1]
 	manager := SelectManager{
 		Engine:   t.Engine,
 		Ast:      stmt,
 		Ctx:      ctx,
-		BaseNode: CreateBaseNode(),
+		BaseNode: NewBaseNode(),
 	}
 	manager.From(t)
 	return manager

@@ -4,6 +4,6 @@ type UpdateManager struct {
 	BaseNode
 }
 
-func NewUpdateManager() *UpdateManager {
-	return new(UpdateManager)
+func NewUpdateManager() UpdateManager {
+	return UpdateManager{}
 }
