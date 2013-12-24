@@ -9,16 +9,16 @@ It is intended to be a framework framework; that is, you can build your own ORM 
 
 ## Interfaces
 
-* AstNode
-* Visitor
-* Engine
+* `AstNode`
+* `Visitor`
+* `Engine`
 
 ## Important Classes
 
-* Table
-* SelectManager
-* InsertManager
-* UpdateManager
+* `Table`
+* `SelectManager`
+* `InsertManager`
+* `UpdateManager`
 
 ## Usage
 
