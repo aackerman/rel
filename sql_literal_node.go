@@ -10,14 +10,12 @@ func Star() SqlLiteralNode {
 
 type SqlLiteralNode struct {
 	Raw string
-	Predicator
 	BaseNode
 }
 
 func NewSqlLiteralNode(raw string) SqlLiteralNode {
 	return SqlLiteralNode{
 		raw,
-		Predicator{},
 		CreateBaseNode(),
 	}
 }

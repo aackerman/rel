@@ -160,16 +160,14 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 	if s.Wheres != nil {
 		claused := false
 		for i, where := range *s.Wheres {
-			if where != nil {
-				// add WHERE clause if it hasn't already been added
-				if !claused {
-					buf.WriteString(WHERE)
-					claused = true
-				}
-				buf.WriteString(v.Visit(where))
-				if (len(*s.Wheres) - 1) != i {
-					buf.WriteString(COMMA)
-				}
+			// add WHERE clause if it hasn't already been added
+			if !claused {
+				buf.WriteString(WHERE)
+				claused = true
+			}
+			buf.WriteString(v.Visit(where))
+			if (len(*s.Wheres) - 1) != i {
+				buf.WriteString(COMMA)
 			}
 		}
 	}
@@ -178,16 +176,14 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 	if s.Groups != nil {
 		claused := false
 		for i, group := range *s.Groups {
-			if group != nil {
-				// add GROUP BY clause if it hasn't already been added
-				if !claused {
-					buf.WriteString(GROUP_BY)
-					claused = true
-				}
-				buf.WriteString(v.Visit(group))
-				if (len(*s.Groups) - 1) != i {
-					buf.WriteString(COMMA)
-				}
+			// add GROUP BY clause if it hasn't already been added
+			if !claused {
+				buf.WriteString(GROUP_BY)
+				claused = true
+			}
+			buf.WriteString(v.Visit(group))
+			if (len(*s.Groups) - 1) != i {
+				buf.WriteString(COMMA)
 			}
 		}
 	}
@@ -202,16 +198,14 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 	if s.Windows != nil {
 		claused := false
 		for i, window := range *s.Windows {
-			if window != nil {
-				// add WINDOW clause if is hasn't already been added
-				if !claused {
-					buf.WriteString(WINDOW)
-					claused = true
-				}
-				buf.WriteString(v.Visit(window))
-				if (len(*s.Windows) - 1) != i {
-					buf.WriteString(COMMA)
-				}
+			// add WINDOW clause if is hasn't already been added
+			if !claused {
+				buf.WriteString(WINDOW)
+				claused = true
+			}
+			buf.WriteString(v.Visit(window))
+			if (len(*s.Windows) - 1) != i {
+				buf.WriteString(COMMA)
 			}
 		}
 	}

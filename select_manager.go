@@ -73,7 +73,9 @@ func (s *SelectManager) Group(things ...interface{}) *SelectManager {
 }
 
 func (s *SelectManager) Skip(things ...interface{}) *SelectManager {
+	s.Ast.Offset = &OffsetNode{
 
+	}
 	return s
 }
 

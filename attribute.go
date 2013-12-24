@@ -11,7 +11,3 @@ func NewAttribute(t *Table, name string) Attribute {
 		Table: t,
 	}
 }
-
-func (a *Attribute) IsEqual(name string) EqualityNode {
-	return NewEqualityNode()
-}
