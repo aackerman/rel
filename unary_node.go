@@ -17,3 +17,7 @@ type LockNode UnaryNode
 type DistinctOnNode UnaryNode
 type WithNode UnaryNode
 type WithRecursiveNode UnaryNode
+
+func NewUnaryNode() {
+
+}

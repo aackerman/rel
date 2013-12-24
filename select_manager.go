@@ -73,7 +73,12 @@ func (s *SelectManager) Group(things ...interface{}) *SelectManager {
 }
 
 func (s *SelectManager) Skip(things ...interface{}) *SelectManager {
+
 	return s
+}
+
+func (s *SelectManager) Offset(things ...interface{}) *SelectManager {
+	return s.Skip(things...)
 }
 
 func (s *SelectManager) Having(things ...interface{}) *SelectManager {
