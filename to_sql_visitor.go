@@ -119,6 +119,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 
 	buf.WriteString("SELECT")
 
+	// Add TOP statement to the buffer
 	if s.Top != nil {
 		buf.WriteString(SPACE)
 		buf.WriteString(v.VisitTopNode(*s.Top))
@@ -129,7 +130,8 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		buf.WriteString(v.Visit(*s.SetQuanifier))
 	}
 
-	if s.Projections != nil && len(*s.Projections) > 0 {
+	// add select projections
+	if s.Projections != nil {
 		claused := false
 		for i, projection := range *s.Projections {
 
@@ -146,6 +148,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		}
 	}
 
+	// add FROM statement to the buffer
 	if s.Source != nil &&
 		s.Source.Left != nil &&
 		len(s.Source.Left.Name) > 0 {
@@ -153,10 +156,12 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		buf.WriteString(v.Visit(*s.Source))
 	}
 
-	if s.Wheres != nil && len(*s.Wheres) > 0 {
+	// add WHERE statement to the buffer
+	if s.Wheres != nil {
 		claused := false
 		for i, where := range *s.Wheres {
 			if where != nil {
+				// add WHERE clause if it hasn't already been added
 				if !claused {
 					buf.WriteString(WHERE)
 					claused = true
@@ -169,10 +174,12 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		}
 	}
 
-	if s.Groups != nil && len(*s.Groups) > 0 {
+	// add GROUP BY statement to the buffer
+	if s.Groups != nil {
 		claused := false
 		for i, group := range *s.Groups {
 			if group != nil {
+				// add GROUP BY clause if it hasn't already been added
 				if !claused {
 					buf.WriteString(GROUP_BY)
 					claused = true
@@ -185,15 +192,18 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		}
 	}
 
+	// add HAVING statement to the buffer
 	if s.Having != nil {
 		buf.WriteString(SPACE)
 		buf.WriteString(v.Visit(s.Having))
 	}
 
-	if s.Windows != nil && len(*s.Windows) > 0 {
+	// add WINDOW statements to the buffer
+	if s.Windows != nil {
 		claused := false
 		for i, window := range *s.Windows {
 			if window != nil {
+				// add WINDOW clause if is hasn't already been added
 				if !claused {
 					buf.WriteString(WINDOW)
 					claused = true
