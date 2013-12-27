@@ -32,8 +32,8 @@ func (v ToSqlVisitor) Accept(a AstNode) string {
 func (v ToSqlVisitor) Visit(a AstNode) string {
 	ret := ""
 	switch val := a.(type) {
-	case SelectStatement:
-		ret = v.VisitSelectStatement(val)
+	case SelectStatementNode:
+		ret = v.VisitSelectStatementNode(val)
 	case AndNode:
 		ret = v.VisitAndNode(val)
 	case InNode:
@@ -213,7 +213,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitSelectStatement(s SelectStatement) string {
+func (v ToSqlVisitor) VisitSelectStatementNode(s SelectStatementNode) string {
 	var buf bytes.Buffer
 
 	// add WITH statement to the buffer

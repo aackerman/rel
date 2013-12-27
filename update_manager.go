@@ -1,6 +1,7 @@
 package arel
 
 type UpdateManager struct {
+	Ast UpdateStatementNode
 	BaseNode
 }
 

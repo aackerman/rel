@@ -1,6 +1,6 @@
 package arel
 
-type SelectStatement struct {
+type SelectStatementNode struct {
 	Cores  []*SelectCoreNode
 	Limit  *LimitNode
 	Orders *[]OrderingNode
@@ -10,6 +10,6 @@ type SelectStatement struct {
 	AstNode
 }
 
-func (s *SelectStatement) IsEqual(s2 SelectStatement) bool {
+func (s *SelectStatementNode) IsEqual(s2 SelectStatementNode) bool {
 	return false
 }

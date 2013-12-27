@@ -6,13 +6,13 @@ import (
 
 type SelectManager struct {
 	Engine Engine
-	Ast    SelectStatement
+	Ast    SelectStatementNode
 	Ctx    *SelectCoreNode
 	BaseNode
 }
 
 func NewSelectManager(t *Table) SelectManager {
-	stmt := SelectStatement{Cores: make([]*SelectCoreNode, 0)}
+	stmt := SelectStatementNode{Cores: make([]*SelectCoreNode, 0)}
 	stmt.Cores = append(stmt.Cores, NewSelectCoreNode(t))
 	ctx := stmt.Cores[len(stmt.Cores)-1]
 	manager := SelectManager{

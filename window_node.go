@@ -1,5 +1,3 @@
 package arel
 
-type WindowNode struct {
-	BaseNode
-}
+type WindowNode BaseNode
