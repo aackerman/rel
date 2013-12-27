@@ -57,23 +57,23 @@ func (s *SelectManager) From(t *Table) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Join(things ...interface{}) *SelectManager {
+func (s *SelectManager) Join(a ...AstNode) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Take(things ...interface{}) *SelectManager {
+func (s *SelectManager) Take(a ...AstNode) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Order(things ...interface{}) *SelectManager {
+func (s *SelectManager) Order(a ...AstNode) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Where(things ...interface{}) *SelectManager {
+func (s *SelectManager) Where(a ...AstNode) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Group(things ...interface{}) *SelectManager {
+func (s *SelectManager) Group(a ...AstNode) *SelectManager {
 	return s
 }
 
