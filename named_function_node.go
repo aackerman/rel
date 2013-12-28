@@ -1,3 +1,5 @@
 package arel
 
-type NamedFunctionNode struct{}
+type NamedFunctionNode struct {
+	FunctionNode
+}
