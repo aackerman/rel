@@ -19,6 +19,7 @@ It is intended to be a framework framework; that is, you can build your own ORM 
 * `SelectManager`
 * `InsertManager`
 * `UpdateManager`
+* `DeleteManager`
 
 ## Usage
 
