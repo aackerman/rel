@@ -30,3 +30,6 @@ type UnionNode BinaryNode
 type UnionAllNode BinaryNode
 type IntersectNode BinaryNode
 type ExceptNode BinaryNode
+type InnerJoinNode JoinNode
+type OuterJoinNode JoinNode
+type StringJoinNode JoinNode
