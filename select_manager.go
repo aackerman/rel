@@ -30,16 +30,8 @@ func (s *SelectManager) ToSql() string {
 	return s.Engine.Visitor().Accept(s.Ast)
 }
 
-func (s *SelectManager) Project(projections ...interface{}) *SelectManager {
-	var projection SqlLiteralNode
-	for _, p := range projections {
-		switch p.(type) {
-		case string:
-			projection = Sql(p.(string))
-		default:
-			projection = Sql("*")
-		}
-
+func (s *SelectManager) Project(projections ...AstNode) *SelectManager {
+	for _, projection := range projections {
 		if s.Ctx.Projections == nil {
 			nodeslice := make([]AstNode, 0)
 			s.Ctx.Projections = &nodeslice

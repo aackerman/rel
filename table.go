@@ -16,7 +16,7 @@ func (t *Table) From() *SelectManager {
 	return t.SelectManager()
 }
 
-func (t *Table) Project(a ...interface{}) *SelectManager {
+func (t *Table) Project(a ...AstNode) *SelectManager {
 	return t.From().Project(a...)
 }
 
