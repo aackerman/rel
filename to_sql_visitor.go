@@ -99,7 +99,6 @@ func (v ToSqlVisitor) QuoteTableName(name string) string {
 func (v ToSqlVisitor) VisitJoinSourceNode(a JoinSource) string {
 	var buf bytes.Buffer
 	if a.Left != nil {
-		log.Printf("VisitJoinSourceNode: %v", a.Left.Name)
 		buf.WriteString(v.VisitTable(a.Left))
 	}
 	return buf.String()

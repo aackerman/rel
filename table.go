@@ -20,6 +20,13 @@ func (t *Table) Project(a ...AstNode) *SelectManager {
 	return t.From().Project(a...)
 }
 
+func (t *Table) CreateStringJoin(left string, right string) StringJoinNode {
+	return StringJoinNode{
+		Left:  left,
+		Right: right,
+	}
+}
+
 func (t *Table) SelectManager() *SelectManager {
 	manager := NewSelectManager(t)
 	return &manager

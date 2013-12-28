@@ -15,8 +15,9 @@ func TestTableProjection(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	query := table.Project(Sql("*"))
 	sql := query.ToSql()
-	if sql != "SELECT * FROM \"users\"" {
-		t.Logf("TestTable sql: %s", sql)
+	expected := "SELECT * FROM \"users\""
+	if sql != expected {
+		t.Logf("TestTable sql: %s != %s", sql, expected)
 		t.Fail()
 	}
 }
@@ -25,8 +26,9 @@ func TestTableMultipleProjections(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	query := table.Project(Sql("*"), Sql("*"))
 	sql := query.ToSql()
-	if sql != "SELECT *, * FROM \"users\"" {
-		t.Logf("TestTableMultipleProjections sql: %s", sql)
+	expected := "SELECT *, * FROM \"users\""
+	if sql != expected {
+		t.Logf("TestTableMultipleProjections sql: '%s' != '%s'", sql, expected)
 		t.Fail()
 	}
 }
@@ -35,8 +37,9 @@ func TestTableSelectManager(t *testing.T) {
 	table := NewTable("", DefaultEngine)
 	sm := table.SelectManager()
 	sql := sm.ToSql()
-	if sql != "SELECT" {
-		t.Logf("TestTableSelectManager sql: %s", sql)
+	expected := "SELECT"
+	if sql != expected {
+		t.Logf("TestTableSelectManager sql: %s != %s", sql, expected)
 		t.Fail()
 	}
 }
