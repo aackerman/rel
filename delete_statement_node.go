@@ -1,5 +1,5 @@
 package arel
 
-type DeleteStatement struct {
+type DeleteStatementNode struct {
 	BaseNode
 }
