@@ -18,5 +18,5 @@ type BaseNode struct {
 }
 
 func NewBaseNode() BaseNode {
-	return BaseNode{NodeFactory{}}
+	return BaseNode{}
 }
