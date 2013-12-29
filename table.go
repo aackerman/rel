@@ -20,10 +20,9 @@ func (t *Table) Project(a ...AstNode) *SelectManager {
 	return t.From().Project(a...)
 }
 
-func (t *Table) CreateStringJoin(left string, right string) StringJoinNode {
+func (t *Table) CreateStringJoin(left string) StringJoinNode {
 	return StringJoinNode{
-		Left:  left,
-		Right: right,
+		Left: left,
 	}
 }
 

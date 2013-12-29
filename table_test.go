@@ -33,6 +33,15 @@ func TestTableMultipleProjections(t *testing.T) {
 	}
 }
 
+func TestTableCreateStringJoin(t *testing.T) {
+	table := NewTable("", DefaultEngine)
+	join := table.CreateStringJoin("foo")
+	if join.Left != "foo" {
+		t.Log("TestTableCreateStringJoin join.Left.Name != \"foo\"")
+		t.Fail()
+	}
+}
+
 func TestTableSelectManager(t *testing.T) {
 	table := NewTable("", DefaultEngine)
 	sm := table.SelectManager()
