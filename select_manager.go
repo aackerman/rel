@@ -1,9 +1,5 @@
 package arel
 
-import (
-	"log"
-)
-
 type SelectManager struct {
 	Engine Engine
 	Ast    SelectStatementNode
