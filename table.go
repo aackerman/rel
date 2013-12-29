@@ -33,6 +33,13 @@ func (t *Table) CreateInnerJoin(left *Table, right *Table) InnerJoinNode {
 	}
 }
 
+func (t *Table) CreateOuterJoin(left *Table, right *Table) InnerJoinNode {
+	return OuterJoinNode{
+		Left:  left,
+		Right: right,
+	}
+}
+
 func (t *Table) SelectManager() *SelectManager {
 	manager := NewSelectManager(t)
 	return &manager
