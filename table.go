@@ -67,6 +67,6 @@ func (t *Table) Alias(name string) {
 	t.Aliases = append(t.Aliases, alias.Name)
 }
 
-func (t *Table) Attr(name string) Attribute {
-	return NewAttribute(name, t)
+func (t *Table) Attr(name string) AttributeNode {
+	return NewAttributeNode(name, t)
 }

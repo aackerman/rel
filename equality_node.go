@@ -1,15 +1,15 @@
 package arel
 
 type EqualityNode struct {
-	Left  SqlLiteralNode
-	Right SqlLiteralNode
+	Left  AstNode
+	Right *AstNode
 	BaseNode
 }
 
-func NewEqualityNode(right SqlLiteralNode, left SqlLiteralNode) EqualityNode {
+func NewEqualityNode(left AstNode, right AstNode) EqualityNode {
 	return EqualityNode{
 		Left:  left,
-		Right: right,
+		Right: &right,
 	}
 }
 

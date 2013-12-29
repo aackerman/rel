@@ -4,11 +4,11 @@ import (
 	"testing"
 )
 
-func TestJoinSources(t *testing.T) {
+func TestSelectManagerJoinSources(t *testing.T) {
 
 }
 
-func TestSkip(t *testing.T) {
+func TestSelectManagerSkip(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	manager := table.SelectManager()
 	sql := manager.Skip(10).ToSql()
@@ -17,7 +17,7 @@ func TestSkip(t *testing.T) {
 	}
 }
 
-func TestOffset(t *testing.T) {
+func TestSelectManagerOffset(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	manager := table.SelectManager()
 	sql := manager.Offset(10).ToSql()

@@ -1,7 +1,7 @@
 package arel
 
 type UnaryNode struct {
-	expr AstNode
+	Expr AstNode
 	BaseNode
 }
 
@@ -20,57 +20,57 @@ type WithNode UnaryNode
 type WithRecursiveNode UnaryNode
 
 func NewUnaryNode(n AstNode) UnaryNode {
-	return UnaryNode{expr: n}
+	return UnaryNode{Expr: n}
 }
 
 func NewBinNode(n AstNode) BinNode {
-	return BinNode{expr: n}
+	return BinNode{Expr: n}
 }
 
 func NewGroupNode(n AstNode) GroupNode {
-	return GroupNode{expr: n}
+	return GroupNode{Expr: n}
 }
 
 func NewHavingNode(n AstNode) HavingNode {
-	return HavingNode{expr: n}
+	return HavingNode{Expr: n}
 }
 
 func NewLimitNode(n AstNode) LimitNode {
-	return LimitNode{expr: n}
+	return LimitNode{Expr: n}
 }
 
 func NewNotNode(n AstNode) NotNode {
-	return NotNode{expr: n}
+	return NotNode{Expr: n}
 }
 
 func NewOffsetNode(n AstNode) OffsetNode {
-	return OffsetNode{expr: n}
+	return OffsetNode{Expr: n}
 }
 
 func NewOnNode(n AstNode) OnNode {
-	return OnNode{expr: n}
+	return OnNode{Expr: n}
 }
 
 func NewOrderingNode(n AstNode) OrderingNode {
-	return OrderingNode{expr: n}
+	return OrderingNode{Expr: n}
 }
 
 func NewTopNode(n AstNode) TopNode {
-	return TopNode{expr: n}
+	return TopNode{Expr: n}
 }
 
 func NewLockNode(n AstNode) LockNode {
-	return LockNode{expr: n}
+	return LockNode{Expr: n}
 }
 
 func NewDistinctOnNode(n AstNode) DistinctOnNode {
-	return DistinctOnNode{expr: n}
+	return DistinctOnNode{Expr: n}
 }
 
 func NewWithNode(n AstNode) WithNode {
-	return WithNode{expr: n}
+	return WithNode{Expr: n}
 }
 
 func NewWithRecursiveNode(n AstNode) WithRecursiveNode {
-	return WithRecursiveNode{expr: n}
+	return WithRecursiveNode{Expr: n}
 }

@@ -7,7 +7,7 @@ type AstNode interface {
 	NewStringJoinNode() StringJoinNode
 	NewInnerJoinNode() InnerJoinNode
 	NewOuterJoinNode() OuterJoinNode
-	NewAndNode() AndNode
+	NewAndNode(...AstNode) AndNode
 	NewOnNode() OnNode
 	NewNotNode() NotNode
 	NewGroupingNode() GroupingNode

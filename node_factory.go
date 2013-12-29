@@ -26,8 +26,8 @@ func (n NodeFactory) NewOuterJoinNode() OuterJoinNode {
 	return OuterJoinNode{}
 }
 
-func (n NodeFactory) NewAndNode() AndNode {
-	return AndNode{}
+func (n NodeFactory) NewAndNode(a ...AstNode) AndNode {
+	return AndNode{Children: &a}
 }
 
 func (n NodeFactory) NewOnNode() OnNode {

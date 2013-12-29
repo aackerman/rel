@@ -1,5 +1,9 @@
 package arel
 
+import (
+	"log"
+)
+
 type SelectManager struct {
 	Engine Engine
 	Ast    SelectStatementNode
@@ -76,6 +80,16 @@ func (s *SelectManager) Offset(i int) *SelectManager {
 }
 
 func (s *SelectManager) Having(a ...AstNode) *SelectManager {
-	s.Ctx.Having = NewHavingNode(a...)
+	var b AstNode
+
+	if len(a) == 1 {
+		b = a[0]
+	} else {
+		b = s.NewAndNode(a...)
+	}
+
+	// pass in an AstNode, usually a SqlLiteralNode or an AndNode
+	having := NewHavingNode(b)
+	s.Ctx.Having = &having
 	return s
 }

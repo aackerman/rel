@@ -44,6 +44,10 @@ func (v ToSqlVisitor) Visit(a AstNode) string {
 		ret = v.VisitJoinSourceNode(val)
 	case EqualityNode:
 		ret = v.VisitEqualityNode(val)
+	case HavingNode:
+		ret = v.VisitHavingNode(val)
+	case AttributeNode:
+		ret = v.VisitAttributeNode(val)
 	default:
 		log.Fatalf("ToSqlVisitor#Visit %T not handled", a)
 	}
@@ -62,8 +66,8 @@ func (v ToSqlVisitor) VisitLockNode(a LockNode) string {
 	return "LockNode"
 }
 
-func (v ToSqlVisitor) VisitOffsetNode(a OffsetNode) string {
-	return "OFFSET " + v.Visit(a.expr)
+func (v ToSqlVisitor) VisitOffsetNode(n OffsetNode) string {
+	return "OFFSET " + v.Visit(n.Expr)
 }
 
 func (v ToSqlVisitor) VisitDistinctOnNode(a DistinctOnNode) string {
@@ -82,7 +86,14 @@ func (v ToSqlVisitor) VisitOrderingNode(a OrderingNode) string {
 	return "OrderingNode"
 }
 
-func (v ToSqlVisitor) VisitAttribute(n Attribute) string {
+func (v ToSqlVisitor) VisitHavingNode(n HavingNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("HAVING ")
+	buf.WriteString(v.Visit(n.Expr))
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitAttributeNode(n AttributeNode) string {
 	var buf bytes.Buffer
 	if n.Table.TableAlias != "" {
 		buf.WriteString(v.QuoteTableName(n.Table.TableAlias))
@@ -97,12 +108,12 @@ func (v ToSqlVisitor) VisitAttribute(n Attribute) string {
 func (v ToSqlVisitor) VisitEqualityNode(n EqualityNode) string {
 	var buf bytes.Buffer
 	if n.Right == nil {
-		buf.WriteString(v.VisitSqlLiteralNode(n.Left))
+		buf.WriteString(v.Visit(n.Left))
 		buf.WriteString(" IS NULL")
 	} else {
-		buf.WriteString(v.VisitSqlLiteralNode(n.Left))
+		buf.WriteString(v.Visit(n.Left))
 		buf.WriteString(" = ")
-		buf.WriteString(v.VisitSqlLiteralNode(n.Right))
+		buf.WriteString(v.Visit(*n.Right))
 	}
 	return buf.String()
 }
@@ -220,7 +231,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 	// add HAVING statement to the buffer
 	if s.Having != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.Visit(s.Having))
+		buf.WriteString(v.VisitHavingNode(*s.Having))
 	}
 
 	// add WINDOW statements to the buffer
