@@ -1,9 +1,5 @@
 package arel
 
-import (
-	"strconv"
-)
-
 type SelectManager struct {
 	Engine Engine
 	Ast    SelectStatementNode
@@ -70,7 +66,7 @@ func (s *SelectManager) Group(a ...AstNode) *SelectManager {
 }
 
 func (s *SelectManager) Skip(i int) *SelectManager {
-	offset := NewOffsetNode(Sql(strconv.Itoa(i)))
+	offset := NewOffsetNode(Sql(i))
 	s.Ast.Offset = &offset
 	return s
 }
@@ -79,6 +75,7 @@ func (s *SelectManager) Offset(i int) *SelectManager {
 	return s.Skip(i)
 }
 
-func (s *SelectManager) Having(a Attribute) *SelectManager {
+func (s *SelectManager) Having(a ...AstNode) *SelectManager {
+	s.Ctx.Having = NewHavingNode(a...)
 	return s
 }

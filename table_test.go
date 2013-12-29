@@ -46,9 +46,9 @@ func TestTableOffset(t *testing.T) {
 
 func TestTableHaving(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
-	query := table.Offset(2)
+	query := table.Having(table.Attr("id").Eq(10))
 	sql := query.ToSql()
-	expected := "SELECT FROM \"users\" OFFSET 2"
+	expected := "SELECT FROM \"users\" HAVING \"users\".\"id\" = 10"
 	if sql != expected {
 		t.Logf("TestTable sql: %s != %s", sql, expected)
 		t.Fail()

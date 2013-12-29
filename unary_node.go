@@ -1,7 +1,7 @@
 package arel
 
 type UnaryNode struct {
-	expr SqlLiteralNode
+	expr AstNode
 	BaseNode
 }
 
@@ -19,58 +19,58 @@ type DistinctOnNode UnaryNode
 type WithNode UnaryNode
 type WithRecursiveNode UnaryNode
 
-func NewUnaryNode(n SqlLiteralNode) UnaryNode {
+func NewUnaryNode(n AstNode) UnaryNode {
 	return UnaryNode{expr: n}
 }
 
-func NewBinNode(n SqlLiteralNode) BinNode {
+func NewBinNode(n AstNode) BinNode {
 	return BinNode{expr: n}
 }
 
-func NewGroupNode(n SqlLiteralNode) GroupNode {
+func NewGroupNode(n AstNode) GroupNode {
 	return GroupNode{expr: n}
 }
 
-func NewHavingNode(n SqlLiteralNode) HavingNode {
+func NewHavingNode(n AstNode) HavingNode {
 	return HavingNode{expr: n}
 }
 
-func NewLimitNode(n SqlLiteralNode) LimitNode {
+func NewLimitNode(n AstNode) LimitNode {
 	return LimitNode{expr: n}
 }
 
-func NewNotNode(n SqlLiteralNode) NotNode {
+func NewNotNode(n AstNode) NotNode {
 	return NotNode{expr: n}
 }
 
-func NewOffsetNode(n SqlLiteralNode) OffsetNode {
+func NewOffsetNode(n AstNode) OffsetNode {
 	return OffsetNode{expr: n}
 }
 
-func NewOnNode(n SqlLiteralNode) OnNode {
+func NewOnNode(n AstNode) OnNode {
 	return OnNode{expr: n}
 }
 
-func NewOrderingNode(n SqlLiteralNode) OrderingNode {
+func NewOrderingNode(n AstNode) OrderingNode {
 	return OrderingNode{expr: n}
 }
 
-func NewTopNode(n SqlLiteralNode) TopNode {
+func NewTopNode(n AstNode) TopNode {
 	return TopNode{expr: n}
 }
 
-func NewLockNode(n SqlLiteralNode) LockNode {
+func NewLockNode(n AstNode) LockNode {
 	return LockNode{expr: n}
 }
 
-func NewDistinctOnNode(n SqlLiteralNode) DistinctOnNode {
+func NewDistinctOnNode(n AstNode) DistinctOnNode {
 	return DistinctOnNode{expr: n}
 }
 
-func NewWithNode(n SqlLiteralNode) WithNode {
+func NewWithNode(n AstNode) WithNode {
 	return WithNode{expr: n}
 }
 
-func NewWithRecursiveNode(n SqlLiteralNode) WithRecursiveNode {
+func NewWithRecursiveNode(n AstNode) WithRecursiveNode {
 	return WithRecursiveNode{expr: n}
 }

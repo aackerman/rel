@@ -1,8 +1,8 @@
 package arel
 
 type BinaryNode struct {
-	Right *Table
 	Left  *Table
+	Right *Table
 	BaseNode
 }
 

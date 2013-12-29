@@ -1,6 +1,16 @@
 package arel
 
-func Sql(raw string) SqlLiteralNode {
+import (
+	"log"
+	"strconv"
+)
+
+type SqlLiteralNode struct {
+	Raw string
+	BaseNode
+}
+
+func Sql(raw interface{}) SqlLiteralNode {
 	return NewSqlLiteralNode(raw)
 }
 
@@ -8,14 +18,15 @@ func Star() SqlLiteralNode {
 	return Sql("*")
 }
 
-type SqlLiteralNode struct {
-	Raw string
-	BaseNode
-}
-
-func NewSqlLiteralNode(raw string) SqlLiteralNode {
-	return SqlLiteralNode{
-		raw,
-		NewBaseNode(),
+func NewSqlLiteralNode(raw interface{}) SqlLiteralNode {
+	var val string
+	switch raw.(type) {
+	case string:
+		val = raw.(string)
+	case int:
+		val = strconv.Itoa(raw.(int))
+	default:
+		log.Fatalf("Cannot create SqlLiteralNode from input type %T", raw)
 	}
+	return SqlLiteralNode{Raw: val}
 }

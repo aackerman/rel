@@ -42,6 +42,8 @@ func (v ToSqlVisitor) Visit(a AstNode) string {
 		ret = v.VisitSqlLiteralNode(val)
 	case JoinSource:
 		ret = v.VisitJoinSourceNode(val)
+	case EqualityNode:
+		ret = v.VisitEqualityNode(val)
 	default:
 		log.Fatalf("ToSqlVisitor#Visit %T not handled", a)
 	}
@@ -80,9 +82,34 @@ func (v ToSqlVisitor) VisitOrderingNode(a OrderingNode) string {
 	return "OrderingNode"
 }
 
+func (v ToSqlVisitor) VisitAttribute(n Attribute) string {
+	var buf bytes.Buffer
+	if n.Table.TableAlias != "" {
+		buf.WriteString(v.QuoteTableName(n.Table.TableAlias))
+	} else {
+		buf.WriteString(v.QuoteTableName(n.Table.Name))
+	}
+	buf.WriteString(".")
+	buf.WriteString(v.QuoteColumnName(n.Name))
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitEqualityNode(n EqualityNode) string {
+	var buf bytes.Buffer
+	if n.Right == nil {
+		buf.WriteString(v.VisitSqlLiteralNode(n.Left))
+		buf.WriteString(" IS NULL")
+	} else {
+		buf.WriteString(v.VisitSqlLiteralNode(n.Left))
+		buf.WriteString(" = ")
+		buf.WriteString(v.VisitSqlLiteralNode(n.Right))
+	}
+	return buf.String()
+}
+
 func (v ToSqlVisitor) VisitTable(t *Table) string {
 	var buf bytes.Buffer
-	if len(t.TableAlias) > 0 {
+	if t.TableAlias != "" {
 		buf.WriteString(v.QuoteTableName(t.Name))
 		buf.WriteString(SPACE)
 		buf.WriteString(v.QuoteTableName(t.TableAlias))
@@ -94,6 +121,10 @@ func (v ToSqlVisitor) VisitTable(t *Table) string {
 
 func (v ToSqlVisitor) QuoteTableName(name string) string {
 	return v.conn.QuoteTableName(name)
+}
+
+func (v ToSqlVisitor) QuoteColumnName(name string) string {
+	return v.conn.QuoteColumnName(name)
 }
 
 func (v ToSqlVisitor) VisitJoinSourceNode(a JoinSource) string {

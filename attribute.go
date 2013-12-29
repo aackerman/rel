@@ -12,6 +12,6 @@ func NewAttribute(name string, t *Table) Attribute {
 	}
 }
 
-func Eq(a *Attribute) *Attribute {
-	return a
+func (a Attribute) Eq(b interface{}) EqualityNode {
+	return NewEqualityNode(&a, Sql(b))
 }
