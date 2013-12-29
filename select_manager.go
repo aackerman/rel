@@ -79,6 +79,6 @@ func (s *SelectManager) Offset(i int) *SelectManager {
 	return s.Skip(i)
 }
 
-func (s *SelectManager) Having(a ...AstNode) *SelectManager {
+func (s *SelectManager) Having(a Attribute) *SelectManager {
 	return s
 }

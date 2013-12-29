@@ -44,6 +44,17 @@ func TestTableOffset(t *testing.T) {
 	}
 }
 
+func TestTableHaving(t *testing.T) {
+	table := NewTable("users", DefaultEngine)
+	query := table.Offset(2)
+	sql := query.ToSql()
+	expected := "SELECT FROM \"users\" OFFSET 2"
+	if sql != expected {
+		t.Logf("TestTable sql: %s != %s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestTableMultipleProjections(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	query := table.Project(Sql("*"), Sql("*"))

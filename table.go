@@ -28,6 +28,10 @@ func (t *Table) Offset(i int) *SelectManager {
 	return t.From().Offset(i)
 }
 
+func (t *Table) Having(a Attribute) *SelectManager {
+	return t.From().Having(a)
+}
+
 func (t *Table) CreateStringJoin(left string) StringJoinNode {
 	return StringJoinNode{
 		Left: left,

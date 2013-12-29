@@ -11,3 +11,7 @@ func NewAttribute(name string, t *Table) Attribute {
 		Table: t,
 	}
 }
+
+func Eq(a *Attribute) *Attribute {
+	return a
+}
