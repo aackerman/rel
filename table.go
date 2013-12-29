@@ -26,6 +26,13 @@ func (t *Table) CreateStringJoin(left string) StringJoinNode {
 	}
 }
 
+func (t *Table) CreateInnerJoin(left *Table, right *Table) InnerJoinNode {
+	return InnerJoinNode{
+		Left:  left,
+		Right: right,
+	}
+}
+
 func (t *Table) SelectManager() *SelectManager {
 	manager := NewSelectManager(t)
 	return &manager
