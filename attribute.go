@@ -5,7 +5,7 @@ type Attribute struct {
 	Table *Table
 }
 
-func NewAttribute(t *Table, name string) Attribute {
+func NewAttribute(name string, t *Table) Attribute {
 	return Attribute{
 		Name:  name,
 		Table: t,
