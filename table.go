@@ -33,7 +33,7 @@ func (t *Table) CreateInnerJoin(left *Table, right *Table) InnerJoinNode {
 	}
 }
 
-func (t *Table) CreateOuterJoin(left *Table, right *Table) InnerJoinNode {
+func (t *Table) CreateOuterJoin(left *Table, right *Table) OuterJoinNode {
 	return OuterJoinNode{
 		Left:  left,
 		Right: right,
@@ -45,11 +45,16 @@ func (t *Table) SelectManager() *SelectManager {
 	return &manager
 }
 
+func (t *Table) InsertManager() *InsertManager {
+	manager := NewInsertManager(t)
+	return &manager
+}
+
 func (t *Table) Alias(name string) {
 	alias := NewTableAliasNode(t, name)
 	t.Aliases = append(t.Aliases, alias.Name)
 }
 
 func (t *Table) Attr(name string) Attribute {
-	return NewAttribute(t, name)
+	return NewAttribute(name, t)
 }
