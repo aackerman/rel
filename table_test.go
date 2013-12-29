@@ -11,11 +11,33 @@ func TestTableName(t *testing.T) {
 	}
 }
 
-func TestTableProjection(t *testing.T) {
+func TestTableProject(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	query := table.Project(Sql("*"))
 	sql := query.ToSql()
 	expected := "SELECT * FROM \"users\""
+	if sql != expected {
+		t.Logf("TestTable sql: %s != %s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestTableSkip(t *testing.T) {
+	table := NewTable("users", DefaultEngine)
+	query := table.Skip(2)
+	sql := query.ToSql()
+	expected := "SELECT FROM \"users\" OFFSET 2"
+	if sql != expected {
+		t.Logf("TestTable sql: %s != %s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestTableOffset(t *testing.T) {
+	table := NewTable("users", DefaultEngine)
+	query := table.Offset(2)
+	sql := query.ToSql()
+	expected := "SELECT FROM \"users\" OFFSET 2"
 	if sql != expected {
 		t.Logf("TestTable sql: %s != %s", sql, expected)
 		t.Fail()
