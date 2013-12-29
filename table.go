@@ -20,6 +20,14 @@ func (t *Table) Project(a ...AstNode) *SelectManager {
 	return t.From().Project(a...)
 }
 
+func (t *Table) Skip(i int) *SelectManager {
+	return t.From().Skip(i)
+}
+
+func (t *Table) Offset(i int) *SelectManager {
+	return t.From().Offset(i)
+}
+
 func (t *Table) CreateStringJoin(left string) StringJoinNode {
 	return StringJoinNode{
 		Left: left,
