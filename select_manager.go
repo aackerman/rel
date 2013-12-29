@@ -13,10 +13,9 @@ func NewSelectManager(t *Table) SelectManager {
 	stmt.Cores = append(stmt.Cores, &core)
 	ctx := stmt.Cores[len(stmt.Cores)-1]
 	manager := SelectManager{
-		Engine:   t.Engine,
-		Ast:      stmt,
-		Ctx:      ctx,
-		BaseNode: NewBaseNode(),
+		Engine: t.Engine,
+		Ast:    stmt,
+		Ctx:    ctx,
 	}
 	manager.From(t)
 	return manager
