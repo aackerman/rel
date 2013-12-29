@@ -82,6 +82,8 @@ func (s *SelectManager) Offset(i int) *SelectManager {
 func (s *SelectManager) Having(a ...AstNode) *SelectManager {
 	var b AstNode
 
+	// use the first Node if there is only one
+	// else create and And node
 	if len(a) == 1 {
 		b = a[0]
 	} else {
