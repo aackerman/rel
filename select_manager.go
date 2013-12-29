@@ -90,7 +90,7 @@ func (s *SelectManager) Having(a ...AstNode) *SelectManager {
 		b = s.NewAndNode(a...)
 	}
 
-	// pass in an AstNode, usually a SqlLiteralNode or an AndNode
+	// pass in an AstNode
 	having := NewHavingNode(b)
 	s.Ctx.Having = &having
 	return s
