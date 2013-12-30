@@ -129,6 +129,10 @@ func TestTableCreateStringJoin(t *testing.T) {
 	}
 }
 
+func TestTableEquality(t *testing.T) {
+	t.Fail()
+}
+
 func TestTableSelectManager(t *testing.T) {
 	table := NewTable("", DefaultEngine)
 	sm := table.SelectManager()
