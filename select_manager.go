@@ -54,9 +54,7 @@ func (s *SelectManager) Take(i int) *SelectManager {
 	return s
 }
 
-// SelectManager#Order accepts an empty interface to allow the acceptance
-// of integers and strings to be passed into NewSqlLiteralNode
-func (s *SelectManager) Order(exprs ...interface{}) *SelectManager {
+func (s *SelectManager) Order(exprs ...string) *SelectManager {
 	if len(exprs) > 0 {
 		if s.Ast.Orders == nil {
 			orders := make([]AstNode, 0)

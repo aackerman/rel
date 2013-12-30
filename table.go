@@ -48,7 +48,7 @@ func (t *Table) Group(a ...AstNode) *SelectManager {
 	return t.SelectManager().Group(a...)
 }
 
-func (t *Table) Order(exprs ...interface{}) *SelectManager {
+func (t *Table) Order(exprs ...string) *SelectManager {
 	return t.SelectManager().Order(exprs...)
 }
 
