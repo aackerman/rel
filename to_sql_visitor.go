@@ -153,7 +153,7 @@ func (v ToSqlVisitor) VisitJoinSourceNode(a JoinSource) string {
 }
 
 func (v ToSqlVisitor) VisitSqlLiteralNode(a SqlLiteralNode) string {
-	if len(a.Raw) > 0 {
+	if a.Raw != "" {
 		return a.Raw
 	} else {
 		return ""
