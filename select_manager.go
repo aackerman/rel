@@ -48,7 +48,9 @@ func (s *SelectManager) Join(a ...AstNode) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Take(a ...AstNode) *SelectManager {
+func (s *SelectManager) Take(i int) *SelectManager {
+	limit := NewLimitNode(Sql(i))
+	s.Ast.Limit = &limit
 	return s
 }
 
