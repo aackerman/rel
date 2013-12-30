@@ -268,10 +268,9 @@ func (v ToSqlVisitor) VisitSelectStatementNode(s SelectStatementNode) string {
 
 	// add ORDER BY clauses to the buffer
 	if s.Orders != nil {
-		buf.WriteString(SPACE)
 		buf.WriteString(ORDER_BY)
 		for i, order := range *s.Orders {
-			buf.WriteString(v.VisitOrderingNode(order))
+			buf.WriteString(v.Visit(order))
 			if (len(*s.Orders) - 1) != i {
 				buf.WriteString(COMMA)
 			}

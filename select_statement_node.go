@@ -3,7 +3,7 @@ package arel
 type SelectStatementNode struct {
 	Cores  []*SelectCoreNode
 	Limit  *LimitNode
-	Orders *[]OrderingNode
+	Orders *[]AstNode
 	Lock   *LockNode
 	With   *WithNode
 	Offset *OffsetNode

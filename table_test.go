@@ -19,6 +19,17 @@ func TestTableAlias(t *testing.T) {
 	}
 }
 
+func TestTableOrder(t *testing.T) {
+	table := NewTable("users", DefaultEngine)
+	sm := table.Order("foo")
+	sql := sm.ToSql()
+	expected := "SELECT FROM \"users\" ORDER BY foo"
+	if sql != expected {
+		t.Logf("TestTableOrder sql: %s != %s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestTableProject(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	query := table.Project(Sql("*"))

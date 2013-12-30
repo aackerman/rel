@@ -52,7 +52,19 @@ func (s *SelectManager) Take(a ...AstNode) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Order(a ...AstNode) *SelectManager {
+// SelectManager#Order accepts an empty interface to allow the acceptance
+// of integers and strings to be passed into NewSqlLiteralNode
+func (s *SelectManager) Order(exprs ...interface{}) *SelectManager {
+	if len(exprs) > 0 {
+		if s.Ast.Orders == nil {
+			orders := make([]AstNode, 0)
+			s.Ast.Orders = &orders
+		}
+		for _, expr := range exprs {
+			order := NewSqlLiteralNode(expr)
+			*s.Ast.Orders = append(*s.Ast.Orders, order)
+		}
+	}
 	return s
 }
 
