@@ -24,6 +24,10 @@ func (t *Table) Project(a ...AstNode) *SelectManager {
 	return t.From().Project(a...)
 }
 
+func (t *Table) Take(i int) *SelectManager {
+	return t.From().Take(i)
+}
+
 func (t *Table) Skip(i int) *SelectManager {
 	return t.From().Skip(i)
 }
