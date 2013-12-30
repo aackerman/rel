@@ -33,7 +33,7 @@ func TestTableOrder(t *testing.T) {
 func TestTableTake(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	sm := table.Take(1)
-	table.Project(Sql("*"))
+	sm.Project(Sql("*"))
 	sql := sm.ToSql()
 	expected := "SELECT * FROM \"users\" LIMIT 1"
 	if sql != expected {

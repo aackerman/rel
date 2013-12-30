@@ -61,7 +61,10 @@ func (v ToSqlVisitor) VisitTopNode(a TopNode) string {
 }
 
 func (v ToSqlVisitor) VisitLimitNode(a LimitNode) string {
-	return "LimitNode"
+	var buf bytes.Buffer
+	buf.WriteString("LIMIT ")
+	buf.WriteString(v.Visit(a.Expr))
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitLockNode(a LockNode) string {
