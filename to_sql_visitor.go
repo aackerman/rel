@@ -89,7 +89,7 @@ func (v ToSqlVisitor) VisitOrderingNode(a OrderingNode) string {
 }
 
 func (v ToSqlVisitor) VisitGroupNode(n GroupNode) string {
-	return "GroupNode"
+	return v.Visit(n.Expr)
 }
 
 func (v ToSqlVisitor) VisitHavingNode(n HavingNode) string {
