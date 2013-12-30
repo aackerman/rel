@@ -45,11 +45,11 @@ func TestTableTake(t *testing.T) {
 func TestTableWhere(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	sm := table.Where(table.Attr("id").Eq(1))
-	sm.Project(Sql("*"))
+	sm.Project(table.Attr("id"))
 	sql := sm.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" = 1"
 	if sql != expected {
-		t.Logf("TestTableOrder sql: %s != %s", sql, expected)
+		t.Logf("TestTableWhere sql: %s != %s", sql, expected)
 		t.Fail()
 	}
 }

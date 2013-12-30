@@ -70,7 +70,12 @@ func (s *SelectManager) Order(exprs ...interface{}) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Where(a ...AstNode) *SelectManager {
+func (s *SelectManager) Where(n AstNode) *SelectManager {
+	if s.Ctx.Wheres == nil {
+		wheres := make([]AstNode, 0)
+		s.Ctx.Wheres = &wheres
+	}
+	*s.Ctx.Wheres = append(*s.Ctx.Wheres, n)
 	return s
 }
 
