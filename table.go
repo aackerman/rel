@@ -40,6 +40,10 @@ func (t *Table) Group(a ...AstNode) *SelectManager {
 	return t.From().Group(a...)
 }
 
+func (t *Table) Order(a ...AstNode) *SelectManager {
+	return t.From().Order(a...)
+}
+
 func (t *Table) CreateStringJoin(left string) StringJoinNode {
 	return StringJoinNode{
 		Left: left,
