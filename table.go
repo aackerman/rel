@@ -28,6 +28,10 @@ func (t *Table) Take(i int) *SelectManager {
 	return t.From().Take(i)
 }
 
+func (t *Table) Where(n AstNode) *SelectManager {
+	return t.From().Where(n)
+}
+
 func (t *Table) Skip(i int) *SelectManager {
 	return t.From().Skip(i)
 }
