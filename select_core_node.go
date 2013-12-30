@@ -6,7 +6,7 @@ type SelectCoreNode struct {
 	Projections  *[]AstNode
 	SetQuanifier *AstNode
 	Wheres       *[]AstNode
-	Groups       *[]GroupingNode
+	Groups       *[]GroupNode
 	Having       *HavingNode
 	Windows      *[]WindowNode
 	AstNode
