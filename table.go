@@ -16,40 +16,36 @@ func NewTable(name string, e Engine) Table {
 	return table
 }
 
-func (t *Table) From() *SelectManager {
-	return t.SelectManager()
-}
-
 func (t *Table) Project(a ...AstNode) *SelectManager {
-	return t.From().Project(a...)
+	return t.SelectManager().Project(a...)
 }
 
 func (t *Table) Take(i int) *SelectManager {
-	return t.From().Take(i)
+	return t.SelectManager().Take(i)
 }
 
 func (t *Table) Where(n AstNode) *SelectManager {
-	return t.From().Where(n)
+	return t.SelectManager().Where(n)
 }
 
 func (t *Table) Skip(i int) *SelectManager {
-	return t.From().Skip(i)
+	return t.SelectManager().Skip(i)
 }
 
 func (t *Table) Offset(i int) *SelectManager {
-	return t.From().Offset(i)
+	return t.SelectManager().Offset(i)
 }
 
 func (t *Table) Having(a ...AstNode) *SelectManager {
-	return t.From().Having(a...)
+	return t.SelectManager().Having(a...)
 }
 
 func (t *Table) Group(a ...AstNode) *SelectManager {
-	return t.From().Group(a...)
+	return t.SelectManager().Group(a...)
 }
 
 func (t *Table) Order(exprs ...interface{}) *SelectManager {
-	return t.From().Order(exprs...)
+	return t.SelectManager().Order(exprs...)
 }
 
 func (t *Table) CreateStringJoin(left string) StringJoinNode {
