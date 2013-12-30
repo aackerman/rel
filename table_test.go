@@ -55,6 +55,17 @@ func TestTableHaving(t *testing.T) {
 	}
 }
 
+func TestTableGroup(t *testing.T) {
+	table := NewTable("users", DefaultEngine)
+	query := table.Group(table.Attr("id"))
+	sql := query.ToSql()
+	expected := "SELECT FROM \"users\" GROUP BY \"users\".\"id\""
+	if sql != expected {
+		t.Logf("TestTable sql: %s != %s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestTableMultipleProjections(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	query := table.Project(Sql("*"), Sql("*"))

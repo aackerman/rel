@@ -48,6 +48,8 @@ func (v ToSqlVisitor) Visit(a AstNode) string {
 		ret = v.VisitHavingNode(val)
 	case AttributeNode:
 		ret = v.VisitAttributeNode(val)
+	case GroupNode:
+		ret = v.VisitGroupNode(val)
 	default:
 		log.Fatalf("ToSqlVisitor#Visit %T not handled", a)
 	}
@@ -84,6 +86,10 @@ func (v ToSqlVisitor) VisitInNode(a InNode) string {
 
 func (v ToSqlVisitor) VisitOrderingNode(a OrderingNode) string {
 	return "OrderingNode"
+}
+
+func (v ToSqlVisitor) VisitGroupNode(n GroupNode) string {
+	return "GroupNode"
 }
 
 func (v ToSqlVisitor) VisitHavingNode(n HavingNode) string {

@@ -60,7 +60,18 @@ func (s *SelectManager) Where(a ...AstNode) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Group(a ...AstNode) *SelectManager {
+func (s *SelectManager) Group(columns ...AstNode) *SelectManager {
+	var group GroupNode
+	if len(columns) > 0 {
+		if s.Ctx.Groups == nil {
+			groups := make([]GroupNode, 0)
+			s.Ctx.Groups = &groups
+		}
+		for _, column := range columns {
+			group = NewGroupNode(column)
+			*s.Ctx.Groups = append(*s.Ctx.Groups, group)
+		}
+	}
 	return s
 }
 
