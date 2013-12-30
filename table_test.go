@@ -42,6 +42,18 @@ func TestTableTake(t *testing.T) {
 	}
 }
 
+func TestTableWhere(t *testing.T) {
+	table := NewTable("users", DefaultEngine)
+	sm := table.Where(table.Attr("id").Eq(1))
+	sm.Project(Sql("*"))
+	sql := sm.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" = 1"
+	if sql != expected {
+		t.Logf("TestTableOrder sql: %s != %s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestTableProject(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	query := table.Project(Sql("*"))
