@@ -101,11 +101,7 @@ func (v ToSqlVisitor) VisitHavingNode(n HavingNode) string {
 
 func (v ToSqlVisitor) VisitAttributeNode(n AttributeNode) string {
 	var buf bytes.Buffer
-	if n.Table.TableAlias != "" {
-		buf.WriteString(v.QuoteTableName(n.Table.TableAlias))
-	} else {
-		buf.WriteString(v.QuoteTableName(n.Table.Name))
-	}
+	buf.WriteString(v.QuoteTableName(n.Table.Name))
 	buf.WriteString(".")
 	buf.WriteString(v.QuoteColumnName(n.Name))
 	return buf.String()
@@ -126,13 +122,7 @@ func (v ToSqlVisitor) VisitEqualityNode(n EqualityNode) string {
 
 func (v ToSqlVisitor) VisitTable(t *Table) string {
 	var buf bytes.Buffer
-	if t.TableAlias != "" {
-		buf.WriteString(v.QuoteTableName(t.Name))
-		buf.WriteString(SPACE)
-		buf.WriteString(v.QuoteTableName(t.TableAlias))
-	} else {
-		buf.WriteString(v.QuoteTableName(t.Name))
-	}
+	buf.WriteString(v.QuoteTableName(t.Name))
 	return buf.String()
 }
 

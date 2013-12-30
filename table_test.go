@@ -11,6 +11,14 @@ func TestTableName(t *testing.T) {
 	}
 }
 
+func TestTableAlias(t *testing.T) {
+	table := NewTable("users", DefaultEngine)
+	alias := table.Alias()
+	if alias.Name != "users_2" {
+		t.Fail()
+	}
+}
+
 func TestTableProject(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	query := table.Project(Sql("*"))

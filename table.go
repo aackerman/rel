@@ -1,10 +1,14 @@
 package arel
 
+import (
+	"bytes"
+	"strconv"
+)
+
 type Table struct {
-	Name       string
-	Engine     Engine
-	TableAlias string
-	Aliases    []string
+	Name    string
+	Engine  Engine
+	Aliases *[]TableAliasNode
 }
 
 func NewTable(name string, e Engine) Table {
@@ -66,9 +70,19 @@ func (t *Table) InsertManager() *InsertManager {
 	return &manager
 }
 
-func (t *Table) Alias(name string) {
-	alias := NewTableAliasNode(t, name)
-	t.Aliases = append(t.Aliases, alias.Name)
+func (t *Table) Alias() TableAliasNode {
+	var buf bytes.Buffer
+	if t.Aliases == nil {
+		aliases := make([]TableAliasNode, 0)
+		t.Aliases = &aliases
+	}
+	n := len(*t.Aliases)
+	buf.WriteString(t.Name)
+	buf.WriteString("_")
+	buf.WriteString(strconv.Itoa(n + 2))
+	alias := NewTableAliasNode(t, buf.String())
+	*t.Aliases = append(*t.Aliases, alias)
+	return alias
 }
 
 func (t *Table) Attr(name string) AttributeNode {
