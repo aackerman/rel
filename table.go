@@ -20,6 +20,10 @@ func (t *Table) Project(a ...AstNode) *SelectManager {
 	return t.SelectManager().Project(a...)
 }
 
+func (t *Table) Select(a ...AstNode) *SelectManager {
+	return t.Project(a...)
+}
+
 func (t *Table) Take(i int) *SelectManager {
 	return t.SelectManager().Take(i)
 }
