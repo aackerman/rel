@@ -17,7 +17,7 @@ func TestTableProject(t *testing.T) {
 	sql := query.ToSql()
 	expected := "SELECT * FROM \"users\""
 	if sql != expected {
-		t.Logf("TestTable sql: %s != %s", sql, expected)
+		t.Logf("TestTableProject sql: %s != %s", sql, expected)
 		t.Fail()
 	}
 }
@@ -28,7 +28,7 @@ func TestTableSkip(t *testing.T) {
 	sql := query.ToSql()
 	expected := "SELECT FROM \"users\" OFFSET 2"
 	if sql != expected {
-		t.Logf("TestTable sql: %s != %s", sql, expected)
+		t.Logf("TestTableSkip sql: %s != %s", sql, expected)
 		t.Fail()
 	}
 }
@@ -39,7 +39,7 @@ func TestTableOffset(t *testing.T) {
 	sql := query.ToSql()
 	expected := "SELECT FROM \"users\" OFFSET 2"
 	if sql != expected {
-		t.Logf("TestTable sql: %s != %s", sql, expected)
+		t.Logf("TestTableOffset sql: %s != %s", sql, expected)
 		t.Fail()
 	}
 }
@@ -50,7 +50,7 @@ func TestTableHaving(t *testing.T) {
 	sql := query.ToSql()
 	expected := "SELECT FROM \"users\" HAVING \"users\".\"id\" = 10"
 	if sql != expected {
-		t.Logf("TestTable sql: %s != %s", sql, expected)
+		t.Logf("TestTableHaving sql: %s != %s", sql, expected)
 		t.Fail()
 	}
 }
@@ -61,7 +61,7 @@ func TestTableGroup(t *testing.T) {
 	sql := query.ToSql()
 	expected := "SELECT FROM \"users\" GROUP BY \"users\".\"id\""
 	if sql != expected {
-		t.Logf("TestTable sql: %s != %s", sql, expected)
+		t.Logf("TestTableGroup sql: %s != %s", sql, expected)
 		t.Fail()
 	}
 }
