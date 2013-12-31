@@ -1,4 +1,4 @@
-package grel
+package rel
 
 type FalseNode struct {
 	BaseNode

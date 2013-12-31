@@ -1,4 +1,4 @@
-package grel
+package rel
 
 // Base Visitor interface for visiting
 // sql nodes and creating a buffer

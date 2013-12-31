@@ -1,4 +1,4 @@
-# Project Name
+# Rel
 
 A SQL AST manager for Go. It:
 

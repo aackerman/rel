@@ -1,4 +1,4 @@
-package grel
+package rel
 
 type AstNode interface {
 	NewTrueNode() TrueNode

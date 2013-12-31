@@ -1,4 +1,4 @@
-package grel
+package rel
 
 type SelectManager struct {
 	Engine Engine

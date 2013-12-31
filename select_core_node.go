@@ -1,4 +1,4 @@
-package grel
+package rel
 
 type SelectCoreNode struct {
 	Source       *JoinSource

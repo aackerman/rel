@@ -1,3 +1,3 @@
-package grel
+package rel
 
 type JoinSource BinaryNode

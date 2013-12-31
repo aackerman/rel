@@ -1,4 +1,4 @@
-package grel
+package rel
 
 // Base engine interface for handling database connections
 // and operating on the database

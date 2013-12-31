@@ -1,4 +1,4 @@
-package grel
+package rel
 
 type NamedFunctionNode struct {
 	FunctionNode
