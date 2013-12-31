@@ -83,7 +83,7 @@ func (t *Table) InsertManager() *InsertManager {
 	return &manager
 }
 
-func (t *Table) AliasName(name string) {
+func (t *Table) SetTableAlias(name string) {
 	t.TableAlias = name
 }
 
