@@ -3,9 +3,8 @@
 A SQL AST manager for Go. It:
 
 * Simplifies the generation of complex SQL queries
-* Adapts to various RDBMSes
 
-It is intended to be a framework framework; that is, you can build your own ORM with it, focusing on data modeling as opposed to database compatibility and query generation.
+It is intended to be a framework, meaning this library could fulfill the query generation for a great ORM.
 
 ## Interfaces
 
