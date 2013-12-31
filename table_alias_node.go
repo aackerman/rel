@@ -1,4 +1,4 @@
-package arel
+package grel
 
 type TableAliasNode struct {
 	Name  string

@@ -1,3 +1,3 @@
-package arel
+package grel
 
 type WindowNode BaseNode

@@ -1,4 +1,4 @@
-package arel
+package grel
 
 type BinaryNode struct {
 	Left  *Table

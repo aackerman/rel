@@ -1,4 +1,4 @@
-package arel
+package grel
 
 type UnaryNode struct {
 	Expr AstNode

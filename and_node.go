@@ -1,4 +1,4 @@
-package arel
+package grel
 
 type AndNode struct {
 	Children *[]AstNode

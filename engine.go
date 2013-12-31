@@ -1,4 +1,4 @@
-package arel
+package grel
 
 // Base engine interface for handling database connections
 // and operating on the database

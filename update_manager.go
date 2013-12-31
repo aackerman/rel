@@ -1,4 +1,4 @@
-package arel
+package grel
 
 type UpdateManager struct {
 	Ast UpdateStatementNode
