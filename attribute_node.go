@@ -13,6 +13,6 @@ func NewAttributeNode(name string, t *Table) AttributeNode {
 	}
 }
 
-func (n AttributeNode) Eq(b interface{}) EqualityNode {
-	return NewEqualityNode(n, Sql(b))
+func (a AttributeNode) Eq(n SqlLiteralNode) EqualityNode {
+	return NewEqualityNode(a, n)
 }

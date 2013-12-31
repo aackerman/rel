@@ -8,9 +8,8 @@ type BinaryNode struct {
 
 func NewBinaryNode(left *Table, right *Table) BinaryNode {
 	return BinaryNode{
-		Left:     left,
-		Right:    right,
-		BaseNode: NewBaseNode(),
+		Left:  left,
+		Right: right,
 	}
 }
 

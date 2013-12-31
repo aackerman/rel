@@ -4,7 +4,7 @@ type UpdateStatementNode struct {
 	table  *Table
 	Wheres *[]AstNode
 	Values *[]AstNode
-	Orders *[]OrderingNode
+	Orders *[]AstNode
 	Limit  int
 	Key    string
 	BaseNode

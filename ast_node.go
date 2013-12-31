@@ -12,11 +12,3 @@ type AstNode interface {
 	NewNotNode() NotNode
 	NewGroupingNode() GroupingNode
 }
-
-type BaseNode struct {
-	NodeFactory
-}
-
-func NewBaseNode() BaseNode {
-	return BaseNode{}
-}

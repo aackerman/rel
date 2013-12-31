@@ -1,3 +1,5 @@
 package rel
 
-type WindowNode BaseNode
+type WindowNode struct {
+	BaseNode
+}

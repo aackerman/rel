@@ -3,6 +3,7 @@ package rel
 import (
 	"bytes"
 	"log"
+	"runtime/debug"
 	"strings"
 )
 
@@ -53,6 +54,7 @@ func (v ToSqlVisitor) Visit(a AstNode) string {
 	case ExistsNode:
 		ret = v.VisitExistsNode(val)
 	default:
+		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit %T not handled", a)
 	}
 	return ret

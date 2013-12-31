@@ -54,9 +54,7 @@ func (t *Table) Order(exprs ...string) *SelectManager {
 }
 
 func (t *Table) CreateStringJoin(left string) StringJoinNode {
-	return StringJoinNode{
-		Left: left,
-	}
+	return StringJoinNode{Left: left}
 }
 
 func (t *Table) CreateInnerJoin(left *Table, right *Table) InnerJoinNode {

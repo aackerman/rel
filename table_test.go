@@ -57,7 +57,7 @@ func TestTableTake(t *testing.T) {
 
 func TestTableWhere(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
-	sm := table.Where(table.Attr("id").Eq(1))
+	sm := table.Where(table.Attr("id").Eq(Sql(1)))
 	sm.Project(table.Attr("id"))
 	sql := sm.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" = 1"
@@ -102,7 +102,7 @@ func TestTableOffset(t *testing.T) {
 
 func TestTableHaving(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
-	query := table.Having(table.Attr("id").Eq(10))
+	query := table.Having(table.Attr("id").Eq(Sql(10)))
 	sql := query.ToSql()
 	expected := "SELECT FROM \"users\" HAVING \"users\".\"id\" = 10"
 	if sql != expected {
