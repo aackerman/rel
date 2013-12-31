@@ -5,7 +5,8 @@ import (
 )
 
 func TestSelectManagerJoinSources(t *testing.T) {
-
+	t.Log("TestSelectManagerJoinSources not implemented")
+	t.Fail()
 }
 
 func TestSelectManagerSkip(t *testing.T) {
@@ -18,6 +19,7 @@ func TestSelectManagerSkip(t *testing.T) {
 }
 
 func TestSelectManagerClone(t *testing.T) {
+	t.Log("TestSelectManagerClone not implemented")
 	t.Fail()
 }
 
