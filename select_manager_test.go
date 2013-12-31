@@ -1,6 +1,7 @@
 package arel
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -21,6 +22,20 @@ func TestSelectManagerSkip(t *testing.T) {
 func TestSelectManagerClone(t *testing.T) {
 	t.Log("TestSelectManagerClone not implemented")
 	t.Fail()
+}
+
+func TestSelectManagerExists(t *testing.T) {
+	table := NewTable("users", DefaultEngine)
+	manager := table.SelectManager()
+	manager.Project(Sql("*"))
+	m2 := table.SelectManager()
+	m2.Project(manager.Exists())
+	sql := m2.ToSql()
+	expected := fmt.Sprintf("SELECT EXISTS (%s)", manager.ToSql())
+	if sql != expected {
+		t.Log("TestSelectManagerClone not implemented")
+		t.Fail()
+	}
 }
 
 func TestSelectManagerOffset(t *testing.T) {

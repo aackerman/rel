@@ -50,6 +50,8 @@ func (v ToSqlVisitor) Visit(a AstNode) string {
 		ret = v.VisitAttributeNode(val)
 	case GroupNode:
 		ret = v.VisitGroupNode(val)
+	case ExistsNode:
+		ret = v.VisitExistsNode(val)
 	default:
 		log.Fatalf("ToSqlVisitor#Visit %T not handled", a)
 	}
@@ -99,6 +101,18 @@ func (v ToSqlVisitor) VisitHavingNode(n HavingNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("HAVING ")
 	buf.WriteString(v.Visit(n.Expr))
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitExistsNode(n ExistsNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("EXISTS (")
+	buf.WriteString(v.Visit(n.Expressions))
+	buf.WriteString(")")
+	if n.Alias != nil {
+		buf.WriteString(" AS ")
+		buf.WriteString(v.Visit(n.Alias))
+	}
 	return buf.String()
 }
 
