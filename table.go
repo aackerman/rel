@@ -6,9 +6,10 @@ import (
 )
 
 type Table struct {
-	Name    string
-	Engine  Engine
-	Aliases *[]TableAliasNode
+	Name       string
+	Engine     Engine
+	TableAlias string
+	Aliases    *[]TableAliasNode
 }
 
 func NewTable(name string, e Engine) Table {
@@ -80,6 +81,10 @@ func (t *Table) SelectManager() *SelectManager {
 func (t *Table) InsertManager() *InsertManager {
 	manager := NewInsertManager(t)
 	return &manager
+}
+
+func (t *Table) AliasName(name string) {
+	t.TableAlias = name
 }
 
 func (t *Table) Alias() TableAliasNode {

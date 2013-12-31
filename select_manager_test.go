@@ -17,6 +17,10 @@ func TestSelectManagerSkip(t *testing.T) {
 	}
 }
 
+func TestSelectManagerClone(t *testing.T) {
+	t.Fail()
+}
+
 func TestSelectManagerOffset(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	manager := table.SelectManager()
