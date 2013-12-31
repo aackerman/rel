@@ -77,7 +77,13 @@ func (s *SelectManager) Where(n AstNode) *SelectManager {
 		wheres := make([]AstNode, 0)
 		s.Ctx.Wheres = &wheres
 	}
-	*s.Ctx.Wheres = append(*s.Ctx.Wheres, n)
+
+	if expr, ok := n.(SelectManager); ok {
+		*s.Ctx.Wheres = append(*s.Ctx.Wheres, expr.Ast)
+	} else {
+		*s.Ctx.Wheres = append(*s.Ctx.Wheres, n)
+	}
+
 	return s
 }
 
