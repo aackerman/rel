@@ -19,6 +19,19 @@ func TestTableAlias(t *testing.T) {
 	}
 }
 
+func TestTableSetTableAlias(t *testing.T) {
+	table := NewTable("users", DefaultEngine)
+	table.SetTableAlias("foo")
+	manager := table.SelectManager()
+	manager.Skip(10)
+	sql := manager.ToSql()
+	expected := "SELECT FROM \"users\" \"foo\" OFFSET 10"
+	if sql != expected {
+		t.Logf("TestTableSetTableAlias sql: %s != %s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestTableOrder(t *testing.T) {
 	table := NewTable("users", DefaultEngine)
 	sm := table.Order("foo")
