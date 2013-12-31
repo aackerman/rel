@@ -18,7 +18,7 @@ func NewTable(name string, e Engine) Table {
 }
 
 func (t *Table) Project(a ...AstNode) *SelectManager {
-	return t.SelectManager().Project(a...)
+	return t.From(t).Project(a...)
 }
 
 func (t *Table) Select(a ...AstNode) *SelectManager {
@@ -26,31 +26,31 @@ func (t *Table) Select(a ...AstNode) *SelectManager {
 }
 
 func (t *Table) Take(i int) *SelectManager {
-	return t.SelectManager().Take(i)
+	return t.From(t).Take(i)
 }
 
 func (t *Table) Where(n AstNode) *SelectManager {
-	return t.SelectManager().Where(n)
+	return t.From(t).Where(n)
 }
 
 func (t *Table) Skip(i int) *SelectManager {
-	return t.SelectManager().Skip(i)
+	return t.From(t).Skip(i)
 }
 
 func (t *Table) Offset(i int) *SelectManager {
-	return t.SelectManager().Offset(i)
+	return t.From(t).Offset(i)
 }
 
 func (t *Table) Having(a ...AstNode) *SelectManager {
-	return t.SelectManager().Having(a...)
+	return t.From(t).Having(a...)
 }
 
 func (t *Table) Group(a ...AstNode) *SelectManager {
-	return t.SelectManager().Group(a...)
+	return t.From(t).Group(a...)
 }
 
 func (t *Table) Order(exprs ...string) *SelectManager {
-	return t.SelectManager().Order(exprs...)
+	return t.From(t).Order(exprs...)
 }
 
 func (t *Table) CreateStringJoin(left string) StringJoinNode {
@@ -71,8 +71,13 @@ func (t *Table) CreateOuterJoin(left *Table, right *Table) OuterJoinNode {
 	}
 }
 
+func (t *Table) From(n *Table) *SelectManager {
+	manager := NewSelectManager(t.Engine, n)
+	return &manager
+}
+
 func (t *Table) SelectManager() *SelectManager {
-	manager := NewSelectManager(t)
+	manager := NewSelectManager(t.Engine, t)
 	return &manager
 }
 

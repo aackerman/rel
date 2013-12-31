@@ -7,16 +7,17 @@ type SelectManager struct {
 	BaseNode
 }
 
-func NewSelectManager(t *Table) SelectManager {
+func NewSelectManager(e Engine, t *Table) SelectManager {
 	stmt := SelectStatementNode{Cores: make([]*SelectCoreNode, 0)}
 	core := NewSelectCoreNode()
 	stmt.Cores = append(stmt.Cores, &core)
 	ctx := stmt.Cores[len(stmt.Cores)-1]
 	manager := SelectManager{
-		Engine: t.Engine,
+		Engine: e,
 		Ast:    stmt,
 		Ctx:    ctx,
 	}
+	// setup initial join source
 	manager.From(t)
 	return manager
 }
