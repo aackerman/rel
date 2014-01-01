@@ -26,10 +26,10 @@ func (s *SelectManager) ToSql() string {
 	return s.Engine.Visitor().Accept(s.Ast)
 }
 
-func (s *SelectManager) Project(projections ...AstNode) *SelectManager {
+func (s *SelectManager) Project(projections ...Visitable) *SelectManager {
 	for _, projection := range projections {
 		if s.Ctx.Projections == nil {
-			nodeslice := make([]AstNode, 0)
+			nodeslice := make([]Visitable, 0)
 			s.Ctx.Projections = &nodeslice
 		}
 
@@ -45,7 +45,7 @@ func (s *SelectManager) From(t *Table) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Join(a ...AstNode) *SelectManager {
+func (s *SelectManager) Join(a ...Visitable) *SelectManager {
 	return s
 }
 
@@ -62,7 +62,7 @@ func (s *SelectManager) Exists() ExistsNode {
 func (s *SelectManager) Order(exprs ...string) *SelectManager {
 	if len(exprs) > 0 {
 		if s.Ast.Orders == nil {
-			orders := make([]AstNode, 0)
+			orders := make([]Visitable, 0)
 			s.Ast.Orders = &orders
 		}
 		for _, expr := range exprs {
@@ -73,9 +73,9 @@ func (s *SelectManager) Order(exprs ...string) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Where(n AstNode) *SelectManager {
+func (s *SelectManager) Where(n Visitable) *SelectManager {
 	if s.Ctx.Wheres == nil {
-		wheres := make([]AstNode, 0)
+		wheres := make([]Visitable, 0)
 		s.Ctx.Wheres = &wheres
 	}
 
@@ -88,7 +88,7 @@ func (s *SelectManager) Where(n AstNode) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Group(columns ...AstNode) *SelectManager {
+func (s *SelectManager) Group(columns ...Visitable) *SelectManager {
 	var group GroupNode
 	if len(columns) > 0 {
 		if s.Ctx.Groups == nil {
@@ -113,8 +113,8 @@ func (s *SelectManager) Offset(i int) *SelectManager {
 	return s.Skip(i)
 }
 
-func (s *SelectManager) Having(a ...AstNode) *SelectManager {
-	var b AstNode
+func (s *SelectManager) Having(a ...Visitable) *SelectManager {
+	var b Visitable
 
 	// use the first Node if there is only one
 	// else create and And node
@@ -124,7 +124,7 @@ func (s *SelectManager) Having(a ...AstNode) *SelectManager {
 		b = s.NewAndNode(a...)
 	}
 
-	// pass in an AstNode
+	// pass in an Visitable
 	having := NewHavingNode(b)
 	s.Ctx.Having = &having
 	return s

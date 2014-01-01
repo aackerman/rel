@@ -8,7 +8,7 @@ It is intended to be a framework, meaning this library could fulfill the query g
 
 ## Interfaces
 
-* `AstNode`
+* `Visitable`
 * `Visitor`
 * `Engine`
 

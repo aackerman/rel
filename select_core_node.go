@@ -3,13 +3,13 @@ package rel
 type SelectCoreNode struct {
 	Source       *JoinSource
 	Top          *TopNode
-	Projections  *[]AstNode
-	SetQuanifier *AstNode
-	Wheres       *[]AstNode
+	Projections  *[]Visitable
+	SetQuanifier *Visitable
+	Wheres       *[]Visitable
 	Groups       *[]GroupNode
 	Having       *HavingNode
 	Windows      *[]WindowNode
-	AstNode
+	Visitable
 }
 
 func NewSelectCoreNode() SelectCoreNode {

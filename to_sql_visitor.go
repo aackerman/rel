@@ -25,11 +25,11 @@ func NewToSqlVisitor(c *Connection) ToSqlVisitor {
 	return ToSqlVisitor{conn: c}
 }
 
-func (v ToSqlVisitor) Accept(a AstNode) string {
+func (v ToSqlVisitor) Accept(a Visitable) string {
 	return v.Visit(a)
 }
 
-func (v ToSqlVisitor) Visit(a AstNode) string {
+func (v ToSqlVisitor) Visit(a Visitable) string {
 	ret := ""
 	switch val := a.(type) {
 	case SelectStatementNode:

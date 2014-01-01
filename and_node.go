@@ -1,6 +1,6 @@
 package rel
 
 type AndNode struct {
-	Children *[]AstNode
+	Children *[]Visitable
 	BaseNode
 }

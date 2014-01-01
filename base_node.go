@@ -4,21 +4,21 @@ import (
 	"log"
 )
 
-// BaseNode satisfies the AstNode Interface
+// BaseNode satisfies the Visitable Interface
 // All other nodes should have an embedded BaseNode
 type BaseNode struct{}
 
-func (a BaseNode) NotEq(n AstNode) NotEqualNode {
+func (a BaseNode) NotEq(n Visitable) NotEqualNode {
 	log.Fatal("BaseNode#NotEq not implemented")
 	return NotEqualNode{}
 }
 
-func (a BaseNode) NotEqAny(n AstNode) GroupingNode {
+func (a BaseNode) NotEqAny(n Visitable) GroupingNode {
 	log.Fatal("BaseNode#NotEqAny not implemented")
 	return GroupingNode{}
 }
 
-func (a BaseNode) NotEqAll(n AstNode) GroupingNode {
+func (a BaseNode) NotEqAll(n Visitable) GroupingNode {
 	log.Fatal("BaseNode#NotEqAll not implemented")
 	return GroupingNode{}
 }
@@ -47,7 +47,7 @@ func (a BaseNode) NewOuterJoinNode() OuterJoinNode {
 	return OuterJoinNode{}
 }
 
-func (a BaseNode) NewAndNode(n ...AstNode) AndNode {
+func (a BaseNode) NewAndNode(n ...Visitable) AndNode {
 	return AndNode{Children: &n}
 }
 

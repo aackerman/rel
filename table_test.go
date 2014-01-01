@@ -135,8 +135,8 @@ func TestTableMultipleProjections(t *testing.T) {
 
 func TestTableCreateStringJoin(t *testing.T) {
 	table := NewTable("", DefaultEngine)
-	join := table.CreateStringJoin("foo")
-	if join.Left != "foo" {
+	join := table.CreateStringJoin(Sql("foo"))
+	if join.Left.Raw != "foo" {
 		t.Log("TestTableCreateStringJoin join.Left != \"foo\"")
 		t.Fail()
 	}

@@ -1,7 +1,7 @@
 package rel
 
 type UnaryNode struct {
-	Expr AstNode
+	Expr Visitable
 	BaseNode
 }
 
@@ -19,58 +19,58 @@ type DistinctOnNode UnaryNode
 type WithNode UnaryNode
 type WithRecursiveNode UnaryNode
 
-func NewUnaryNode(n AstNode) UnaryNode {
+func NewUnaryNode(n Visitable) UnaryNode {
 	return UnaryNode{Expr: n}
 }
 
-func NewBinNode(n AstNode) BinNode {
+func NewBinNode(n Visitable) BinNode {
 	return BinNode{Expr: n}
 }
 
-func NewGroupNode(n AstNode) GroupNode {
+func NewGroupNode(n Visitable) GroupNode {
 	return GroupNode{Expr: n}
 }
 
-func NewHavingNode(n AstNode) HavingNode {
+func NewHavingNode(n Visitable) HavingNode {
 	return HavingNode{Expr: n}
 }
 
-func NewLimitNode(n AstNode) LimitNode {
+func NewLimitNode(n Visitable) LimitNode {
 	return LimitNode{Expr: n}
 }
 
-func NewNotNode(n AstNode) NotNode {
+func NewNotNode(n Visitable) NotNode {
 	return NotNode{Expr: n}
 }
 
-func NewOffsetNode(n AstNode) OffsetNode {
+func NewOffsetNode(n Visitable) OffsetNode {
 	return OffsetNode{Expr: n}
 }
 
-func NewOnNode(n AstNode) OnNode {
+func NewOnNode(n Visitable) OnNode {
 	return OnNode{Expr: n}
 }
 
-func NewOrderingNode(n AstNode) OrderingNode {
+func NewOrderingNode(n Visitable) OrderingNode {
 	return OrderingNode{Expr: n}
 }
 
-func NewTopNode(n AstNode) TopNode {
+func NewTopNode(n Visitable) TopNode {
 	return TopNode{Expr: n}
 }
 
-func NewLockNode(n AstNode) LockNode {
+func NewLockNode(n Visitable) LockNode {
 	return LockNode{Expr: n}
 }
 
-func NewDistinctOnNode(n AstNode) DistinctOnNode {
+func NewDistinctOnNode(n Visitable) DistinctOnNode {
 	return DistinctOnNode{Expr: n}
 }
 
-func NewWithNode(n AstNode) WithNode {
+func NewWithNode(n Visitable) WithNode {
 	return WithNode{Expr: n}
 }
 
-func NewWithRecursiveNode(n AstNode) WithRecursiveNode {
+func NewWithRecursiveNode(n Visitable) WithRecursiveNode {
 	return WithRecursiveNode{Expr: n}
 }

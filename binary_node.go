@@ -30,9 +30,3 @@ type IntersectNode BinaryNode
 type ExceptNode BinaryNode
 type InnerJoinNode JoinNode
 type OuterJoinNode JoinNode
-
-type StringJoinNode struct {
-	Right string
-	Left  string
-	BaseNode
-}

@@ -3,11 +3,11 @@ package rel
 type SelectStatementNode struct {
 	Cores  []*SelectCoreNode
 	Limit  *LimitNode
-	Orders *[]AstNode
+	Orders *[]Visitable
 	Lock   *LockNode
 	With   *WithNode
 	Offset *OffsetNode
-	AstNode
+	Visitable
 }
 
 func (s *SelectStatementNode) IsEqual(s2 SelectStatementNode) bool {

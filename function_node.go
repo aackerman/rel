@@ -1,7 +1,7 @@
 package rel
 
 type FunctionNode struct {
-	Expressions AstNode
+	Expressions Visitable
 	Alias       *SqlLiteralNode
 	BaseNode
 }

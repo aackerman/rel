@@ -1,12 +1,12 @@
 package rel
 
 type EqualityNode struct {
-	Left  AstNode
-	Right *AstNode
+	Left  Visitable
+	Right *Visitable
 	BaseNode
 }
 
-func NewEqualityNode(left AstNode, right AstNode) EqualityNode {
+func NewEqualityNode(left Visitable, right Visitable) EqualityNode {
 	return EqualityNode{
 		Left:  left,
 		Right: &right,

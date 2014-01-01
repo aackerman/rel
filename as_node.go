@@ -1,7 +1,7 @@
 package rel
 
 type AsNode struct {
-	Left  AstNode
-	Right *AstNode
+	Left  Visitable
+	Right *Visitable
 	BaseNode
 }

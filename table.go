@@ -17,11 +17,11 @@ func NewTable(name string, e Engine) Table {
 	return table
 }
 
-func (t *Table) Project(a ...AstNode) *SelectManager {
+func (t *Table) Project(a ...Visitable) *SelectManager {
 	return t.From(t).Project(a...)
 }
 
-func (t *Table) Select(a ...AstNode) *SelectManager {
+func (t *Table) Select(a ...Visitable) *SelectManager {
 	return t.Project(a...)
 }
 
@@ -29,7 +29,7 @@ func (t *Table) Take(i int) *SelectManager {
 	return t.From(t).Take(i)
 }
 
-func (t *Table) Where(n AstNode) *SelectManager {
+func (t *Table) Where(n Visitable) *SelectManager {
 	return t.From(t).Where(n)
 }
 
@@ -41,11 +41,11 @@ func (t *Table) Offset(i int) *SelectManager {
 	return t.From(t).Offset(i)
 }
 
-func (t *Table) Having(a ...AstNode) *SelectManager {
+func (t *Table) Having(a ...Visitable) *SelectManager {
 	return t.From(t).Having(a...)
 }
 
-func (t *Table) Group(a ...AstNode) *SelectManager {
+func (t *Table) Group(a ...Visitable) *SelectManager {
 	return t.From(t).Group(a...)
 }
 
@@ -53,7 +53,7 @@ func (t *Table) Order(exprs ...string) *SelectManager {
 	return t.From(t).Order(exprs...)
 }
 
-func (t *Table) CreateStringJoin(left string) StringJoinNode {
+func (t *Table) CreateStringJoin(left SqlLiteralNode) StringJoinNode {
 	return StringJoinNode{Left: left}
 }
 
