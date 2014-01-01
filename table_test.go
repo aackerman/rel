@@ -137,7 +137,7 @@ func TestTableCreateStringJoin(t *testing.T) {
 	table := NewTable("", DefaultEngine)
 	join := table.CreateStringJoin("foo")
 	if join.Left != "foo" {
-		t.Log("TestTableCreateStringJoin join.Left.Name != \"foo\"")
+		t.Log("TestTableCreateStringJoin join.Left != \"foo\"")
 		t.Fail()
 	}
 }

@@ -23,12 +23,6 @@ func TestSelectManagerClone(t *testing.T) {
 }
 
 func TestSelectManagerExists(t *testing.T) {
-	// table = Table.new(:users)
-	// manager = Arel::SelectManager.new Table.engine, table
-	// manager.project SqlLiteral.new '*'
-	// m2 = Arel::SelectManager.new(manager.engine)
-	// m2.project manager.exists
-	// m2.to_sql.must_be_like %{ SELECT EXISTS (#{manager.to_sql}) }
 	table := NewTable("users", DefaultEngine)
 	manager := table.From(&table)
 	manager.Project(Sql("*"))
@@ -36,6 +30,20 @@ func TestSelectManagerExists(t *testing.T) {
 	m2.Project(manager.Exists())
 	sql := m2.ToSql()
 	expected := fmt.Sprintf("SELECT EXISTS (%s)", manager.ToSql())
+	if sql != expected {
+		t.Logf("TestSelectManagerExists sql: %s != %s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestSelectManagerExistsAs(t *testing.T) {
+	table := NewTable("users", DefaultEngine)
+	manager := table.From(&table)
+	manager.Project(Sql("*"))
+	m2 := NewSelectManager(DefaultEngine, nil)
+	m2.Project(manager.Exists().As(Sql("foo")))
+	sql := m2.ToSql()
+	expected := fmt.Sprintf("SELECT EXISTS (%s) AS foo", manager.ToSql())
 	if sql != expected {
 		t.Logf("TestSelectManagerExists sql: %s != %s", sql, expected)
 		t.Fail()

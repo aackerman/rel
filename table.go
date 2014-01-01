@@ -98,7 +98,7 @@ func (t *Table) Alias() TableAliasNode {
 	buf.WriteString(t.Name)
 	buf.WriteString("_")
 	buf.WriteString(strconv.Itoa(n + 2))
-	alias := NewTableAliasNode(t, buf.String())
+	alias := TableAliasNode{Name: buf.String(), Table: t}
 	*t.Aliases = append(*t.Aliases, alias)
 	return alias
 }

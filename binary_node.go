@@ -13,7 +13,6 @@ func NewBinaryNode(left *Table, right *Table) BinaryNode {
 	}
 }
 
-type AsNode BinaryNode
 type AssignmentNode BinaryNode
 type DoesNotMatchNode BinaryNode
 type GreaterThanNode BinaryNode
