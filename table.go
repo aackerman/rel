@@ -72,13 +72,11 @@ func (t *Table) CreateOuterJoin(left *Table, right *Table) OuterJoinNode {
 }
 
 func (t *Table) From(n *Table) *SelectManager {
-	manager := NewSelectManager(t.Engine, n)
-	return &manager
+	return t.SelectManager(n)
 }
 
-func (t *Table) SelectManager() *SelectManager {
-	manager := NewSelectManager(t.Engine, t)
-	return &manager
+func (t *Table) SelectManager(n *Table) *SelectManager {
+	return NewSelectManager(t.Engine, n)
 }
 
 func (t *Table) InsertManager() *InsertManager {
