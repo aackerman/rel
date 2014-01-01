@@ -89,15 +89,22 @@ func (t *Table) SetTableAlias(name string) {
 
 func (t *Table) Alias() TableAliasNode {
 	var buf bytes.Buffer
+
+	// create the slice for aliases if it doesn't already exist
 	if t.Aliases == nil {
 		aliases := make([]TableAliasNode, 0)
 		t.Aliases = &aliases
 	}
+
+	// create the alias name
 	n := len(*t.Aliases)
 	buf.WriteString(t.Name)
 	buf.WriteString("_")
 	buf.WriteString(strconv.Itoa(n + 2))
+
+	// create the alias
 	alias := TableAliasNode{Name: buf.String(), Table: t}
+	// append the new alias to the list of current aliases
 	*t.Aliases = append(*t.Aliases, alias)
 	return alias
 }
