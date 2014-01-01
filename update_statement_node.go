@@ -7,5 +7,5 @@ type UpdateStatementNode struct {
 	Orders *[]Visitable
 	Limit  int
 	Key    string
-	BaseNode
+	BaseVisitable
 }

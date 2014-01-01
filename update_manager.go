@@ -2,7 +2,7 @@ package rel
 
 type UpdateManager struct {
 	Ast UpdateStatementNode
-	BaseNode
+	BaseVisitable
 }
 
 func NewUpdateManager() UpdateManager {

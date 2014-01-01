@@ -2,7 +2,7 @@ package rel
 
 type UnaryNode struct {
 	Expr Visitable
-	BaseNode
+	BaseVisitable
 }
 
 type BinNode UnaryNode

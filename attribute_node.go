@@ -3,7 +3,7 @@ package rel
 type AttributeNode struct {
 	Name  string
 	Table *Table
-	BaseNode
+	BaseVisitable
 }
 
 func NewAttributeNode(name string, t *Table) AttributeNode {

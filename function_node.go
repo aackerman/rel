@@ -3,7 +3,7 @@ package rel
 type FunctionNode struct {
 	Expressions Visitable
 	Alias       *SqlLiteralNode
-	BaseNode
+	BaseVisitable
 }
 
 type SumNode FunctionNode

@@ -7,7 +7,7 @@ import (
 
 type SqlLiteralNode struct {
 	Raw string
-	BaseNode
+	BaseVisitable
 }
 
 func Sql(raw interface{}) SqlLiteralNode {

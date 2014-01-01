@@ -3,7 +3,7 @@ package rel
 type BinaryNode struct {
 	Left  *Table
 	Right *Table
-	BaseNode
+	BaseVisitable
 }
 
 func NewBinaryNode(left *Table, right *Table) BinaryNode {

@@ -4,7 +4,7 @@ type SelectManager struct {
 	Engine Engine
 	Ast    SelectStatementNode
 	Ctx    *SelectCoreNode
-	BaseNode
+	BaseVisitable
 }
 
 func NewSelectManager(e Engine, t *Table) *SelectManager {

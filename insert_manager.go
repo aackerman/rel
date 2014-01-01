@@ -1,7 +1,7 @@
 package rel
 
 type InsertManager struct {
-	BaseNode
+	BaseVisitable
 }
 
 func NewInsertManager(t *Table) InsertManager {

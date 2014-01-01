@@ -4,65 +4,65 @@ import (
 	"log"
 )
 
-// BaseNode satisfies the Visitable Interface
-// All other nodes should have an embedded BaseNode
-type BaseNode struct{}
+// BaseVisitable satisfies the Visitable Interface
+// All other nodes should have an embedded BaseVisitable
+type BaseVisitable struct{}
 
-func (a BaseNode) NotEq(n Visitable) NotEqualNode {
-	log.Fatal("BaseNode#NotEq not implemented")
+func (a BaseVisitable) NotEq(n Visitable) NotEqualNode {
+	log.Fatal("BaseVisitable#NotEq not implemented")
 	return NotEqualNode{}
 }
 
-func (a BaseNode) NotEqAny(n Visitable) GroupingNode {
-	log.Fatal("BaseNode#NotEqAny not implemented")
+func (a BaseVisitable) NotEqAny(n Visitable) GroupingNode {
+	log.Fatal("BaseVisitable#NotEqAny not implemented")
 	return GroupingNode{}
 }
 
-func (a BaseNode) NotEqAll(n Visitable) GroupingNode {
-	log.Fatal("BaseNode#NotEqAll not implemented")
+func (a BaseVisitable) NotEqAll(n Visitable) GroupingNode {
+	log.Fatal("BaseVisitable#NotEqAll not implemented")
 	return GroupingNode{}
 }
 
-func (a BaseNode) NewTrueNode() TrueNode {
+func (a BaseVisitable) NewTrueNode() TrueNode {
 	return TrueNode{}
 }
 
-func (a BaseNode) NewFalseNode() FalseNode {
+func (a BaseVisitable) NewFalseNode() FalseNode {
 	return FalseNode{}
 }
 
-func (a BaseNode) NewTableAliasNode(t *Table, name string) TableAliasNode {
+func (a BaseVisitable) NewTableAliasNode(t *Table, name string) TableAliasNode {
 	return TableAliasNode{Name: name, Table: t}
 }
 
-func (a BaseNode) NewStringJoinNode() StringJoinNode {
+func (a BaseVisitable) NewStringJoinNode() StringJoinNode {
 	return StringJoinNode{}
 }
 
-func (a BaseNode) NewInnerJoinNode() InnerJoinNode {
+func (a BaseVisitable) NewInnerJoinNode() InnerJoinNode {
 	return InnerJoinNode{}
 }
 
-func (a BaseNode) NewOuterJoinNode() OuterJoinNode {
+func (a BaseVisitable) NewOuterJoinNode() OuterJoinNode {
 	return OuterJoinNode{}
 }
 
-func (a BaseNode) NewAndNode(n ...Visitable) AndNode {
+func (a BaseVisitable) NewAndNode(n ...Visitable) AndNode {
 	return AndNode{Children: &n}
 }
 
-func (a BaseNode) NewOnNode() OnNode {
+func (a BaseVisitable) NewOnNode() OnNode {
 	return OnNode{}
 }
 
-func (a BaseNode) NewNotNode() NotNode {
+func (a BaseVisitable) NewNotNode() NotNode {
 	return NotNode{}
 }
 
-func (a BaseNode) NewGroupingNode() GroupingNode {
+func (a BaseVisitable) NewGroupingNode() GroupingNode {
 	return GroupingNode{}
 }
 
-func (a BaseNode) NewNamedFunctionNode() NamedFunctionNode {
+func (a BaseVisitable) NewNamedFunctionNode() NamedFunctionNode {
 	return NamedFunctionNode{}
 }

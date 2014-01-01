@@ -10,6 +10,7 @@ type Table struct {
 	Engine     Engine
 	TableAlias string
 	Aliases    *[]TableAliasNode
+	BaseVisitable
 }
 
 func NewTable(name string, e Engine) Table {

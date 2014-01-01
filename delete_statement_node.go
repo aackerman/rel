@@ -1,5 +1,5 @@
 package rel
 
 type DeleteStatementNode struct {
-	BaseNode
+	BaseVisitable
 }
