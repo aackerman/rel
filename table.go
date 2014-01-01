@@ -53,18 +53,18 @@ func (t *Table) Order(exprs ...string) *SelectManager {
 	return t.From(t).Order(exprs...)
 }
 
-func (t *Table) CreateStringJoin(left SqlLiteralNode) StringJoinNode {
+func (t *Table) NewStringJoin(left SqlLiteralNode) StringJoinNode {
 	return StringJoinNode{Left: left}
 }
 
-func (t *Table) CreateInnerJoin(left *Table, right *Table) InnerJoinNode {
+func (t *Table) NewInnerJoin(left *Table, right *Table) InnerJoinNode {
 	return InnerJoinNode{
 		Left:  left,
 		Right: right,
 	}
 }
 
-func (t *Table) CreateOuterJoin(left *Table, right *Table) OuterJoinNode {
+func (t *Table) NewOuterJoin(left *Table, right *Table) OuterJoinNode {
 	return OuterJoinNode{
 		Left:  left,
 		Right: right,
@@ -104,6 +104,7 @@ func (t *Table) Alias() TableAliasNode {
 
 	// create the alias
 	alias := TableAliasNode{Name: buf.String(), Table: t}
+
 	// append the new alias to the list of current aliases
 	*t.Aliases = append(*t.Aliases, alias)
 	return alias
