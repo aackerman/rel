@@ -12,3 +12,7 @@ type AstNode interface {
 	NewNotNode() NotNode
 	NewGroupingNode() GroupingNode
 }
+
+type Vistable interface {
+	String() string
+}
