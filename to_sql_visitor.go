@@ -3,6 +3,7 @@ package rel
 import (
 	"bytes"
 	"log"
+	"runtime/debug"
 	"strings"
 )
 
@@ -54,7 +55,12 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitExistsNode(val)
 	case AsNode:
 		ret = v.VisitAsNode(val)
+	case Table:
+		ret = v.VisitTable(val)
+	case *Table:
+		ret = v.VisitTable(*val)
 	default:
+		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit %T not handled", a)
 	}
 	return ret
@@ -147,7 +153,7 @@ func (v ToSqlVisitor) VisitEqualityNode(n EqualityNode) string {
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitTable(t *Table) string {
+func (v ToSqlVisitor) VisitTable(t Table) string {
 	var buf bytes.Buffer
 	if t.TableAlias != "" {
 		buf.WriteString(v.QuoteTableName(t.Name))
@@ -170,7 +176,8 @@ func (v ToSqlVisitor) QuoteColumnName(name string) string {
 func (v ToSqlVisitor) VisitJoinSourceNode(a JoinSource) string {
 	var buf bytes.Buffer
 	if a.Left != nil {
-		buf.WriteString(v.VisitTable(a.Left))
+		log.Printf("here %T", *a.Left)
+		buf.WriteString(v.Visit(*a.Left))
 	}
 	return buf.String()
 }
@@ -218,11 +225,16 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 	}
 
 	// add FROM statement to the buffer
-	if s.Source != nil &&
-		s.Source.Left != nil &&
-		len(s.Source.Left.Name) > 0 {
-		buf.WriteString(" FROM ")
-		buf.WriteString(v.Visit(*s.Source))
+	if s.Source != nil && s.Source.Left != nil {
+		if t, ok := (*s.Source.Left).(Table); ok && t.Name != "" {
+			buf.WriteString(" FROM ")
+			buf.WriteString(v.Visit(*s.Source))
+		}
+
+		if t, ok := (*s.Source.Left).(*Table); ok && t.Name != "" {
+			buf.WriteString(" FROM ")
+			buf.WriteString(v.Visit(*s.Source))
+		}
 	}
 
 	// add WHERE statement to the buffer

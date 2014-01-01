@@ -41,7 +41,10 @@ func (s *SelectManager) Project(projections ...Visitable) *SelectManager {
 }
 
 func (s *SelectManager) From(t *Table) *SelectManager {
-	s.Ctx.Source.Left = t
+	if t != nil {
+		var v Visitable = t
+		s.Ctx.Source.Left = &v
+	}
 	return s
 }
 
