@@ -176,7 +176,6 @@ func (v ToSqlVisitor) QuoteColumnName(name string) string {
 func (v ToSqlVisitor) VisitJoinSourceNode(a JoinSource) string {
 	var buf bytes.Buffer
 	if a.Left != nil {
-		log.Printf("here %T", *a.Left)
 		buf.WriteString(v.Visit(*a.Left))
 	}
 	return buf.String()
@@ -229,9 +228,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 		if t, ok := (*s.Source.Left).(Table); ok && t.Name != "" {
 			buf.WriteString(" FROM ")
 			buf.WriteString(v.Visit(*s.Source))
-		}
-
-		if t, ok := (*s.Source.Left).(*Table); ok && t.Name != "" {
+		} else if t, ok := (*s.Source.Left).(*Table); ok && t.Name != "" {
 			buf.WriteString(" FROM ")
 			buf.WriteString(v.Visit(*s.Source))
 		}
