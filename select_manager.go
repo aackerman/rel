@@ -106,6 +106,14 @@ func (s *SelectManager) Group(columns ...Visitable) *SelectManager {
 	return s
 }
 
+func (s *SelectManager) Union() *SelectManager {
+	return s
+}
+
+func (s *SelectManager) UnionAll() *SelectManager {
+	return s
+}
+
 func (s *SelectManager) Skip(i int) *SelectManager {
 	offset := NewOffsetNode(Sql(i))
 	s.Ast.Offset = &offset
