@@ -14,8 +14,7 @@ type Table struct {
 }
 
 func NewTable(name string, e Engine) Table {
-	table := Table{Name: name, Engine: e}
-	return table
+	return Table{Name: name, Engine: e}
 }
 
 func (t *Table) Project(a ...Visitable) *SelectManager {
