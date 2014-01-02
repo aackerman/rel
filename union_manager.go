@@ -4,6 +4,7 @@ import (
 	"bytes"
 )
 
+// A UnionManager managers the handling of UNIONs on SELECT statements
 type UnionManager struct {
 	managers []*SelectManager
 }
