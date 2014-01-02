@@ -43,7 +43,7 @@ func (s *SelectManager) Project(projections ...Visitable) *SelectManager {
 func (s *SelectManager) From(t *Table) *SelectManager {
 	if t != nil {
 		var v Visitable = t
-		s.Ctx.Source.Left = &v
+		s.Ctx.Source.Left = v
 	}
 	return s
 }
@@ -106,8 +106,13 @@ func (s *SelectManager) Group(columns ...Visitable) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Union() *SelectManager {
-	return s
+func (s *SelectManager) Union(newManagers ...*SelectManager) *UnionManager {
+	manager := NewUnionManager()
+	manager.managers = append(manager.managers, s)
+	for _, m := range newManagers {
+		manager.managers = append(manager.managers, m)
+	}
+	return manager
 }
 
 func (s *SelectManager) UnionAll() *SelectManager {

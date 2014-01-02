@@ -16,3 +16,11 @@ func NewAttributeNode(name string, t *Table) AttributeNode {
 func (a AttributeNode) Eq(n SqlLiteralNode) EqualityNode {
 	return NewEqualityNode(a, n)
 }
+
+func (a AttributeNode) Lt(i int) LessThanNode {
+	return LessThanNode{Left: a, Right: Sql(i)}
+}
+
+func (a AttributeNode) Gt(i int) GreaterThanNode {
+	return GreaterThanNode{Left: a, Right: Sql(i)}
+}

@@ -59,3 +59,20 @@ func TestSelectManagerOffset(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestSelectManagerUnion(t *testing.T) {
+	table := NewTable("users", DefaultEngine)
+	m1 := NewSelectManager(DefaultEngine, &table)
+	m1.Project(Star())
+	m1.Where(table.Attr("age").Lt(18))
+	m2 := NewSelectManager(DefaultEngine, &table)
+	m2.Project(Star())
+	m2.Where(table.Attr("age").Gt(99))
+	um := m1.Union(m2)
+	sql := um.ToSql()
+	expected := "( SELECT * FROM \"users\" WHERE \"users\".\"age\" < 18 UNION SELECT * FROM \"users\" WHERE \"users\".\"age\" > 99 )"
+	if sql != expected {
+		t.Logf("TestSelectManagerUnion sql: %s != %s", sql, expected)
+		t.Fail()
+	}
+}

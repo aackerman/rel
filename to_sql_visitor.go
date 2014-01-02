@@ -59,6 +59,10 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitTable(val)
 	case *Table:
 		ret = v.VisitTable(*val)
+	case LessThanNode:
+		ret = v.VisitLessThanNode(val)
+	case GreaterThanNode:
+		ret = v.VisitGreaterThanNode(val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit %T not handled", a)
@@ -99,6 +103,22 @@ func (v ToSqlVisitor) VisitInNode(a InNode) string {
 
 func (v ToSqlVisitor) VisitOrderingNode(a OrderingNode) string {
 	return "OrderingNode"
+}
+
+func (v ToSqlVisitor) VisitLessThanNode(a LessThanNode) string {
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(a.Left))
+	buf.WriteString(" < ")
+	buf.WriteString(v.Visit(a.Right))
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitGreaterThanNode(a GreaterThanNode) string {
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(a.Left))
+	buf.WriteString(" > ")
+	buf.WriteString(v.Visit(a.Right))
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitAsNode(a AsNode) string {
@@ -176,7 +196,7 @@ func (v ToSqlVisitor) QuoteColumnName(name string) string {
 func (v ToSqlVisitor) VisitJoinSourceNode(a JoinSource) string {
 	var buf bytes.Buffer
 	if a.Left != nil {
-		buf.WriteString(v.Visit(*a.Left))
+		buf.WriteString(v.Visit(a.Left))
 	}
 	return buf.String()
 }
@@ -225,10 +245,10 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 
 	// add FROM statement to the buffer
 	if s.Source != nil && s.Source.Left != nil {
-		if t, ok := (*s.Source.Left).(Table); ok && t.Name != "" {
+		if t, ok := s.Source.Left.(Table); ok && t.Name != "" {
 			buf.WriteString(" FROM ")
 			buf.WriteString(v.Visit(*s.Source))
-		} else if t, ok := (*s.Source.Left).(*Table); ok && t.Name != "" {
+		} else if t, ok := s.Source.Left.(*Table); ok && t.Name != "" {
 			buf.WriteString(" FROM ")
 			buf.WriteString(v.Visit(*s.Source))
 		}

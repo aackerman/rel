@@ -1,12 +1,12 @@
 package rel
 
 type BinaryNode struct {
-	Left  *Visitable
-	Right *Visitable
+	Left  Visitable
+	Right Visitable
 	BaseVisitable
 }
 
-func NewBinaryNode(left *Visitable, right *Visitable) BinaryNode {
+func NewBinaryNode(left Visitable, right Visitable) BinaryNode {
 	return BinaryNode{
 		Left:  left,
 		Right: right,

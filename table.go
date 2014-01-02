@@ -57,14 +57,14 @@ func (t *Table) NewStringJoin(left SqlLiteralNode) StringJoinNode {
 	return StringJoinNode{Left: left}
 }
 
-func (t *Table) NewInnerJoin(left *Visitable, right *Visitable) InnerJoinNode {
+func (t *Table) NewInnerJoin(left Visitable, right Visitable) InnerJoinNode {
 	return InnerJoinNode{
 		Left:  left,
 		Right: right,
 	}
 }
 
-func (t *Table) NewOuterJoin(left *Visitable, right *Visitable) OuterJoinNode {
+func (t *Table) NewOuterJoin(left Visitable, right Visitable) OuterJoinNode {
 	return OuterJoinNode{
 		Left:  left,
 		Right: right,

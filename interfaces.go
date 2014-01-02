@@ -18,6 +18,10 @@ type Visitor interface {
 	Visit(Visitable) string
 }
 
+type TreeManager interface {
+	ToSql() string
+}
+
 type Engine interface {
 	Visitor() Visitor
 	Connection() *Connection
