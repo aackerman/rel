@@ -110,6 +110,10 @@ func (s *SelectManager) Union(mgr1 *SelectManager, mgr2 *SelectManager) *UnionMa
 	return NewUnionManager(s.Engine).Union(*mgr1, *mgr2)
 }
 
+func (s *SelectManager) UnionAll(mgr1 *SelectManager, mgr2 *SelectManager) *UnionManager {
+	return NewUnionManager(s.Engine).UnionAll(*mgr1, *mgr2)
+}
+
 func (s *SelectManager) UnionAll() *SelectManager {
 	return s
 }
