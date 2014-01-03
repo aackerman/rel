@@ -106,6 +106,10 @@ func (s *SelectManager) Group(columns ...Visitable) *SelectManager {
 	return s
 }
 
+func (s *SelectManager) Intersect(mgr1 *SelectManager, mgr2 *SelectManager) *IntersectManager {
+	return NewIntersectManager(s.Engine).Intersect(*mgr1, *mgr2)
+}
+
 func (s *SelectManager) Union(mgr1 *SelectManager, mgr2 *SelectManager) *UnionManager {
 	return NewUnionManager(s.Engine).Union(*mgr1, *mgr2)
 }
