@@ -68,8 +68,8 @@ func TestSelectManagerUnion(t *testing.T) {
 	m2 := NewSelectManager(DefaultEngine, &table)
 	m2.Project(Star())
 	m2.Where(table.Attr("age").Gt(99))
-	um := m1.Union(m2)
-	sql := um.ToSql()
+	mgr := m1.Union(m1, m2)
+	sql := mgr.ToSql()
 	expected := "( SELECT * FROM \"users\" WHERE \"users\".\"age\" < 18 UNION SELECT * FROM \"users\" WHERE \"users\".\"age\" > 99 )"
 	if sql != expected {
 		t.Logf("TestSelectManagerUnion sql: %s != %s", sql, expected)

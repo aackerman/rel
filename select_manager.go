@@ -106,13 +106,8 @@ func (s *SelectManager) Group(columns ...Visitable) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Union(newManagers ...*SelectManager) *UnionManager {
-	manager := NewUnionManager()
-	manager.managers = append(manager.managers, s)
-	for _, m := range newManagers {
-		manager.managers = append(manager.managers, m)
-	}
-	return manager
+func (s *SelectManager) Union(mgr1 *SelectManager, mgr2 *SelectManager) *UnionManager {
+	return NewUnionManager(s.Engine).Union(*mgr1, *mgr2)
 }
 
 func (s *SelectManager) UnionAll() *SelectManager {

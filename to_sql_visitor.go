@@ -61,6 +61,10 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitTable(*val)
 	case LessThanNode:
 		ret = v.VisitLessThanNode(val)
+	case UnionNode:
+		ret = v.VisitUnionNode(val)
+	case SelectManager:
+		ret = v.VisitSelectManager(val)
 	case GreaterThanNode:
 		ret = v.VisitGreaterThanNode(val)
 	default:
@@ -103,6 +107,24 @@ func (v ToSqlVisitor) VisitInNode(a InNode) string {
 
 func (v ToSqlVisitor) VisitOrderingNode(a OrderingNode) string {
 	return "OrderingNode"
+}
+
+func (v ToSqlVisitor) VisitSelectManager(a SelectManager) string {
+	var buf bytes.Buffer
+	buf.WriteString("(")
+	buf.WriteString(a.ToSql())
+	buf.WriteString(")")
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitUnionNode(a UnionNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("( ")
+	buf.WriteString(v.Visit(a.Left))
+	buf.WriteString(" UNION ")
+	buf.WriteString(v.Visit(a.Right))
+	buf.WriteString(" )")
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitLessThanNode(a LessThanNode) string {
