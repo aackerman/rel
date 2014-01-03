@@ -19,6 +19,14 @@ func (u *UnionManager) Union(mgr1 SelectManager, mgr2 SelectManager) *UnionManag
 	return u
 }
 
+func (u *UnionManager) UnionAll(mgr1 SelectManager, mgr2 SelectManager) *UnionManager {
+	u.Ast = UnionAllNode{
+		Left:  mgr1.Ast,
+		Right: mgr2.Ast,
+	}
+	return u
+}
+
 func NewUnionManager(e Engine) *UnionManager {
 	return &UnionManager{Engine: e}
 }
