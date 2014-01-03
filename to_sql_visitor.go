@@ -69,6 +69,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitSelectManager(val)
 	case GreaterThanNode:
 		ret = v.VisitGreaterThanNode(val)
+	case IntersectNode:
+		ret = v.VisitIntersectNode(val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit %T not handled", a)
@@ -109,6 +111,16 @@ func (v ToSqlVisitor) VisitInNode(a InNode) string {
 
 func (v ToSqlVisitor) VisitOrderingNode(a OrderingNode) string {
 	return "OrderingNode"
+}
+
+func (v ToSqlVisitor) VisitIntersectNode(a IntersectNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("( ")
+	buf.WriteString(v.Visit(a.Left))
+	buf.WriteString(" INTERSECT ")
+	buf.WriteString(v.Visit(a.Right))
+	buf.WriteString(" )")
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitSelectManager(a SelectManager) string {
