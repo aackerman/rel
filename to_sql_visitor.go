@@ -127,6 +127,16 @@ func (v ToSqlVisitor) VisitUnionNode(a UnionNode) string {
 	return buf.String()
 }
 
+func (v ToSqlVisitor) VisitUnionAllNode(a UnionNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("( ")
+	buf.WriteString(v.Visit(a.Left))
+	buf.WriteString(" UNION ALL ")
+	buf.WriteString(v.Visit(a.Right))
+	buf.WriteString(" )")
+	return buf.String()
+}
+
 func (v ToSqlVisitor) VisitLessThanNode(a LessThanNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(a.Left))
