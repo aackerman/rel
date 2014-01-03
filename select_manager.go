@@ -114,10 +114,6 @@ func (s *SelectManager) UnionAll(mgr1 *SelectManager, mgr2 *SelectManager) *Unio
 	return NewUnionManager(s.Engine).UnionAll(*mgr1, *mgr2)
 }
 
-func (s *SelectManager) UnionAll() *SelectManager {
-	return s
-}
-
 func (s *SelectManager) Skip(i int) *SelectManager {
 	offset := NewOffsetNode(Sql(i))
 	s.Ast.Offset = &offset

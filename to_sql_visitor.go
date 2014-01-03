@@ -63,6 +63,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitLessThanNode(val)
 	case UnionNode:
 		ret = v.VisitUnionNode(val)
+	case UnionAllNode:
+		ret = v.VisitUnionAllNode(val)
 	case SelectManager:
 		ret = v.VisitSelectManager(val)
 	case GreaterThanNode:
@@ -127,7 +129,7 @@ func (v ToSqlVisitor) VisitUnionNode(a UnionNode) string {
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitUnionAllNode(a UnionNode) string {
+func (v ToSqlVisitor) VisitUnionAllNode(a UnionAllNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("( ")
 	buf.WriteString(v.Visit(a.Left))
