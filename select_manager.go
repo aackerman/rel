@@ -107,15 +107,15 @@ func (s *SelectManager) Group(columns ...Visitable) *SelectManager {
 }
 
 func (s *SelectManager) Intersect(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
-	return NewMultiStatementManager(s.Engine).Intersect(stmt1, stmt1)
+	return NewMultiStatementManager(s.Engine).Intersect(stmt1, stmt2)
 }
 
 func (s *SelectManager) Union(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
-	return NewMultiStatementManager(s.Engine).Union(stmt1, stmt1)
+	return NewMultiStatementManager(s.Engine).Union(stmt1, stmt2)
 }
 
 func (s *SelectManager) UnionAll(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
-	return NewMultiStatementManager(s.Engine).UnionAll(stmt1, stmt1)
+	return NewMultiStatementManager(s.Engine).UnionAll(stmt1, stmt2)
 }
 
 func (s *SelectManager) Skip(i int) *SelectManager {

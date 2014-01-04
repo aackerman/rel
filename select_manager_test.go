@@ -31,7 +31,7 @@ func TestSelectManagerExists(t *testing.T) {
 	sql := m2.ToSql()
 	expected := fmt.Sprintf("SELECT EXISTS (%s)", manager.ToSql())
 	if sql != expected {
-		t.Logf("TestSelectManagerExists sql: %s != %s", sql, expected)
+		t.Logf("TestSelectManagerExists sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -45,7 +45,7 @@ func TestSelectManagerExistsAs(t *testing.T) {
 	sql := m2.ToSql()
 	expected := fmt.Sprintf("SELECT EXISTS (%s) AS foo", manager.ToSql())
 	if sql != expected {
-		t.Logf("TestSelectManagerExists sql: %s != %s", sql, expected)
+		t.Logf("TestSelectManagerExists sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -68,11 +68,11 @@ func TestSelectManagerUnion(t *testing.T) {
 	m2 := NewSelectManager(DefaultEngine, &table)
 	m2.Project(Star())
 	m2.Where(table.Attr("age").Gt(99))
-	mgr := m1.Union(m1, m2)
+	mgr := m1.Union(m1.Ast, m2.Ast)
 	sql := mgr.ToSql()
 	expected := "( SELECT * FROM \"users\" WHERE \"users\".\"age\" < 18 UNION SELECT * FROM \"users\" WHERE \"users\".\"age\" > 99 )"
 	if sql != expected {
-		t.Logf("TestSelectManagerUnion sql: %s != %s", sql, expected)
+		t.Logf("TestSelectManagerUnion sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -85,11 +85,11 @@ func TestSelectManagerUnionAll(t *testing.T) {
 	m2 := NewSelectManager(DefaultEngine, &table)
 	m2.Project(Star())
 	m2.Where(table.Attr("age").Gt(99))
-	mgr := m1.UnionAll(m1, m2)
+	mgr := m1.UnionAll(m1.Ast, m2.Ast)
 	sql := mgr.ToSql()
 	expected := "( SELECT * FROM \"users\" WHERE \"users\".\"age\" < 18 UNION ALL SELECT * FROM \"users\" WHERE \"users\".\"age\" > 99 )"
 	if sql != expected {
-		t.Logf("TestSelectManagerUnionAll sql: %s != %s", sql, expected)
+		t.Logf("TestSelectManagerUnionAll sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -102,11 +102,11 @@ func TestSelectManagerIntersect(t *testing.T) {
 	m2 := NewSelectManager(DefaultEngine, &table)
 	m2.Project(Star())
 	m2.Where(table.Attr("age").Gt(99))
-	mgr := m1.Intersect(m1, m2)
+	mgr := m1.Intersect(m1.Ast, m2.Ast)
 	sql := mgr.ToSql()
 	expected := "( SELECT * FROM \"users\" WHERE \"users\".\"age\" < 18 INTERSECT SELECT * FROM \"users\" WHERE \"users\".\"age\" > 99 )"
 	if sql != expected {
-		t.Logf("TestSelectManagerUnionAll sql: %s != %s", sql, expected)
+		t.Logf("TestSelectManagerUnionAll sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
