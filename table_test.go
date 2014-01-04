@@ -5,14 +5,14 @@ import (
 )
 
 func TestTableName(t *testing.T) {
-	table := NewTable("users", DefaultEngine)
+	table := NewTable("users")
 	if table.Name != "users" {
 		t.Fail()
 	}
 }
 
 func TestTableAlias(t *testing.T) {
-	table := NewTable("users", DefaultEngine)
+	table := NewTable("users")
 	alias := table.Alias()
 	if alias.Name != "users_2" {
 		t.Fail()
@@ -20,7 +20,7 @@ func TestTableAlias(t *testing.T) {
 }
 
 func TestTableSetTableAlias(t *testing.T) {
-	table := NewTable("users", DefaultEngine)
+	table := NewTable("users")
 	table.SetTableAlias("foo")
 	manager := table.From(&table)
 	manager.Skip(10)
@@ -33,7 +33,7 @@ func TestTableSetTableAlias(t *testing.T) {
 }
 
 func TestTableOrder(t *testing.T) {
-	table := NewTable("users", DefaultEngine)
+	table := NewTable("users")
 	sm := table.Order("foo")
 	sql := sm.ToSql()
 	expected := "SELECT FROM \"users\" ORDER BY foo"
@@ -44,7 +44,7 @@ func TestTableOrder(t *testing.T) {
 }
 
 func TestTableTake(t *testing.T) {
-	table := NewTable("users", DefaultEngine)
+	table := NewTable("users")
 	sm := table.Take(1)
 	sm.Project(Sql("*"))
 	sql := sm.ToSql()
@@ -56,7 +56,7 @@ func TestTableTake(t *testing.T) {
 }
 
 func TestTableWhere(t *testing.T) {
-	table := NewTable("users", DefaultEngine)
+	table := NewTable("users")
 	sm := table.Where(table.Attr("id").Eq(Sql(1)))
 	sm.Project(table.Attr("id"))
 	sql := sm.ToSql()
@@ -68,7 +68,7 @@ func TestTableWhere(t *testing.T) {
 }
 
 func TestTableProject(t *testing.T) {
-	table := NewTable("users", DefaultEngine)
+	table := NewTable("users")
 	query := table.Project(Sql("*"))
 	sql := query.ToSql()
 	expected := "SELECT * FROM \"users\""
@@ -79,7 +79,7 @@ func TestTableProject(t *testing.T) {
 }
 
 func TestTableSkip(t *testing.T) {
-	table := NewTable("users", DefaultEngine)
+	table := NewTable("users")
 	query := table.Skip(2)
 	sql := query.ToSql()
 	expected := "SELECT FROM \"users\" OFFSET 2"
@@ -90,7 +90,7 @@ func TestTableSkip(t *testing.T) {
 }
 
 func TestTableOffset(t *testing.T) {
-	table := NewTable("users", DefaultEngine)
+	table := NewTable("users")
 	query := table.Offset(2)
 	sql := query.ToSql()
 	expected := "SELECT FROM \"users\" OFFSET 2"
@@ -101,7 +101,7 @@ func TestTableOffset(t *testing.T) {
 }
 
 func TestTableHaving(t *testing.T) {
-	table := NewTable("users", DefaultEngine)
+	table := NewTable("users")
 	query := table.Having(table.Attr("id").Eq(Sql(10)))
 	sql := query.ToSql()
 	expected := "SELECT FROM \"users\" HAVING \"users\".\"id\" = 10"
@@ -112,7 +112,7 @@ func TestTableHaving(t *testing.T) {
 }
 
 func TestTableGroup(t *testing.T) {
-	table := NewTable("users", DefaultEngine)
+	table := NewTable("users")
 	query := table.Group(table.Attr("id"))
 	sql := query.ToSql()
 	expected := "SELECT FROM \"users\" GROUP BY \"users\".\"id\""
@@ -123,7 +123,7 @@ func TestTableGroup(t *testing.T) {
 }
 
 func TestTableMultipleProjections(t *testing.T) {
-	table := NewTable("users", DefaultEngine)
+	table := NewTable("users")
 	query := table.Project(Sql("*"), Sql("*"))
 	sql := query.ToSql()
 	expected := "SELECT *, * FROM \"users\""
@@ -134,7 +134,7 @@ func TestTableMultipleProjections(t *testing.T) {
 }
 
 func TestTableNewStringJoin(t *testing.T) {
-	table := NewTable("", DefaultEngine)
+	table := NewTable("")
 	join := table.NewStringJoin(Sql("foo"))
 	if join.Left.Raw != "foo" {
 		t.Log("TestTableNewStringJoin join.Left != \"foo\"")
@@ -147,7 +147,7 @@ func TestTableEquality(t *testing.T) {
 }
 
 func TestTableSelectManager(t *testing.T) {
-	table := NewTable("", DefaultEngine)
+	table := NewTable("")
 	sm := table.From(&table)
 	sql := sm.ToSql()
 	expected := "SELECT"

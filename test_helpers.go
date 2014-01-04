@@ -22,10 +22,8 @@ func (e BaseEngine) Visitor() Visitor {
 	return e.visitor
 }
 
-var DefaultEngine BaseEngine = NewDefaultEngine()
-
-func NewDefaultEngine() BaseEngine {
-	e := BaseEngine{}
+func NewEngine() *BaseEngine {
+	e := new(BaseEngine)
 	e.pool = ConnectionPool{conn: new(Connection)}
 	e.visitor = ToSqlVisitor{conn: e.pool.Connection()}
 	return e

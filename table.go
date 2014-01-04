@@ -13,8 +13,10 @@ type Table struct {
 	BaseVisitable
 }
 
-func NewTable(name string, e Engine) Table {
-	return Table{Name: name, Engine: e}
+var TableEngine Engine = NewEngine()
+
+func NewTable(name string) Table {
+	return Table{Name: name, Engine: TableEngine}
 }
 
 func (t *Table) Project(a ...Visitable) *SelectManager {
