@@ -48,7 +48,33 @@ func (s *SelectManager) From(t *Table) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Join(a ...Visitable) *SelectManager {
+func (s *SelectManager) On(a ...Visitable) *SelectManager {
+	right := s.Ctx.Source.Right
+
+	if len(right) > 0 {
+		last := right[len(right)-1]
+		if l, ok := last.(JoinSource); ok {
+			l.Right = append(l.Right, NewOnNode(s.collapse(a...)))
+		}
+	}
+
+	return s
+}
+
+func (s *SelectManager) Join(right Visitable) *SelectManager {
+	return s.InnerJoin(right)
+}
+
+func (s *SelectManager) InnerJoin(join Visitable) *SelectManager {
+	s.Ctx.Source.Right = append(s.Ctx.Source.Right, InnerJoinNode{Left: join})
+	return s
+}
+
+func (s *SelectManager) OuterJoin(right Visitable) *SelectManager {
+	return s
+}
+
+func (s *SelectManager) StringJoin(right Visitable) *SelectManager {
 	return s
 }
 
@@ -133,18 +159,20 @@ func (s *SelectManager) Offset(i int) *SelectManager {
 }
 
 func (s *SelectManager) Having(a ...Visitable) *SelectManager {
-	var b Visitable
+	having := NewHavingNode(s.collapse(a...))
+	s.Ctx.Having = &having
+	return s
+}
+
+func (s *SelectManager) collapse(a ...Visitable) Visitable {
+	var v Visitable
 
 	// use the first Node if there is only one
 	// else create and And node
 	if len(a) == 1 {
-		b = a[0]
+		v = a[0]
 	} else {
-		b = s.NewAndNode(a...)
+		v = s.NewAndNode(a...)
 	}
-
-	// pass in an Visitable
-	having := NewHavingNode(b)
-	s.Ctx.Having = &having
-	return s
+	return v
 }

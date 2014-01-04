@@ -73,6 +73,10 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitIntersectNode(val)
 	case ExceptNode:
 		ret = v.VisitExceptNode(val)
+	case TableAliasNode:
+		ret = v.VisitTableAliasNode(val)
+	case InnerJoinNode:
+		ret = v.VisitInnerJoinNode(val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit %T not handled", a)
@@ -256,6 +260,21 @@ func (v ToSqlVisitor) VisitJoinSourceNode(a JoinSource) string {
 	if a.Left != nil {
 		buf.WriteString(v.Visit(a.Left))
 	}
+
+	for _, source := range a.Right {
+		buf.WriteString(v.Visit(source))
+	}
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitInnerJoinNode(a InnerJoinNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("INNER JOIN ")
+	buf.WriteString(v.Visit(a.Left))
+	if a.Right != nil {
+		buf.WriteString(SPACE)
+		buf.WriteString(v.Visit(a.Right))
+	}
 	return buf.String()
 }
 
@@ -265,6 +284,14 @@ func (v ToSqlVisitor) VisitSqlLiteralNode(a SqlLiteralNode) string {
 	} else {
 		return ""
 	}
+}
+
+func (v ToSqlVisitor) VisitTableAliasNode(a TableAliasNode) string {
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(a.Table))
+	buf.WriteString(" ")
+	buf.WriteString(v.QuoteTableName(a.Name))
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {

@@ -133,15 +133,6 @@ func TestTableMultipleProjections(t *testing.T) {
 	}
 }
 
-func TestTableNewStringJoin(t *testing.T) {
-	table := NewTable("")
-	join := table.NewStringJoin(Sql("foo"))
-	if join.Left.Raw != "foo" {
-		t.Log("TestTableNewStringJoin \njoin.Left.Raw != \n\"foo\"")
-		t.Fail()
-	}
-}
-
 func TestTableEquality(t *testing.T) {
 	t.SkipNow()
 }

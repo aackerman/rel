@@ -13,7 +13,7 @@ func NewAttributeNode(name string, t *Table) AttributeNode {
 	}
 }
 
-func (a AttributeNode) Eq(n SqlLiteralNode) EqualityNode {
+func (a AttributeNode) Eq(n Visitable) EqualityNode {
 	return NewEqualityNode(a, n)
 }
 

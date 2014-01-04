@@ -55,22 +55,20 @@ func (t *Table) Order(exprs ...string) *SelectManager {
 	return t.From(t).Order(exprs...)
 }
 
-func (t *Table) NewStringJoin(left SqlLiteralNode) StringJoinNode {
-	return StringJoinNode{Left: left}
+func (t *Table) Join(right Visitable) *SelectManager {
+	return t.From(t).InnerJoin(right)
 }
 
-func (t *Table) NewInnerJoin(left Visitable, right Visitable) InnerJoinNode {
-	return InnerJoinNode{
-		Left:  left,
-		Right: right,
-	}
+func (t *Table) InnerJoin(right Visitable) *SelectManager {
+	return t.From(t).InnerJoin(right)
 }
 
-func (t *Table) NewOuterJoin(left Visitable, right Visitable) OuterJoinNode {
-	return OuterJoinNode{
-		Left:  left,
-		Right: right,
-	}
+func (t *Table) OuterJoin(right Visitable) *SelectManager {
+	return t.From(t).OuterJoin(right)
+}
+
+func (t *Table) StringJoin(right Visitable) *SelectManager {
+	return t.From(t).StringJoin(right)
 }
 
 func (t *Table) From(n *Table) *SelectManager {

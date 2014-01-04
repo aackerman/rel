@@ -9,9 +9,11 @@ type SelectCoreNode struct {
 	Groups       *[]GroupNode
 	Having       *HavingNode
 	Windows      *[]WindowNode
-	Visitable
+	BaseVisitable
 }
 
 func NewSelectCoreNode() SelectCoreNode {
-	return SelectCoreNode{Source: new(JoinSource)}
+	return SelectCoreNode{Source: &JoinSource{
+		Right: make([]Visitable, 0),
+	}}
 }
