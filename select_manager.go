@@ -1,5 +1,9 @@
 package rel
 
+import (
+	"log"
+)
+
 type SelectManager struct {
 	Engine Engine
 	Ast    SelectStatementNode
@@ -53,8 +57,14 @@ func (s *SelectManager) On(a ...Visitable) *SelectManager {
 
 	if len(right) > 0 {
 		last := right[len(right)-1]
-		if l, ok := last.(JoinSource); ok {
-			l.Right = append(l.Right, NewOnNode(s.collapse(a...)))
+		switch val := last.(type) {
+		case *InnerJoinNode:
+			log.Printf("%v", a)
+			val.Right = NewOnNode(s.collapse(a...))
+		case *OuterJoinNode:
+			val.Right = NewOnNode(s.collapse(a...))
+		default:
+			log.Fatal("Unable to call On with input type %T", val)
 		}
 	}
 
@@ -66,7 +76,7 @@ func (s *SelectManager) Join(right Visitable) *SelectManager {
 }
 
 func (s *SelectManager) InnerJoin(join Visitable) *SelectManager {
-	s.Ctx.Source.Right = append(s.Ctx.Source.Right, InnerJoinNode{Left: join})
+	s.Ctx.Source.Right = append(s.Ctx.Source.Right, &InnerJoinNode{Left: join})
 	return s
 }
 

@@ -5,3 +5,6 @@ type JoinSource struct {
 	Right []Visitable
 	BaseVisitable
 }
+
+type InnerJoinNode JoinNode
+type OuterJoinNode JoinNode

@@ -7,5 +7,5 @@ type TableAliasNode struct {
 }
 
 func (t *TableAliasNode) Attr(name string) AttributeNode {
-	return NewAttributeNode(name, t.Table)
+	return NewAttributeNode(t, name)
 }

@@ -111,5 +111,5 @@ func (t *Table) Alias() TableAliasNode {
 }
 
 func (t *Table) Attr(name string) AttributeNode {
-	return NewAttributeNode(name, t)
+	return NewAttributeNode(t, name)
 }

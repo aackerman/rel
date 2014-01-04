@@ -1,15 +1,15 @@
 package rel
 
 type AttributeNode struct {
-	Name  string
-	Table *Table
+	Name     string
+	Relation Visitable
 	BaseVisitable
 }
 
-func NewAttributeNode(name string, t *Table) AttributeNode {
+func NewAttributeNode(v Visitable, name string) AttributeNode {
 	return AttributeNode{
-		Name:  name,
-		Table: t,
+		Name:     name,
+		Relation: v,
 	}
 }
 

@@ -77,9 +77,13 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitTableAliasNode(val)
 	case InnerJoinNode:
 		ret = v.VisitInnerJoinNode(val)
+	case *InnerJoinNode:
+		ret = v.VisitInnerJoinNode(*val)
+	case OnNode:
+		ret = v.VisitOnNode(val)
 	default:
 		debug.PrintStack()
-		log.Fatalf("ToSqlVisitor#Visit %T not handled", a)
+		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
 	}
 	return ret
 }
@@ -113,6 +117,13 @@ func (v ToSqlVisitor) VisitAndNode(a AndNode) string {
 
 func (v ToSqlVisitor) VisitInNode(a InNode) string {
 	return "InNode"
+}
+
+func (v ToSqlVisitor) VisitOnNode(a OnNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("ON ")
+	buf.WriteString(v.Visit(a.Expr))
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitOrderingNode(a OrderingNode) string {
@@ -216,7 +227,12 @@ func (v ToSqlVisitor) VisitExistsNode(n ExistsNode) string {
 
 func (v ToSqlVisitor) VisitAttributeNode(n AttributeNode) string {
 	var buf bytes.Buffer
-	buf.WriteString(v.QuoteTableName(n.Table.Name))
+	// quote a table name or a table alias name
+	if relation, ok := n.Relation.(*Table); ok {
+		buf.WriteString(v.QuoteTableName(relation.Name))
+	} else if relation, ok := n.Relation.(*TableAliasNode); ok {
+		buf.WriteString(v.QuoteTableName(relation.Name))
+	}
 	buf.WriteString(".")
 	buf.WriteString(v.QuoteColumnName(n.Name))
 	return buf.String()
@@ -260,16 +276,18 @@ func (v ToSqlVisitor) VisitJoinSourceNode(a JoinSource) string {
 	if a.Left != nil {
 		buf.WriteString(v.Visit(a.Left))
 	}
-
-	for _, source := range a.Right {
+	for i, source := range a.Right {
 		buf.WriteString(v.Visit(source))
+		if i != len(a.Right)-1 {
+			buf.WriteString(SPACE)
+		}
 	}
 	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitInnerJoinNode(a InnerJoinNode) string {
 	var buf bytes.Buffer
-	buf.WriteString("INNER JOIN ")
+	buf.WriteString(" INNER JOIN ")
 	buf.WriteString(v.Visit(a.Left))
 	if a.Right != nil {
 		buf.WriteString(SPACE)
