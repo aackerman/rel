@@ -6,6 +6,8 @@ A SQL AST manager for Go. It:
 
 It is intended to be a framework, meaning this library could fulfill the query generation for a great ORM.
 
+Rel allows you to programatically create dynamic SQL with a clear and simple interface.
+
 ## Interfaces
 
 * `Visitable`
