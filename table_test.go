@@ -106,7 +106,7 @@ func TestTableHaving(t *testing.T) {
 	sql := query.ToSql()
 	expected := "SELECT FROM \"users\" HAVING \"users\".\"id\" = 10"
 	if sql != expected {
-		t.Logf("TestTableHaving sql: %s != %s", sql, expected)
+		t.Logf("TestTableHaving sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -117,7 +117,7 @@ func TestTableGroup(t *testing.T) {
 	sql := query.ToSql()
 	expected := "SELECT FROM \"users\" GROUP BY \"users\".\"id\""
 	if sql != expected {
-		t.Logf("TestTableGroup sql: %s != %s", sql, expected)
+		t.Logf("TestTableGroup sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -128,7 +128,7 @@ func TestTableMultipleProjections(t *testing.T) {
 	sql := query.ToSql()
 	expected := "SELECT *, * FROM \"users\""
 	if sql != expected {
-		t.Logf("TestTableMultipleProjections sql: '%s' != '%s'", sql, expected)
+		t.Logf("TestTableMultipleProjections sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -137,7 +137,7 @@ func TestTableNewStringJoin(t *testing.T) {
 	table := NewTable("")
 	join := table.NewStringJoin(Sql("foo"))
 	if join.Left.Raw != "foo" {
-		t.Log("TestTableNewStringJoin join.Left != \"foo\"")
+		t.Log("TestTableNewStringJoin \njoin.Left.Raw != \n\"foo\"")
 		t.Fail()
 	}
 }
@@ -152,7 +152,7 @@ func TestTableSelectManager(t *testing.T) {
 	sql := sm.ToSql()
 	expected := "SELECT"
 	if sql != expected {
-		t.Logf("TestTableSelectManager sql: %s != %s", sql, expected)
+		t.Logf("TestTableSelectManager sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
