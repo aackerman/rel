@@ -13,6 +13,7 @@ Rel allows you to programatically create dynamic SQL with a clear and simple int
 * `Visitable`
 * `Visitor`
 * `Engine`
+* `TreeManager`
 
 ## Important Classes
 
