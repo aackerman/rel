@@ -106,16 +106,16 @@ func (s *SelectManager) Group(columns ...Visitable) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Intersect(mgr1 *SelectManager, mgr2 *SelectManager) *IntersectManager {
-	return NewIntersectManager(s.Engine).Intersect(*mgr1, *mgr2)
+func (s *SelectManager) Intersect(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
+	return NewMultiStatementManager(s.Engine).Intersect(stmt1, stmt1)
 }
 
-func (s *SelectManager) Union(mgr1 *SelectManager, mgr2 *SelectManager) *UnionManager {
-	return NewUnionManager(s.Engine).Union(*mgr1, *mgr2)
+func (s *SelectManager) Union(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
+	return NewMultiStatementManager(s.Engine).Union(stmt1, stmt1)
 }
 
-func (s *SelectManager) UnionAll(mgr1 *SelectManager, mgr2 *SelectManager) *UnionManager {
-	return NewUnionManager(s.Engine).UnionAll(*mgr1, *mgr2)
+func (s *SelectManager) UnionAll(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
+	return NewMultiStatementManager(s.Engine).UnionAll(stmt1, stmt1)
 }
 
 func (s *SelectManager) Skip(i int) *SelectManager {
