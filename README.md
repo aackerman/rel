@@ -21,7 +21,7 @@ Rel allows you to programatically create dynamic SQL with a clear and simple int
 * `InsertManager`
 * `UpdateManager`
 * `DeleteManager`
-* `UnionManager`
+* `MultiStatementManager`
 
 ## Usage
 
