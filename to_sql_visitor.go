@@ -214,7 +214,7 @@ func (v ToSqlVisitor) VisitEqualityNode(n EqualityNode) string {
 	} else {
 		buf.WriteString(v.Visit(n.Left))
 		buf.WriteString(" = ")
-		buf.WriteString(v.Visit(*n.Right))
+		buf.WriteString(v.Visit(n.Right))
 	}
 	return buf.String()
 }
