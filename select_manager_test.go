@@ -132,9 +132,7 @@ func TestSelectManagerJoin(t *testing.T) {
 	left := NewTable("users")
 	right := left.Alias()
 	predicate := left.Attr("id").Eq(right.Attr("id"))
-	mgr := left.Join(right)
-	mgr.Project(Star())
-	mgr.On(predicate)
+	mgr := left.Select(Star()).Join(right).On(predicate)
 	sql := mgr.ToSql()
 	expected := "SELECT * FROM \"users\" INNER JOIN \"users\" \"users_2\" ON \"users\".\"id\" = \"users_2\".\"id\""
 	if sql != expected {
