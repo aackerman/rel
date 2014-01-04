@@ -118,6 +118,10 @@ func (s *SelectManager) UnionAll(stmt1 Visitable, stmt2 Visitable) *MultiStateme
 	return NewMultiStatementManager(s.Engine).UnionAll(stmt1, stmt2)
 }
 
+func (s *SelectManager) Except(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
+	return NewMultiStatementManager(s.Engine).Except(stmt1, stmt2)
+}
+
 func (s *SelectManager) Skip(i int) *SelectManager {
 	offset := NewOffsetNode(Sql(i))
 	s.Ast.Offset = &offset
