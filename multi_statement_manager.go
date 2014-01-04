@@ -36,3 +36,11 @@ func (mgr *MultiStatementManager) UnionAll(stmt1 Visitable, stmt2 Visitable) *Mu
 	}
 	return mgr
 }
+
+func (mgr *MultiStatementManager) Except(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
+	mgr.Ast = ExceptNode{
+		Left:  stmt1,
+		Right: stmt2,
+	}
+	return mgr
+}
