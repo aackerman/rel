@@ -121,7 +121,7 @@ func TestSelectManagerExcept(t *testing.T) {
 	m2.Where(table.Attr("age").Lt(50))
 	mgr := m1.Except(m1.Ast, m2.Ast)
 	sql := mgr.ToSql()
-	expected := "( SELECT * FROM \"users\" WHERE \"users\".\"age\" < 99 EXCEPT SELECT * FROM \"users\" WHERE \"users\".\"age\" > 50 )"
+	expected := "( SELECT * FROM \"users\" WHERE \"users\".\"age\" < 99 EXCEPT SELECT * FROM \"users\" WHERE \"users\".\"age\" < 50 )"
 	if sql != expected {
 		t.Logf("TestSelectManagerExcept sql: \n%s != \n%s", sql, expected)
 		t.Fail()
