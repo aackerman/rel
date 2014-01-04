@@ -15,8 +15,8 @@ type Table struct {
 
 var TableEngine Engine = NewEngine()
 
-func NewTable(name string) Table {
-	return Table{Name: name, Engine: TableEngine}
+func NewTable(name string) *Table {
+	return &Table{Name: name, Engine: TableEngine}
 }
 
 func (t *Table) Project(a ...Visitable) *SelectManager {

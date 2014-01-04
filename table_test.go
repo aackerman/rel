@@ -22,7 +22,7 @@ func TestTableAlias(t *testing.T) {
 func TestTableSetTableAlias(t *testing.T) {
 	table := NewTable("users")
 	table.SetTableAlias("foo")
-	manager := table.From(&table)
+	manager := table.From(table)
 	manager.Skip(10)
 	sql := manager.ToSql()
 	expected := "SELECT FROM \"users\" \"foo\" OFFSET 10"
@@ -148,7 +148,7 @@ func TestTableEquality(t *testing.T) {
 
 func TestTableSelectManager(t *testing.T) {
 	table := NewTable("")
-	sm := table.From(&table)
+	sm := table.From(table)
 	sql := sm.ToSql()
 	expected := "SELECT"
 	if sql != expected {

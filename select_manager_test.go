@@ -11,7 +11,7 @@ func TestSelectManagerJoinSources(t *testing.T) {
 
 func TestSelectManagerSkip(t *testing.T) {
 	table := NewTable("users")
-	manager := table.From(&table)
+	manager := table.From(table)
 	sql := manager.Skip(10).ToSql()
 	if sql != "SELECT FROM \"users\" OFFSET 10" {
 		t.Fail()
@@ -24,7 +24,7 @@ func TestSelectManagerClone(t *testing.T) {
 
 func TestSelectManagerExists(t *testing.T) {
 	table := NewTable("users")
-	manager := table.From(&table)
+	manager := table.From(table)
 	manager.Project(Sql("*"))
 	m2 := NewSelectManager(TableEngine, nil)
 	m2.Project(manager.Exists())
@@ -38,7 +38,7 @@ func TestSelectManagerExists(t *testing.T) {
 
 func TestSelectManagerExistsAs(t *testing.T) {
 	table := NewTable("users")
-	manager := table.From(&table)
+	manager := table.From(table)
 	manager.Project(Sql("*"))
 	m2 := NewSelectManager(TableEngine, nil)
 	m2.Project(manager.Exists().As(Sql("foo")))
@@ -52,7 +52,7 @@ func TestSelectManagerExistsAs(t *testing.T) {
 
 func TestSelectManagerOffset(t *testing.T) {
 	table := NewTable("users")
-	manager := table.From(&table)
+	manager := table.From(table)
 	sql := manager.Offset(10).ToSql()
 	expected := "SELECT FROM \"users\" OFFSET 10"
 	if sql != expected {
@@ -62,10 +62,10 @@ func TestSelectManagerOffset(t *testing.T) {
 
 func TestSelectManagerUnion(t *testing.T) {
 	table := NewTable("users")
-	m1 := NewSelectManager(TableEngine, &table)
+	m1 := NewSelectManager(TableEngine, table)
 	m1.Project(Star())
 	m1.Where(table.Attr("age").Lt(18))
-	m2 := NewSelectManager(TableEngine, &table)
+	m2 := NewSelectManager(TableEngine, table)
 	m2.Project(Star())
 	m2.Where(table.Attr("age").Gt(99))
 	mgr := m1.Union(m1.Ast, m2.Ast)
@@ -79,10 +79,10 @@ func TestSelectManagerUnion(t *testing.T) {
 
 func TestSelectManagerUnionAll(t *testing.T) {
 	table := NewTable("users")
-	m1 := NewSelectManager(TableEngine, &table)
+	m1 := NewSelectManager(TableEngine, table)
 	m1.Project(Star())
 	m1.Where(table.Attr("age").Lt(18))
-	m2 := NewSelectManager(TableEngine, &table)
+	m2 := NewSelectManager(TableEngine, table)
 	m2.Project(Star())
 	m2.Where(table.Attr("age").Gt(99))
 	mgr := m1.UnionAll(m1.Ast, m2.Ast)
@@ -96,10 +96,10 @@ func TestSelectManagerUnionAll(t *testing.T) {
 
 func TestSelectManagerIntersect(t *testing.T) {
 	table := NewTable("users")
-	m1 := NewSelectManager(TableEngine, &table)
+	m1 := NewSelectManager(TableEngine, table)
 	m1.Project(Star())
 	m1.Where(table.Attr("age").Lt(18))
-	m2 := NewSelectManager(TableEngine, &table)
+	m2 := NewSelectManager(TableEngine, table)
 	m2.Project(Star())
 	m2.Where(table.Attr("age").Gt(99))
 	mgr := m1.Intersect(m1.Ast, m2.Ast)
