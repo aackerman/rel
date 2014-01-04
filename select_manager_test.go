@@ -110,3 +110,20 @@ func TestSelectManagerIntersect(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestSelectManagerExcept(t *testing.T) {
+	table := NewTable("users")
+	m1 := NewSelectManager(TableEngine, table)
+	m1.Project(Star())
+	m1.Where(table.Attr("age").Lt(99))
+	m2 := NewSelectManager(TableEngine, table)
+	m2.Project(Star())
+	m2.Where(table.Attr("age").Lt(50))
+	mgr := m1.Except(m1.Ast, m2.Ast)
+	sql := mgr.ToSql()
+	expected := "( SELECT * FROM \"users\" WHERE \"users\".\"age\" < 99 EXCEPT SELECT * FROM \"users\" WHERE \"users\".\"age\" > 50 )"
+	if sql != expected {
+		t.Logf("TestSelectManagerExcept sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
