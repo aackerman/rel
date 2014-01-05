@@ -98,6 +98,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitRowsNode(*val)
 	case *PrecedingNode:
 		ret = v.VisitPrecedingNode(*val)
+	case *FollowingNode:
+		ret = v.VisitFollowingNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -129,6 +131,17 @@ func (v ToSqlVisitor) VisitPrecedingNode(node PrecedingNode) string {
 		buf.WriteString("UNBOUNDED")
 	}
 	buf.WriteString(" PRECEDING")
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitFollowingNode(node FollowingNode) string {
+	var buf bytes.Buffer
+	if node.Expr != nil {
+		buf.WriteString(v.Visit(node.Expr))
+	} else {
+		buf.WriteString("UNBOUNDED")
+	}
+	buf.WriteString(" FOLLOWING")
 	return buf.String()
 }
 
