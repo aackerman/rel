@@ -59,7 +59,7 @@ func NewTopNode(n Visitable) TopNode {
 	return TopNode{Expr: n}
 }
 
-func NewLockNode(n Visitable) LockNode {
+func NewLockNode(n Visitable) *LockNode {
 	return LockNode{Expr: n}
 }
 

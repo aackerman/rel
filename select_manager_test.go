@@ -140,3 +140,14 @@ func TestSelectManagerJoin(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestSelectManagerLock(t *testing.T) {
+	table := NewTable("users")
+	mgr := table.From(table)
+	sql := mgr.Lock().ToSql()
+	expected := "SELECT FROM \"users\" FOR UPDATE"
+	if sql != expected {
+		t.Logf("TestSelectManagerLock sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}

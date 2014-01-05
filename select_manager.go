@@ -88,6 +88,16 @@ func (s *SelectManager) StringJoin(right Visitable) *SelectManager {
 	return s
 }
 
+func (s *SelectManager) Lock() *SelectManager {
+	s.LockForUpdate()
+	return s
+}
+
+func (s *SelectManager) LockForUpdate() *SelectManager {
+	s.Ast.Lock = NewLockNode(Sql("FOR UPDATE"))
+	return s
+}
+
 func (s *SelectManager) Take(i int) *SelectManager {
 	limit := NewLimitNode(Sql(i))
 	s.Ast.Limit = &limit
