@@ -4,7 +4,7 @@ type SelectCoreNode struct {
 	Source       *JoinSource
 	Top          *TopNode
 	Projections  *[]Visitable
-	SetQuanifier *Visitable
+	SetQuanifier Visitable
 	Wheres       *[]Visitable
 	Groups       *[]GroupNode
 	Having       *HavingNode

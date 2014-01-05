@@ -187,6 +187,16 @@ func (s *SelectManager) Having(a ...Visitable) *SelectManager {
 	return s
 }
 
+func (s *SelectManager) Distinct() *SelectManager {
+	s.Ctx.SetQuanifier = &DistinctNode{}
+	return s
+}
+
+func (s *SelectManager) NotDistinct() *SelectManager {
+	s.Ctx.SetQuanifier = nil
+	return s
+}
+
 func (s *SelectManager) Window(a SqlLiteralNode) *NamedWindowNode {
 	if s.Ctx.Windows == nil {
 		slice := make([]Visitable, 0)

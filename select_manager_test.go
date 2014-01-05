@@ -409,3 +409,15 @@ func TestSelectManagerJoinMultipleTables(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestSelectManagerDistinct(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.From(users)
+	mgr.Distinct()
+	sql := mgr.ToSql()
+	expected := "SELECT DISTINCT FROM \"users\""
+	if sql != expected {
+		t.Logf("TestSelectManagerDistinct sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}

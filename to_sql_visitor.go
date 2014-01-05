@@ -106,6 +106,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitBetweenNode(*val)
 	case *RangeNode:
 		ret = v.VisitRangeNode(*val)
+	case *DistinctNode:
+		ret = v.VisitDistinctNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -129,8 +131,12 @@ func (v ToSqlVisitor) VisitInNode(node InNode) string {
 }
 
 func (v ToSqlVisitor) VisitDistinctOnNode(node DistinctOnNode) string {
-	log.Fatal("NOT IMPLEMENTED")
+	log.Fatal("NOT IMPLEMENTED FOR THIS DB")
 	return ""
+}
+
+func (v ToSqlVisitor) VisitDistinctNode(node DistinctNode) string {
+	return DISTINCT
 }
 
 func (v ToSqlVisitor) VisitRangeNode(node RangeNode) string {
@@ -504,7 +510,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 
 	if node.SetQuanifier != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.Visit(*node.SetQuanifier))
+		buf.WriteString(v.Visit(node.SetQuanifier))
 	}
 
 	// add select projections
