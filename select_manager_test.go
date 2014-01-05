@@ -237,14 +237,26 @@ func TestSelectManagerWindowWithOrders(t *testing.T) {
 	}
 }
 
-func TestSelectManagerWindowWithRowsFrame(t *testing.T) {
+func TestSelectManagerWindowWithUnboundedPreceding(t *testing.T) {
 	users := NewTable("users")
 	mgr := users.From(users)
 	mgr.Window(Sql("a_window")).Rows(&PrecedingNode{})
 	sql := mgr.ToSql()
 	expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (ROWS UNBOUNDED PRECEDING)"
 	if sql != expected {
-		t.Logf("TestSelectManagerWindowWithOrders sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestSelectManagerWindowWithUnboundedPreceding sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestSelectManagerWindowWithBoundedPreceding(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.From(users)
+	mgr.Window(Sql("a_window")).Rows(&PrecedingNode{Expr: Sql(5)})
+	sql := mgr.ToSql()
+	expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (ROWS 5 PRECEDING)"
+	if sql != expected {
+		t.Logf("TestSelectManagerWindowWithBoundedPreceding sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
