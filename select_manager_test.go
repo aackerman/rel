@@ -201,3 +201,23 @@ func TestSelectManagerLock(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestSelectManagerWhereSql(t *testing.T) {
+	table := NewTable("users")
+	mgr := table.From(table)
+	sql := mgr.WhereSql()
+	if sql != expected {
+		t.Logf("TestSelectManagerWhereSql sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestSelectManagerJoinSql(t *testing.T) {
+	table := NewTable("users")
+	mgr := table.From(table)
+	sql := mgr.WhereSql()
+	if sql != expected {
+		t.Logf("TestSelectManagerWhereSql sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
