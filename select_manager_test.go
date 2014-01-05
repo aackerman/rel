@@ -273,6 +273,18 @@ func TestSelectManagerWindowWithUnboundedFollowing(t *testing.T) {
 	}
 }
 
+func TestSelectManagerWindowWithBoundedFollowing(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.From(users)
+	mgr.Window(Sql("a_window")).Rows(&FollowingNode{Expr: Sql(5)})
+	sql := mgr.ToSql()
+	expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (ROWS 5 FOLLOWING)"
+	if sql != expected {
+		t.Logf("TestSelectManagerWindowWithUnboundedPreceding sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestSelectManagerJoinMultipleTables(t *testing.T) {
 	users := NewTable("users")
 	comments := NewTable("comments")
