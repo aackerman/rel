@@ -311,12 +311,7 @@ func (v ToSqlVisitor) VisitExistsNode(n ExistsNode) string {
 
 func (v ToSqlVisitor) VisitAttributeNode(n AttributeNode) string {
 	var buf bytes.Buffer
-	// quote a table name or a table alias name
-	if relation, ok := n.Relation.(*Table); ok {
-		buf.WriteString(v.QuoteTableName(relation))
-	} else if relation, ok := n.Relation.(*TableAliasNode); ok {
-		buf.WriteString(v.QuoteTableName(relation))
-	}
+	buf.WriteString(v.QuoteTableName(n.Relation))
 	buf.WriteString(".")
 	buf.WriteString(v.QuoteColumnName(n.Name))
 	return buf.String()
