@@ -10,3 +10,11 @@ type NamedWindowNode struct {
 	Framing Visitable
 	BaseVisitable
 }
+
+func (node *NamedWindowNode) Order(v Visitable) {
+	if node.Orders == nil {
+		slice := make([]Visitable, 0)
+		node.Orders = &slice
+	}
+	*node.Orders = append(*node.Orders, v)
+}

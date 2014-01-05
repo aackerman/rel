@@ -225,6 +225,18 @@ func TestSelectManagerWindowEmpty(t *testing.T) {
 	}
 }
 
+func TestSelectManagerWindowWithOrders(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.From(users)
+	mgr.Window(Sql("a_window")).Order(users.Attr("foo").Asc())
+	sql := mgr.ToSql()
+	expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (ORDER BY \"users\".\"foo\" ASC)"
+	if sql != expected {
+		t.Logf("TestSelectManagerWindowWithOrders sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestSelectManagerJoinMultipleTables(t *testing.T) {
 	users := NewTable("users")
 	comments := NewTable("comments")

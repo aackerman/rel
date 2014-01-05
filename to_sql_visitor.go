@@ -30,6 +30,7 @@ func (v ToSqlVisitor) Accept(a Visitable) string {
 	return v.Visit(a)
 }
 
+// FIXME: Only visit pointers to visitables
 func (v ToSqlVisitor) Visit(a Visitable) string {
 	ret := ""
 	switch val := a.(type) {
@@ -119,8 +120,11 @@ func (v ToSqlVisitor) VisitDistinctOnNode(a DistinctOnNode) string {
 func (v ToSqlVisitor) VisitNamedWindowNode(a NamedWindowNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.QuoteColumnName(a.Name))
-	buf.WriteString(" AS ")
-	if a.Orders != nil && len(*a.Orders) > 0 {
+	buf.WriteString(" AS (")
+
+	visitOrders := (a.Orders != nil && len(*a.Orders) > 0)
+	visitFraming := (a.Framing != nil)
+	if visitOrders {
 		buf.WriteString("ORDER BY ")
 		for i, order := range *a.Orders {
 			buf.WriteString(v.Visit(order))
@@ -129,14 +133,16 @@ func (v ToSqlVisitor) VisitNamedWindowNode(a NamedWindowNode) string {
 				buf.WriteString(", ")
 			}
 		}
+	}
+
+	if visitOrders && visitFraming {
 		buf.WriteString(SPACE)
 	}
 
-	if a.Framing != nil {
+	if visitFraming {
 		buf.WriteString(v.Visit(a.Framing))
-		buf.WriteString(SPACE)
 	}
-	buf.WriteString("(")
+
 	buf.WriteString(")")
 	return buf.String()
 }

@@ -187,14 +187,14 @@ func (s *SelectManager) Having(a ...Visitable) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Window(a SqlLiteralNode) *SelectManager {
+func (s *SelectManager) Window(a SqlLiteralNode) *NamedWindowNode {
 	if s.Ctx.Windows == nil {
 		slice := make([]Visitable, 0)
 		s.Ctx.Windows = &slice
 	}
 	window := &NamedWindowNode{Name: a}
 	*s.Ctx.Windows = append(*s.Ctx.Windows, window)
-	return s
+	return window
 }
 
 func (s *SelectManager) collapse(a ...Visitable) Visitable {
