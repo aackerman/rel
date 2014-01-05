@@ -20,6 +20,11 @@ type WithNode UnaryNode
 type WithRecursiveNode UnaryNode
 type DescendingNode OrderingNode
 type AscendingNode OrderingNode
+type RowsNode UnaryNode
+type RangeNode UnaryNode
+type CurrentRowNode UnaryNode
+type PrecedingNode UnaryNode
+type FollowingNode UnaryNode
 
 func NewUnaryNode(n Visitable) UnaryNode {
 	return UnaryNode{Expr: n}

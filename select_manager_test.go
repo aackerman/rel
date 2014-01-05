@@ -240,7 +240,7 @@ func TestSelectManagerWindowWithOrders(t *testing.T) {
 func TestSelectManagerWindowWithRowsFrame(t *testing.T) {
 	users := NewTable("users")
 	mgr := users.From(users)
-	mgr.Window(Sql("a_window")).Rows(&PrecendingNode{})
+	mgr.Window(Sql("a_window")).Rows(&PrecedingNode{})
 	sql := mgr.ToSql()
 	expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (ROWS UNBOUNDED PRECEDING)"
 	if sql != expected {

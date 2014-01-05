@@ -94,6 +94,10 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitCountNode(val)
 	case *NamedWindowNode:
 		ret = v.VisitNamedWindowNode(*val)
+	case *RowsNode:
+		ret = v.VisitRowsNode(*val)
+	case *PrecedingNode:
+		ret = v.VisitPrecedingNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -115,6 +119,27 @@ func (v ToSqlVisitor) VisitInNode(a InNode) string {
 
 func (v ToSqlVisitor) VisitDistinctOnNode(a DistinctOnNode) string {
 	return "DistinctOnNode"
+}
+
+func (v ToSqlVisitor) VisitPrecedingNode(node PrecedingNode) string {
+	var buf bytes.Buffer
+	if node.Expr != nil {
+		buf.WriteString(v.Visit(node.Expr))
+	} else {
+		buf.WriteString("UNBOUNDED")
+	}
+	buf.WriteString(" PRECEDING")
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitRowsNode(node RowsNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("ROWS")
+	if node.Expr != nil {
+		buf.WriteString(SPACE)
+		buf.WriteString(v.Visit(node.Expr))
+	}
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitNamedWindowNode(a NamedWindowNode) string {
