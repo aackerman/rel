@@ -8,12 +8,14 @@ type SelectCoreNode struct {
 	Wheres       *[]Visitable
 	Groups       *[]GroupNode
 	Having       *HavingNode
-	Windows      *[]WindowNode
+	Windows      *[]Visitable
 	BaseVisitable
 }
 
 func NewSelectCoreNode() SelectCoreNode {
-	return SelectCoreNode{Source: &JoinSource{
-		Right: make([]Visitable, 0),
-	}}
+	return SelectCoreNode{
+		Source: &JoinSource{
+			Right: make([]Visitable, 0),
+		},
+	}
 }

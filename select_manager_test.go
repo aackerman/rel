@@ -216,7 +216,7 @@ func TestSelectManagerGroup(t *testing.T) {
 func TestSelectManagerWindowEmpty(t *testing.T) {
 	users := NewTable("users")
 	mgr := users.From(users)
-	mgr.Window("a_window")
+	mgr.Window(Sql("a_window"))
 	sql := mgr.ToSql()
 	expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS ()"
 	if sql != expected {
