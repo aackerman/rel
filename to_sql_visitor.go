@@ -344,6 +344,7 @@ func (v ToSqlVisitor) VisitTable(t Table) string {
 	return buf.String()
 }
 
+// FIXME: far too complex
 func (v ToSqlVisitor) QuoteTableName(relation Visitable) string {
 	switch rel := relation.(type) {
 	case Table:
