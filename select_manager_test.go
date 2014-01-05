@@ -165,6 +165,20 @@ func TestSelectManagerOrderWithDirection(t *testing.T) {
 	}
 }
 
+func TestSelectManagerOnWithMultipleArguments(t *testing.T) {
+	left := NewTable("users")
+	right := left.Alias()
+	predicate := left.Attr("id").Eq(right.Attr("id"))
+	mgr := left.From(left)
+	mgr.Join(right).On(predicate, predicate)
+	sql := mgr.ToSql()
+	expected := "SELECT FROM \"users\" INNER JOIN \"users\" \"users_2\" ON \"users\".\"id\" = \"users_2\".\"id\" AND \"users\".\"id\" = \"users_2\".\"id\""
+	if sql != expected {
+		t.Logf("TestSelectManagerOrderWithDirection sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestSelectManagerOrderWithAttributesForExpressions(t *testing.T) {
 	table := NewTable("users")
 	mgr := table.Select(Star())

@@ -118,7 +118,17 @@ func (v ToSqlVisitor) VisitDistinctOnNode(a DistinctOnNode) string {
 }
 
 func (v ToSqlVisitor) VisitAndNode(a AndNode) string {
-	return "AndNode"
+	var buf bytes.Buffer
+	if a.Children != nil {
+		children := *a.Children
+		for i, child := range children {
+			buf.WriteString(v.Visit(child))
+			if i != len(children)-1 {
+				buf.WriteString(" AND ")
+			}
+		}
+	}
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitInNode(a InNode) string {
