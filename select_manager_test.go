@@ -334,7 +334,7 @@ func TestSelectManagerWindowFrameRangeBoundedPreceding(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (RANGE 5 PRECEDING)"
 	if sql != expected {
-		t.Logf("TestSelectManagerWindowFrameRangeUnboundedPreceding sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestSelectManagerWindowFrameRangeBoundedPreceding sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
