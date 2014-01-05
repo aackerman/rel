@@ -108,6 +108,10 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitRangeNode(*val)
 	case *DistinctNode:
 		ret = v.VisitDistinctNode(*val)
+	case *WithRecursiveNode:
+		ret = v.VisitWithRecursiveNode(*val)
+	case *MultiStatementManager:
+		ret = v.VisitMultiStatementManager(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -128,6 +132,13 @@ func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 func (v ToSqlVisitor) VisitInNode(node InNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
+}
+
+func (v ToSqlVisitor) VisitWithRecursiveNode(node WithRecursiveNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("WITH RECURSIVE ")
+	buf.WriteString(v.Visit(node.Expr))
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitDistinctOnNode(node DistinctOnNode) string {
@@ -321,6 +332,12 @@ func (v ToSqlVisitor) VisitSelectManager(node SelectManager) string {
 	buf.WriteString("(")
 	buf.WriteString(node.ToSql())
 	buf.WriteString(")")
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitMultiStatementManager(node MultiStatementManager) string {
+	var buf bytes.Buffer
+	buf.WriteString(node.ToSql())
 	return buf.String()
 }
 
@@ -605,6 +622,7 @@ func (v ToSqlVisitor) VisitSelectStatementNode(node SelectStatementNode) string 
 	// add WITH statement to the buffer
 	if node.With != nil {
 		buf.WriteString(v.Visit(node.With))
+		buf.WriteString(SPACE)
 	}
 
 	// add SELECT core to the buffer

@@ -197,6 +197,16 @@ func (s *SelectManager) NotDistinct() *SelectManager {
 	return s
 }
 
+func (s *SelectManager) With(node Visitable) *SelectManager {
+	s.Ast.With = &WithNode{Expr: node}
+	return s
+}
+
+func (s *SelectManager) WithRecursive(node Visitable) *SelectManager {
+	s.Ast.With = &WithRecursiveNode{Expr: node}
+	return s
+}
+
 func (s *SelectManager) Window(a SqlLiteralNode) *NamedWindowNode {
 	if s.Ctx.Windows == nil {
 		slice := make([]Visitable, 0)

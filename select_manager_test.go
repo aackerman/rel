@@ -434,3 +434,32 @@ func TestSelectManagerNotDistinct(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestSelectManagerWithRecursiveSupport(t *testing.T) {
+	comments := NewTable("comments")
+	commentsId := comments.Attr("id")
+	commentsParentId := comments.Attr("parent_id")
+
+	replies := NewTable("replies")
+	repliesId := replies.Attr("id")
+
+	recursiveTerm := NewSelectManager(TableEngine, nil)
+	recursiveTerm.From(comments).Project(commentsId, commentsParentId).Where(commentsId.Eq(Sql(42)))
+
+	nonRecursiveTerm := NewSelectManager(TableEngine, nil)
+	nonRecursiveTerm.From(comments).Project(commentsId, commentsParentId).Join(replies).On(commentsParentId.Eq(repliesId))
+
+	union := recursiveTerm.Union(recursiveTerm.Ast, nonRecursiveTerm.Ast)
+
+	asStmt := AsNode{Left: replies, Right: union}
+
+	mgr := NewSelectManager(TableEngine, nil)
+	mgr.WithRecursive(asStmt).From(replies).Project(Star())
+
+	sql := mgr.ToSql()
+	expected := "WITH RECURSIVE \"replies\" AS ( SELECT \"comments\".\"id\", \"comments\".\"parent_id\" FROM \"comments\" WHERE \"comments\".\"id\" = 42 UNION SELECT \"comments\".\"id\", \"comments\".\"parent_id\" FROM \"comments\" INNER JOIN \"replies\" ON \"comments\".\"parent_id\" = \"replies\".\"id\" ) SELECT * FROM \"replies\""
+	if sql != expected {
+		t.Logf("TestSelectManagerWithRecursiveSupport sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}

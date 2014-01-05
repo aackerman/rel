@@ -3,6 +3,7 @@ package rel
 type MultiStatementManager struct {
 	Engine Engine
 	Ast    Visitable
+	BaseVisitable
 }
 
 func (mgr *MultiStatementManager) ToSql() string {

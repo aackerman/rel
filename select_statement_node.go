@@ -5,7 +5,7 @@ type SelectStatementNode struct {
 	Limit  *LimitNode
 	Orders *[]Visitable
 	Lock   *LockNode
-	With   *WithNode
+	With   Visitable // WithNode or WithRecursiveNode
 	Offset *OffsetNode
 	Visitable
 }
