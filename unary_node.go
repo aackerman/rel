@@ -18,6 +18,8 @@ type LockNode UnaryNode
 type DistinctOnNode UnaryNode
 type WithNode UnaryNode
 type WithRecursiveNode UnaryNode
+type DescendingNode OrderingNode
+type AscendingNode OrderingNode
 
 func NewUnaryNode(n Visitable) UnaryNode {
 	return UnaryNode{Expr: n}

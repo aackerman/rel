@@ -25,6 +25,14 @@ func (a AttributeNode) Gt(i int) GreaterThanNode {
 	return GreaterThanNode{Left: a, Right: Sql(i)}
 }
 
+func (a AttributeNode) Desc() DescendingNode {
+	return DescendingNode{Expr: a}
+}
+
+func (a AttributeNode) Asc() AscendingNode {
+	return AscendingNode{Expr: a}
+}
+
 func (a AttributeNode) In(v Visitable) Visitable {
 	var ret Visitable
 	switch val := v.(type) {

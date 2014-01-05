@@ -81,6 +81,10 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitInnerJoinNode(*val)
 	case OnNode:
 		ret = v.VisitOnNode(val)
+	case AscendingNode:
+		ret = v.VisitAscendingNode(val)
+	case DescendingNode:
+		ret = v.VisitDescendingNode(val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -117,6 +121,20 @@ func (v ToSqlVisitor) VisitAndNode(a AndNode) string {
 
 func (v ToSqlVisitor) VisitInNode(a InNode) string {
 	return "InNode"
+}
+
+func (v ToSqlVisitor) VisitAscendingNode(a AscendingNode) string {
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(a.Expr))
+	buf.WriteString(" ASC")
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitDescendingNode(a DescendingNode) string {
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(a.Expr))
+	buf.WriteString(" DESC")
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitOnNode(a OnNode) string {
