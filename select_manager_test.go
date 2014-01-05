@@ -347,7 +347,20 @@ func TestSelectManagerWindowFrameRangeUnboundedFollowing(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (RANGE UNBOUNDED FOLLOWING)"
 	if sql != expected {
-		t.Logf("TestSelectManagerWindowFrameRangeBoundedPreceding sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestSelectManagerWindowFrameRangeUnboundedFollowing sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestSelectManagerWindowFrameRangeBoundedFollowing(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.From(users)
+	window := mgr.Window(Sql("a_window"))
+	window.Range(&FollowingNode{Expr: Sql(5)})
+	sql := mgr.ToSql()
+	expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (RANGE 5 FOLLOWING)"
+	if sql != expected {
+		t.Logf("TestSelectManagerWindowFrameRangeBoundedFollowing sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
