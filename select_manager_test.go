@@ -202,6 +202,17 @@ func TestSelectManagerLock(t *testing.T) {
 	}
 }
 
+func TestSelectManagerGroup(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Group(users.Attr("id"))
+	sql := mgr.ToSql()
+	expected := "SELECT FROM \"users\" GROUP BY \"users\".\"id\""
+	if sql != expected {
+		t.Logf("TestSelectManagerGroup sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestSelectManagerJoinMultipleTables(t *testing.T) {
 	users := NewTable("users")
 	comments := NewTable("comments")
