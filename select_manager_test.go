@@ -421,3 +421,16 @@ func TestSelectManagerDistinct(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestSelectManagerNotDistinct(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.From(users)
+	mgr.Distinct()
+	mgr.NotDistinct()
+	sql := mgr.ToSql()
+	expected := "SELECT FROM \"users\""
+	if sql != expected {
+		t.Logf("TestSelectManagerNotDistinct sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
