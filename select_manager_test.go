@@ -160,7 +160,19 @@ func TestSelectManagerOrderWithDirection(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT * FROM \"users\" ORDER BY \"users\".\"id\" DESC"
 	if sql != expected {
-		t.Logf("TestSelectManagerOrder sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestSelectManagerOrderWithDirection sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestSelectManagerOrderWithAttributesForExpressions(t *testing.T) {
+	table := NewTable("users")
+	mgr := table.Select(Star())
+	mgr.Order(table.Attr("id").Count().Desc())
+	sql := mgr.ToSql()
+	expected := "SELECT * FROM \"users\" ORDER BY COUNT(\"users\".\"id\") DESC"
+	if sql != expected {
+		t.Logf("TestSelectManagerOrderWithAttributesForExpressions sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }

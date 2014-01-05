@@ -85,6 +85,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitAscendingNode(val)
 	case DescendingNode:
 		ret = v.VisitDescendingNode(val)
+	case CountNode:
+		ret = v.VisitCountNode(val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -121,6 +123,18 @@ func (v ToSqlVisitor) VisitAndNode(a AndNode) string {
 
 func (v ToSqlVisitor) VisitInNode(a InNode) string {
 	return "InNode"
+}
+
+func (v ToSqlVisitor) VisitCountNode(a CountNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("COUNT(")
+	buf.WriteString(v.Visit(a.Expressions))
+	buf.WriteString(")")
+	if a.Alias != nil {
+		buf.WriteString(" AS ")
+		buf.WriteString(v.Visit(a.Alias))
+	}
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitAscendingNode(a AscendingNode) string {
