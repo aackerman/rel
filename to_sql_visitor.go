@@ -104,6 +104,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitCurrentRowNode(*val)
 	case *BetweenNode:
 		ret = v.VisitBetweenNode(*val)
+	case *RangeNode:
+		ret = v.VisitRangeNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -129,6 +131,16 @@ func (v ToSqlVisitor) VisitInNode(node InNode) string {
 func (v ToSqlVisitor) VisitDistinctOnNode(node DistinctOnNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
+}
+
+func (v ToSqlVisitor) VisitRangeNode(node RangeNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("RANGE")
+	if node.Expr != nil {
+		buf.WriteString(SPACE)
+		buf.WriteString(v.Visit(node.Expr))
+	}
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitBetweenNode(node BetweenNode) string {
