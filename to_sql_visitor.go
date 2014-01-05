@@ -100,6 +100,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitPrecedingNode(*val)
 	case *FollowingNode:
 		ret = v.VisitFollowingNode(*val)
+	case *CurrentRowNode:
+		ret = v.VisitCurrentRowNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -121,6 +123,10 @@ func (v ToSqlVisitor) VisitInNode(a InNode) string {
 
 func (v ToSqlVisitor) VisitDistinctOnNode(a DistinctOnNode) string {
 	return "DistinctOnNode"
+}
+
+func (v ToSqlVisitor) VisitCurrentRowNode(node CurrentRowNode) string {
+	return "CURRENT ROW"
 }
 
 func (v ToSqlVisitor) VisitPrecedingNode(node PrecedingNode) string {
