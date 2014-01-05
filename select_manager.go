@@ -59,7 +59,6 @@ func (s *SelectManager) On(a ...Visitable) *SelectManager {
 		last := right[len(right)-1]
 		switch val := last.(type) {
 		case *InnerJoinNode:
-			log.Printf("%v", a)
 			val.Right = NewOnNode(s.collapse(a...))
 		case *OuterJoinNode:
 			val.Right = NewOnNode(s.collapse(a...))

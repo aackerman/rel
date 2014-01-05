@@ -60,7 +60,7 @@ func NewTopNode(n Visitable) TopNode {
 }
 
 func NewLockNode(n Visitable) *LockNode {
-	return LockNode{Expr: n}
+	return &LockNode{Expr: n}
 }
 
 func NewDistinctOnNode(n Visitable) DistinctOnNode {

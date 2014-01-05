@@ -100,7 +100,7 @@ func (v ToSqlVisitor) VisitLimitNode(a LimitNode) string {
 }
 
 func (v ToSqlVisitor) VisitLockNode(a LockNode) string {
-	return "LockNode"
+	return v.Visit(a.Expr)
 }
 
 func (v ToSqlVisitor) VisitOffsetNode(n OffsetNode) string {
