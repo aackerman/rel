@@ -2,6 +2,6 @@ package rel
 
 type AsNode struct {
 	Left  Visitable
-	Right *Visitable
+	Right Visitable
 	BaseVisitable
 }

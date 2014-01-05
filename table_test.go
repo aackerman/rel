@@ -14,7 +14,7 @@ func TestTableName(t *testing.T) {
 func TestTableAlias(t *testing.T) {
 	table := NewTable("users")
 	alias := table.Alias()
-	if alias.Name != "users_2" {
+	if alias.Name.Raw != "users_2" {
 		t.Fail()
 	}
 }
@@ -27,7 +27,7 @@ func TestTableSetTableAlias(t *testing.T) {
 	sql := manager.ToSql()
 	expected := "SELECT FROM \"users\" \"foo\" OFFSET 10"
 	if sql != expected {
-		t.Logf("TestTableSetTableAlias sql: %s != %s", sql, expected)
+		t.Logf("TestTableSetTableAlias sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }

@@ -174,7 +174,7 @@ func TestSelectManagerOnWithMultipleArguments(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT FROM \"users\" INNER JOIN \"users\" \"users_2\" ON \"users\".\"id\" = \"users_2\".\"id\" AND \"users\".\"id\" = \"users_2\".\"id\""
 	if sql != expected {
-		t.Logf("TestSelectManagerOrderWithDirection sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestSelectManagerOnWithMultipleArguments sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -198,6 +198,22 @@ func TestSelectManagerLock(t *testing.T) {
 	expected := "SELECT FROM \"users\" FOR UPDATE"
 	if sql != expected {
 		t.Logf("TestSelectManagerLock sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestSelectManagerJoinMultipleTables(t *testing.T) {
+	users := NewTable("users")
+	comments := NewTable("comments")
+	counts := comments.From(comments).Group(comments.Attr("user_id")).Project(
+		comments.Attr("user_id").As(Sql("user_id")),
+		comments.Attr("user_id").Count().As(Sql("count")),
+	).As(Sql("counts"))
+	mgr := users.Join(counts).On(counts.Attr("user_id").Eq(Sql(10)))
+	sql := mgr.ToSql()
+	expected := "SELECT FROM \"users\" INNER JOIN (SELECT \"comments\".\"user_id\" AS user_id, COUNT(\"comments\".\"user_id\") AS count FROM \"comments\" GROUP BY \"comments\".\"user_id\") counts ON counts.\"user_id\" = 10"
+	if sql != expected {
+		t.Logf("TestSelectManagerJoinMultipleTables sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }

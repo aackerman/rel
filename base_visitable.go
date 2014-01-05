@@ -31,8 +31,8 @@ func (a BaseVisitable) NewFalseNode() FalseNode {
 	return FalseNode{}
 }
 
-func (a BaseVisitable) NewTableAliasNode(t *Table, name string) TableAliasNode {
-	return TableAliasNode{Name: name, Table: t}
+func (a BaseVisitable) NewTableAliasNode(t *Table, name SqlLiteralNode) *TableAliasNode {
+	return &TableAliasNode{Relation: t, Name: name}
 }
 
 func (a BaseVisitable) NewStringJoinNode() StringJoinNode {

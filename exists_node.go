@@ -9,6 +9,6 @@ func NewExistsNode(n Visitable) ExistsNode {
 func (e ExistsNode) As(n Visitable) AsNode {
 	return AsNode{
 		Left:  e,
-		Right: &n,
+		Right: n,
 	}
 }

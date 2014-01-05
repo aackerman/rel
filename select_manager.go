@@ -52,6 +52,11 @@ func (s *SelectManager) From(t *Table) *SelectManager {
 	return s
 }
 
+func (s *SelectManager) As(n SqlLiteralNode) *TableAliasNode {
+	grouping := &GroupingNode{Expr: s.Ast}
+	return &TableAliasNode{Relation: grouping, Name: n}
+}
+
 func (s *SelectManager) On(a ...Visitable) *SelectManager {
 	right := s.Ctx.Source.Right
 

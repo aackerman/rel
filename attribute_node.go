@@ -37,6 +37,13 @@ func (a AttributeNode) Count() CountNode {
 	return CountNode{Expressions: a}
 }
 
+func (a AttributeNode) As(n Visitable) AsNode {
+	return AsNode{
+		Left:  a,
+		Right: n,
+	}
+}
+
 func (a AttributeNode) In(v Visitable) Visitable {
 	var ret Visitable
 	switch val := v.(type) {

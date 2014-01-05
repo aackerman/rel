@@ -3,7 +3,7 @@ package rel
 type Visitable interface {
 	NewTrueNode() TrueNode
 	NewFalseNode() FalseNode
-	NewTableAliasNode(*Table, string) TableAliasNode
+	NewTableAliasNode(*Table, SqlLiteralNode) *TableAliasNode
 	NewStringJoinNode() StringJoinNode
 	NewInnerJoinNode() InnerJoinNode
 	NewOuterJoinNode() OuterJoinNode

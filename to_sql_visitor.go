@@ -75,10 +75,14 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitExceptNode(val)
 	case TableAliasNode:
 		ret = v.VisitTableAliasNode(val)
+	case *TableAliasNode:
+		ret = v.VisitTableAliasNode(*val)
 	case InnerJoinNode:
 		ret = v.VisitInnerJoinNode(val)
 	case *InnerJoinNode:
 		ret = v.VisitInnerJoinNode(*val)
+	case *GroupingNode:
+		ret = v.VisitGroupingNode(*val)
 	case OnNode:
 		ret = v.VisitOnNode(val)
 	case AscendingNode:
@@ -98,6 +102,26 @@ func (v ToSqlVisitor) VisitTopNode(a TopNode) string {
 	return "TopNode"
 }
 
+func (v ToSqlVisitor) VisitOrderingNode(a OrderingNode) string {
+	return "OrderingNode"
+}
+
+func (v ToSqlVisitor) VisitInNode(a InNode) string {
+	return "InNode"
+}
+
+func (v ToSqlVisitor) VisitDistinctOnNode(a DistinctOnNode) string {
+	return "DistinctOnNode"
+}
+
+func (v ToSqlVisitor) VisitGroupingNode(a GroupingNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("(")
+	buf.WriteString(v.Visit(a.Expr))
+	buf.WriteString(")")
+	return buf.String()
+}
+
 func (v ToSqlVisitor) VisitLimitNode(a LimitNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("LIMIT ")
@@ -110,11 +134,10 @@ func (v ToSqlVisitor) VisitLockNode(a LockNode) string {
 }
 
 func (v ToSqlVisitor) VisitOffsetNode(n OffsetNode) string {
-	return "OFFSET " + v.Visit(n.Expr)
-}
-
-func (v ToSqlVisitor) VisitDistinctOnNode(a DistinctOnNode) string {
-	return "DistinctOnNode"
+	var buf bytes.Buffer
+	buf.WriteString("OFFSET ")
+	buf.WriteString(v.Visit(n.Expr))
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitAndNode(a AndNode) string {
@@ -129,10 +152,6 @@ func (v ToSqlVisitor) VisitAndNode(a AndNode) string {
 		}
 	}
 	return buf.String()
-}
-
-func (v ToSqlVisitor) VisitInNode(a InNode) string {
-	return "InNode"
 }
 
 func (v ToSqlVisitor) VisitCountNode(a CountNode) string {
@@ -166,10 +185,6 @@ func (v ToSqlVisitor) VisitOnNode(a OnNode) string {
 	buf.WriteString("ON ")
 	buf.WriteString(v.Visit(a.Expr))
 	return buf.String()
-}
-
-func (v ToSqlVisitor) VisitOrderingNode(a OrderingNode) string {
-	return "OrderingNode"
 }
 
 func (v ToSqlVisitor) VisitExceptNode(a ExceptNode) string {
@@ -240,7 +255,7 @@ func (v ToSqlVisitor) VisitAsNode(a AsNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(a.Left))
 	buf.WriteString(" AS ")
-	buf.WriteString(v.Visit(*a.Right))
+	buf.WriteString(v.Visit(a.Right))
 	return buf.String()
 }
 
@@ -271,9 +286,9 @@ func (v ToSqlVisitor) VisitAttributeNode(n AttributeNode) string {
 	var buf bytes.Buffer
 	// quote a table name or a table alias name
 	if relation, ok := n.Relation.(*Table); ok {
-		buf.WriteString(v.QuoteTableName(relation.Name))
+		buf.WriteString(v.QuoteTableName(relation))
 	} else if relation, ok := n.Relation.(*TableAliasNode); ok {
-		buf.WriteString(v.QuoteTableName(relation.Name))
+		buf.WriteString(v.QuoteTableName(relation))
 	}
 	buf.WriteString(".")
 	buf.WriteString(v.QuoteColumnName(n.Name))
@@ -296,17 +311,40 @@ func (v ToSqlVisitor) VisitEqualityNode(n EqualityNode) string {
 func (v ToSqlVisitor) VisitTable(t Table) string {
 	var buf bytes.Buffer
 	if t.TableAlias != "" {
-		buf.WriteString(v.QuoteTableName(t.Name))
+		buf.WriteString(v.QuoteTableName(t))
 		buf.WriteString(SPACE)
-		buf.WriteString(v.QuoteTableName(t.TableAlias))
+		// FIXME: table.TableAlias should be a ptr to a TableAliasNode not a string
+		alias := TableAliasNode{Relation: t, Name: Sql(t.TableAlias), Quoted: true}
+		buf.WriteString(v.QuoteTableName())
 	} else {
-		buf.WriteString(v.QuoteTableName(t.Name))
+		buf.WriteString(v.QuoteTableName(t))
 	}
 	return buf.String()
 }
 
-func (v ToSqlVisitor) QuoteTableName(name string) string {
-	return v.conn.QuoteTableName(name)
+func (v ToSqlVisitor) QuoteTableName(relation Visitable) string {
+	switch rel := relation.(type) {
+	case Table:
+		return v.conn.QuoteTableName(rel.Name)
+	case *Table:
+		return v.conn.QuoteTableName(rel.Name)
+	case TableAliasNode:
+		if rel.Quoted == true {
+			return v.conn.QuoteTableName(rel.Name.Raw)
+		} else {
+			return rel.Name.Raw
+		}
+	case *TableAliasNode:
+		if rel.Quoted == true {
+			return v.conn.QuoteTableName(rel.Name.Raw)
+		} else {
+			return rel.Name.Raw
+		}
+	case SqlLiteralNode:
+		return rel.Raw
+	default:
+		return ""
+	}
 }
 
 func (v ToSqlVisitor) QuoteColumnName(name string) string {
@@ -348,9 +386,9 @@ func (v ToSqlVisitor) VisitSqlLiteralNode(a SqlLiteralNode) string {
 
 func (v ToSqlVisitor) VisitTableAliasNode(a TableAliasNode) string {
 	var buf bytes.Buffer
-	buf.WriteString(v.Visit(a.Table))
+	buf.WriteString(v.Visit(a.Relation))
 	buf.WriteString(" ")
-	buf.WriteString(v.QuoteTableName(a.Name))
+	buf.WriteString(v.QuoteTableName(a))
 	return buf.String()
 }
 
