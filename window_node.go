@@ -27,3 +27,7 @@ func (node *NamedWindowNode) Frame(v Visitable) Visitable {
 	node.Framing = v
 	return node.Framing
 }
+
+func (node *NamedWindowNode) Range(v Visitable) Visitable {
+	return node.Frame(&RangeNode{Expr: v})
+}

@@ -313,6 +313,19 @@ func TestSelectManagerWindowFrameBetweenTwoDelimeters(t *testing.T) {
 	}
 }
 
+func TestSelectManagerWindowFrameRangeUnboundedPreceding(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.From(users)
+	window := mgr.Window(Sql("a_window"))
+	window.Range(&PrecedingNode{})
+	sql := mgr.ToSql()
+	expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (RANGE UNBOUNDED PRECEDING)"
+	if sql != expected {
+		t.Logf("TestSelectManagerWindowFrameRangeUnboundedPreceding sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestSelectManagerJoinMultipleTables(t *testing.T) {
 	users := NewTable("users")
 	comments := NewTable("comments")
