@@ -107,15 +107,14 @@ func (s *SelectManager) Exists() ExistsNode {
 	return NewExistsNode(s.Ast)
 }
 
-func (s *SelectManager) Order(exprs ...string) *SelectManager {
+func (s *SelectManager) Order(exprs ...Visitable) *SelectManager {
 	if len(exprs) > 0 {
 		if s.Ast.Orders == nil {
 			orders := make([]Visitable, 0)
 			s.Ast.Orders = &orders
 		}
 		for _, expr := range exprs {
-			order := NewSqlLiteralNode(expr)
-			*s.Ast.Orders = append(*s.Ast.Orders, order)
+			*s.Ast.Orders = append(*s.Ast.Orders, expr)
 		}
 	}
 	return s

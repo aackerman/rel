@@ -51,7 +51,7 @@ func (t *Table) Group(a ...Visitable) *SelectManager {
 	return t.From(t).Group(a...)
 }
 
-func (t *Table) Order(exprs ...string) *SelectManager {
+func (t *Table) Order(exprs ...Visitable) *SelectManager {
 	return t.From(t).Order(exprs...)
 }
 

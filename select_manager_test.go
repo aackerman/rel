@@ -141,6 +141,18 @@ func TestSelectManagerJoin(t *testing.T) {
 	}
 }
 
+func TestSelectManagerOrder(t *testing.T) {
+	table := NewTable("users")
+	mgr := table.Select(Star())
+	mgr.Order(table.Attr("id"))
+	sql := mgr.ToSql()
+	expected := "SELECT * FROM \"users\" ORDER BY \"users\".\"id\""
+	if sql != expected {
+		t.Logf("TestSelectManagerOrder sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestSelectManagerLock(t *testing.T) {
 	table := NewTable("users")
 	mgr := table.From(table)

@@ -2,6 +2,7 @@ package rel
 
 import (
 	"log"
+	"runtime/debug"
 	"strconv"
 )
 
@@ -26,6 +27,7 @@ func NewSqlLiteralNode(raw interface{}) SqlLiteralNode {
 	case int:
 		val = strconv.Itoa(raw.(int))
 	default:
+		debug.PrintStack()
 		log.Fatalf("Cannot create SqlLiteralNode from input type %T", raw)
 	}
 	return SqlLiteralNode{Raw: val}

@@ -34,7 +34,7 @@ func TestTableSetTableAlias(t *testing.T) {
 
 func TestTableOrder(t *testing.T) {
 	table := NewTable("users")
-	sm := table.Order("foo")
+	sm := table.Order(Sql("foo"))
 	sql := sm.ToSql()
 	expected := "SELECT FROM \"users\" ORDER BY foo"
 	if sql != expected {
