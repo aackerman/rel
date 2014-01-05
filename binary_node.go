@@ -13,6 +13,7 @@ func NewBinaryNode(left Visitable, right Visitable) BinaryNode {
 	}
 }
 
+type BetweenNode BinaryNode
 type AssignmentNode BinaryNode
 type DoesNotMatchNode BinaryNode
 type GreaterThanNode BinaryNode

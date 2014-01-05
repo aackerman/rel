@@ -19,10 +19,11 @@ func (node *NamedWindowNode) Order(v Visitable) {
 	*node.Orders = append(*node.Orders, v)
 }
 
-func (node *NamedWindowNode) Rows(v Visitable) {
-	node.Frame(&RowsNode{Expr: v})
+func (node *NamedWindowNode) Rows(v Visitable) Visitable {
+	return node.Frame(&RowsNode{Expr: v})
 }
 
-func (node *NamedWindowNode) Frame(v Visitable) {
+func (node *NamedWindowNode) Frame(v Visitable) Visitable {
 	node.Framing = v
+	return node.Framing
 }
