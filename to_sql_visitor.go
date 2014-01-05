@@ -315,7 +315,7 @@ func (v ToSqlVisitor) VisitTable(t Table) string {
 		buf.WriteString(SPACE)
 		// FIXME: table.TableAlias should be a ptr to a TableAliasNode not a string
 		alias := TableAliasNode{Relation: t, Name: Sql(t.TableAlias), Quoted: true}
-		buf.WriteString(v.QuoteTableName())
+		buf.WriteString(v.QuoteTableName(alias))
 	} else {
 		buf.WriteString(v.QuoteTableName(t))
 	}
