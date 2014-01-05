@@ -5,6 +5,8 @@ type WindowNode struct {
 }
 
 type NamedWindowNode struct {
-	Name SqlLiteralNode
+	Name    SqlLiteralNode
+	Orders  *[]Visitable
+	Framing Visitable
 	BaseVisitable
 }

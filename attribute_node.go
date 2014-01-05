@@ -1,14 +1,14 @@
 package rel
 
 type AttributeNode struct {
-	Name     string
+	Name     SqlLiteralNode
 	Relation Visitable
 	BaseVisitable
 }
 
 func NewAttributeNode(v Visitable, name string) AttributeNode {
 	return AttributeNode{
-		Name:     name,
+		Name:     Sql(name),
 		Relation: v,
 	}
 }

@@ -91,6 +91,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitDescendingNode(val)
 	case CountNode:
 		ret = v.VisitCountNode(val)
+	case *NamedWindowNode:
+		ret = v.VisitNamedWindowNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -112,6 +114,31 @@ func (v ToSqlVisitor) VisitInNode(a InNode) string {
 
 func (v ToSqlVisitor) VisitDistinctOnNode(a DistinctOnNode) string {
 	return "DistinctOnNode"
+}
+
+func (v ToSqlVisitor) VisitNamedWindowNode(a NamedWindowNode) string {
+	var buf bytes.Buffer
+	buf.WriteString(v.QuoteColumnName(a.Name))
+	buf.WriteString(" AS ")
+	if a.Orders != nil && len(*a.Orders) > 0 {
+		buf.WriteString("ORDER BY ")
+		for i, order := range *a.Orders {
+			buf.WriteString(v.Visit(order))
+			// Join on ", "
+			if i != len(*a.Orders)-1 {
+				buf.WriteString(", ")
+			}
+		}
+		buf.WriteString(SPACE)
+	}
+
+	if a.Framing != nil {
+		buf.WriteString(v.Visit(a.Framing))
+		buf.WriteString(SPACE)
+	}
+	buf.WriteString("(")
+	buf.WriteString(")")
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitGroupingNode(a GroupingNode) string {
@@ -347,8 +374,8 @@ func (v ToSqlVisitor) QuoteTableName(relation Visitable) string {
 	}
 }
 
-func (v ToSqlVisitor) QuoteColumnName(name string) string {
-	return v.conn.QuoteColumnName(name)
+func (v ToSqlVisitor) QuoteColumnName(literal SqlLiteralNode) string {
+	return v.conn.QuoteColumnName(literal.Raw)
 }
 
 func (v ToSqlVisitor) VisitJoinSourceNode(a JoinSource) string {
