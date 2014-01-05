@@ -58,8 +58,6 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitAsNode(val)
 	case Table:
 		ret = v.VisitTable(val)
-	case *Table:
-		ret = v.VisitTable(*val)
 	case LessThanNode:
 		ret = v.VisitLessThanNode(val)
 	case UnionNode:
@@ -76,14 +74,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitExceptNode(val)
 	case TableAliasNode:
 		ret = v.VisitTableAliasNode(val)
-	case *TableAliasNode:
-		ret = v.VisitTableAliasNode(*val)
 	case InnerJoinNode:
 		ret = v.VisitInnerJoinNode(val)
-	case *InnerJoinNode:
-		ret = v.VisitInnerJoinNode(*val)
-	case *GroupingNode:
-		ret = v.VisitGroupingNode(*val)
 	case OnNode:
 		ret = v.VisitOnNode(val)
 	case AscendingNode:
@@ -92,6 +84,14 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitDescendingNode(val)
 	case CountNode:
 		ret = v.VisitCountNode(val)
+	case *Table:
+		ret = v.VisitTable(*val)
+	case *TableAliasNode:
+		ret = v.VisitTableAliasNode(*val)
+	case *InnerJoinNode:
+		ret = v.VisitInnerJoinNode(*val)
+	case *GroupingNode:
+		ret = v.VisitGroupingNode(*val)
 	case *NamedWindowNode:
 		ret = v.VisitNamedWindowNode(*val)
 	case *RowsNode:
