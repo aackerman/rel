@@ -109,20 +109,24 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 	return ret
 }
 
-func (v ToSqlVisitor) VisitTopNode(a TopNode) string {
-	return "TopNode"
+func (v ToSqlVisitor) VisitTopNode(node TopNode) string {
+	log.Fatal("NOT IMPLEMENTED")
+	return ""
 }
 
-func (v ToSqlVisitor) VisitOrderingNode(a OrderingNode) string {
-	return "OrderingNode"
+func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
+	log.Fatal("NOT IMPLEMENTED")
+	return ""
 }
 
-func (v ToSqlVisitor) VisitInNode(a InNode) string {
-	return "InNode"
+func (v ToSqlVisitor) VisitInNode(node InNode) string {
+	log.Fatal("NOT IMPLEMENTED")
+	return ""
 }
 
-func (v ToSqlVisitor) VisitDistinctOnNode(a DistinctOnNode) string {
-	return "DistinctOnNode"
+func (v ToSqlVisitor) VisitDistinctOnNode(node DistinctOnNode) string {
+	log.Fatal("NOT IMPLEMENTED")
+	return ""
 }
 
 func (v ToSqlVisitor) VisitCurrentRowNode(node CurrentRowNode) string {
@@ -161,19 +165,19 @@ func (v ToSqlVisitor) VisitRowsNode(node RowsNode) string {
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitNamedWindowNode(a NamedWindowNode) string {
+func (v ToSqlVisitor) VisitNamedWindowNode(node NamedWindowNode) string {
 	var buf bytes.Buffer
-	buf.WriteString(v.QuoteColumnName(a.Name))
+	buf.WriteString(v.QuoteColumnName(node.Name))
 	buf.WriteString(" AS (")
 
-	visitOrders := (a.Orders != nil && len(*a.Orders) > 0)
-	visitFraming := (a.Framing != nil)
+	visitOrders := (node.Orders != nil && len(*node.Orders) > 0)
+	visitFraming := (node.Framing != nil)
 	if visitOrders {
 		buf.WriteString("ORDER BY ")
-		for i, order := range *a.Orders {
+		for i, order := range *node.Orders {
 			buf.WriteString(v.Visit(order))
 			// Join on ", "
-			if i != len(*a.Orders)-1 {
+			if i != len(*node.Orders)-1 {
 				buf.WriteString(", ")
 			}
 		}
@@ -184,43 +188,43 @@ func (v ToSqlVisitor) VisitNamedWindowNode(a NamedWindowNode) string {
 	}
 
 	if visitFraming {
-		buf.WriteString(v.Visit(a.Framing))
+		buf.WriteString(v.Visit(node.Framing))
 	}
 
 	buf.WriteString(")")
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitGroupingNode(a GroupingNode) string {
+func (v ToSqlVisitor) VisitGroupingNode(node GroupingNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("(")
-	buf.WriteString(v.Visit(a.Expr))
+	buf.WriteString(v.Visit(node.Expr))
 	buf.WriteString(")")
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitLimitNode(a LimitNode) string {
+func (v ToSqlVisitor) VisitLimitNode(node LimitNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("LIMIT ")
-	buf.WriteString(v.Visit(a.Expr))
+	buf.WriteString(v.Visit(node.Expr))
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitLockNode(a LockNode) string {
-	return v.Visit(a.Expr)
+func (v ToSqlVisitor) VisitLockNode(node LockNode) string {
+	return v.Visit(node.Expr)
 }
 
-func (v ToSqlVisitor) VisitOffsetNode(n OffsetNode) string {
+func (v ToSqlVisitor) VisitOffsetNode(node OffsetNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("OFFSET ")
-	buf.WriteString(v.Visit(n.Expr))
+	buf.WriteString(v.Visit(node.Expr))
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitAndNode(a AndNode) string {
+func (v ToSqlVisitor) VisitAndNode(node AndNode) string {
 	var buf bytes.Buffer
-	if a.Children != nil {
-		children := *a.Children
+	if node.Children != nil {
+		children := *node.Children
 		for i, child := range children {
 			buf.WriteString(v.Visit(child))
 			if i != len(children)-1 {
@@ -231,172 +235,172 @@ func (v ToSqlVisitor) VisitAndNode(a AndNode) string {
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitCountNode(a CountNode) string {
+func (v ToSqlVisitor) VisitCountNode(node CountNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("COUNT(")
-	buf.WriteString(v.Visit(a.Expressions))
+	buf.WriteString(v.Visit(node.Expressions))
 	buf.WriteString(")")
-	if a.Alias != nil {
+	if node.Alias != nil {
 		buf.WriteString(" AS ")
-		buf.WriteString(v.Visit(a.Alias))
+		buf.WriteString(v.Visit(node.Alias))
 	}
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitAscendingNode(a AscendingNode) string {
+func (v ToSqlVisitor) VisitAscendingNode(node AscendingNode) string {
 	var buf bytes.Buffer
-	buf.WriteString(v.Visit(a.Expr))
+	buf.WriteString(v.Visit(node.Expr))
 	buf.WriteString(" ASC")
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitDescendingNode(a DescendingNode) string {
+func (v ToSqlVisitor) VisitDescendingNode(node DescendingNode) string {
 	var buf bytes.Buffer
-	buf.WriteString(v.Visit(a.Expr))
+	buf.WriteString(v.Visit(node.Expr))
 	buf.WriteString(" DESC")
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitOnNode(a OnNode) string {
+func (v ToSqlVisitor) VisitOnNode(node OnNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("ON ")
-	buf.WriteString(v.Visit(a.Expr))
+	buf.WriteString(v.Visit(node.Expr))
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitExceptNode(a ExceptNode) string {
+func (v ToSqlVisitor) VisitExceptNode(node ExceptNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("( ")
-	buf.WriteString(v.Visit(a.Left))
+	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" EXCEPT ")
-	buf.WriteString(v.Visit(a.Right))
+	buf.WriteString(v.Visit(node.Right))
 	buf.WriteString(" )")
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitIntersectNode(a IntersectNode) string {
+func (v ToSqlVisitor) VisitIntersectNode(node IntersectNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("( ")
-	buf.WriteString(v.Visit(a.Left))
+	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" INTERSECT ")
-	buf.WriteString(v.Visit(a.Right))
+	buf.WriteString(v.Visit(node.Right))
 	buf.WriteString(" )")
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitSelectManager(a SelectManager) string {
+func (v ToSqlVisitor) VisitSelectManager(node SelectManager) string {
 	var buf bytes.Buffer
 	buf.WriteString("(")
-	buf.WriteString(a.ToSql())
+	buf.WriteString(node.ToSql())
 	buf.WriteString(")")
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitUnionNode(a UnionNode) string {
+func (v ToSqlVisitor) VisitUnionNode(node UnionNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("( ")
-	buf.WriteString(v.Visit(a.Left))
+	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" UNION ")
-	buf.WriteString(v.Visit(a.Right))
+	buf.WriteString(v.Visit(node.Right))
 	buf.WriteString(" )")
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitUnionAllNode(a UnionAllNode) string {
+func (v ToSqlVisitor) VisitUnionAllNode(node UnionAllNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("( ")
-	buf.WriteString(v.Visit(a.Left))
+	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" UNION ALL ")
-	buf.WriteString(v.Visit(a.Right))
+	buf.WriteString(v.Visit(node.Right))
 	buf.WriteString(" )")
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitLessThanNode(a LessThanNode) string {
+func (v ToSqlVisitor) VisitLessThanNode(node LessThanNode) string {
 	var buf bytes.Buffer
-	buf.WriteString(v.Visit(a.Left))
+	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" < ")
-	buf.WriteString(v.Visit(a.Right))
+	buf.WriteString(v.Visit(node.Right))
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitGreaterThanNode(a GreaterThanNode) string {
+func (v ToSqlVisitor) VisitGreaterThanNode(node GreaterThanNode) string {
 	var buf bytes.Buffer
-	buf.WriteString(v.Visit(a.Left))
+	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" > ")
-	buf.WriteString(v.Visit(a.Right))
+	buf.WriteString(v.Visit(node.Right))
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitAsNode(a AsNode) string {
+func (v ToSqlVisitor) VisitAsNode(node AsNode) string {
 	var buf bytes.Buffer
-	buf.WriteString(v.Visit(a.Left))
+	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" AS ")
-	buf.WriteString(v.Visit(a.Right))
+	buf.WriteString(v.Visit(node.Right))
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitGroupNode(n GroupNode) string {
-	return v.Visit(n.Expr)
+func (v ToSqlVisitor) VisitGroupNode(node GroupNode) string {
+	return v.Visit(node.Expr)
 }
 
-func (v ToSqlVisitor) VisitHavingNode(n HavingNode) string {
+func (v ToSqlVisitor) VisitHavingNode(node HavingNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("HAVING ")
-	buf.WriteString(v.Visit(n.Expr))
+	buf.WriteString(v.Visit(node.Expr))
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitExistsNode(n ExistsNode) string {
+func (v ToSqlVisitor) VisitExistsNode(node ExistsNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("EXISTS (")
-	buf.WriteString(v.Visit(n.Expressions))
+	buf.WriteString(v.Visit(node.Expressions))
 	buf.WriteString(")")
-	if n.Alias != nil {
+	if node.Alias != nil {
 		buf.WriteString(" AS ")
-		buf.WriteString(v.Visit(n.Alias))
+		buf.WriteString(v.Visit(node.Alias))
 	}
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitAttributeNode(n AttributeNode) string {
+func (v ToSqlVisitor) VisitAttributeNode(node AttributeNode) string {
 	var buf bytes.Buffer
-	buf.WriteString(v.QuoteTableName(n.Relation))
+	buf.WriteString(v.QuoteTableName(node.Relation))
 	buf.WriteString(".")
-	buf.WriteString(v.QuoteColumnName(n.Name))
+	buf.WriteString(v.QuoteColumnName(node.Name))
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitEqualityNode(n EqualityNode) string {
+func (v ToSqlVisitor) VisitEqualityNode(node EqualityNode) string {
 	var buf bytes.Buffer
-	if n.Right == nil {
-		buf.WriteString(v.Visit(n.Left))
+	if node.Right == nil {
+		buf.WriteString(v.Visit(node.Left))
 		buf.WriteString(" IS NULL")
 	} else {
-		buf.WriteString(v.Visit(n.Left))
+		buf.WriteString(v.Visit(node.Left))
 		buf.WriteString(" = ")
-		buf.WriteString(v.Visit(n.Right))
+		buf.WriteString(v.Visit(node.Right))
 	}
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitTable(t Table) string {
+func (v ToSqlVisitor) VisitTable(table Table) string {
 	var buf bytes.Buffer
-	if t.TableAlias != "" {
-		buf.WriteString(v.QuoteTableName(t))
+	if table.TableAlias != "" {
+		buf.WriteString(v.QuoteTableName(table))
 		buf.WriteString(SPACE)
 		// FIXME: table.TableAlias should be a ptr to a TableAliasNode not a string
-		alias := TableAliasNode{Relation: t, Name: Sql(t.TableAlias), Quoted: true}
+		alias := TableAliasNode{Relation: table, Name: Sql(table.TableAlias), Quoted: true}
 		buf.WriteString(v.QuoteTableName(alias))
 	} else {
-		buf.WriteString(v.QuoteTableName(t))
+		buf.WriteString(v.QuoteTableName(table))
 	}
 	return buf.String()
 }
 
 // FIXME: far too complex
-func (v ToSqlVisitor) QuoteTableName(relation Visitable) string {
-	switch rel := relation.(type) {
+func (v ToSqlVisitor) QuoteTableName(visitable Visitable) string {
+	switch rel := visitable.(type) {
 	case Table:
 		return v.conn.QuoteTableName(rel.Name)
 	case *Table:
@@ -424,67 +428,67 @@ func (v ToSqlVisitor) QuoteColumnName(literal SqlLiteralNode) string {
 	return v.conn.QuoteColumnName(literal.Raw)
 }
 
-func (v ToSqlVisitor) VisitJoinSourceNode(a JoinSource) string {
+func (v ToSqlVisitor) VisitJoinSourceNode(node JoinSource) string {
 	var buf bytes.Buffer
-	if a.Left != nil {
-		buf.WriteString(v.Visit(a.Left))
+	if node.Left != nil {
+		buf.WriteString(v.Visit(node.Left))
 	}
-	for i, source := range a.Right {
+	for i, source := range node.Right {
 		buf.WriteString(v.Visit(source))
-		if i != len(a.Right)-1 {
+		if i != len(node.Right)-1 {
 			buf.WriteString(SPACE)
 		}
 	}
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitInnerJoinNode(a InnerJoinNode) string {
+func (v ToSqlVisitor) VisitInnerJoinNode(node InnerJoinNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(" INNER JOIN ")
-	buf.WriteString(v.Visit(a.Left))
-	if a.Right != nil {
+	buf.WriteString(v.Visit(node.Left))
+	if node.Right != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.Visit(a.Right))
+		buf.WriteString(v.Visit(node.Right))
 	}
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitSqlLiteralNode(a SqlLiteralNode) string {
-	if a.Raw != "" {
-		return a.Raw
+func (v ToSqlVisitor) VisitSqlLiteralNode(node SqlLiteralNode) string {
+	if node.Raw != "" {
+		return node.Raw
 	} else {
 		return ""
 	}
 }
 
-func (v ToSqlVisitor) VisitTableAliasNode(a TableAliasNode) string {
+func (v ToSqlVisitor) VisitTableAliasNode(node TableAliasNode) string {
 	var buf bytes.Buffer
-	buf.WriteString(v.Visit(a.Relation))
+	buf.WriteString(v.Visit(node.Relation))
 	buf.WriteString(" ")
-	buf.WriteString(v.QuoteTableName(a))
+	buf.WriteString(v.QuoteTableName(node))
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
+func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 	var buf bytes.Buffer
 
 	buf.WriteString("SELECT")
 
 	// Add TOP statement to the buffer
-	if s.Top != nil {
+	if node.Top != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitTopNode(*s.Top))
+		buf.WriteString(v.VisitTopNode(*node.Top))
 	}
 
-	if s.SetQuanifier != nil {
+	if node.SetQuanifier != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.Visit(*s.SetQuanifier))
+		buf.WriteString(v.Visit(*node.SetQuanifier))
 	}
 
 	// add select projections
-	if s.Projections != nil {
+	if node.Projections != nil {
 		claused := false
-		for i, projection := range *s.Projections {
+		for i, projection := range *node.Projections {
 
 			if projection != nil {
 				if !claused {
@@ -492,7 +496,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 					claused = true
 				}
 				buf.WriteString(v.Visit(projection))
-				if (len(*s.Projections) - 1) != i {
+				if (len(*node.Projections) - 1) != i {
 					buf.WriteString(COMMA)
 				}
 			}
@@ -500,65 +504,65 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 	}
 
 	// add FROM statement to the buffer
-	if s.Source != nil && s.Source.Left != nil {
-		if t, ok := s.Source.Left.(Table); ok && t.Name != "" {
+	if node.Source != nil && node.Source.Left != nil {
+		if t, ok := node.Source.Left.(Table); ok && t.Name != "" {
 			buf.WriteString(" FROM ")
-			buf.WriteString(v.Visit(*s.Source))
-		} else if t, ok := s.Source.Left.(*Table); ok && t.Name != "" {
+			buf.WriteString(v.Visit(*node.Source))
+		} else if t, ok := node.Source.Left.(*Table); ok && t.Name != "" {
 			buf.WriteString(" FROM ")
-			buf.WriteString(v.Visit(*s.Source))
+			buf.WriteString(v.Visit(*node.Source))
 		}
 	}
 
 	// add WHERE statement to the buffer
-	if s.Wheres != nil {
+	if node.Wheres != nil {
 		claused := false
-		for i, where := range *s.Wheres {
+		for i, where := range *node.Wheres {
 			// add WHERE clause if it hasn't already been added
 			if !claused {
 				buf.WriteString(WHERE)
 				claused = true
 			}
 			buf.WriteString(v.Visit(where))
-			if (len(*s.Wheres) - 1) != i {
+			if (len(*node.Wheres) - 1) != i {
 				buf.WriteString(COMMA)
 			}
 		}
 	}
 
 	// add GROUP BY statement to the buffer
-	if s.Groups != nil {
+	if node.Groups != nil {
 		claused := false
-		for i, group := range *s.Groups {
+		for i, group := range *node.Groups {
 			// add GROUP BY clause if it hasn't already been added
 			if !claused {
 				buf.WriteString(GROUP_BY)
 				claused = true
 			}
 			buf.WriteString(v.Visit(group))
-			if (len(*s.Groups) - 1) != i {
+			if (len(*node.Groups) - 1) != i {
 				buf.WriteString(COMMA)
 			}
 		}
 	}
 
 	// add HAVING statement to the buffer
-	if s.Having != nil {
+	if node.Having != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitHavingNode(*s.Having))
+		buf.WriteString(v.VisitHavingNode(*node.Having))
 	}
 
 	// add WINDOW statements to the buffer
-	if s.Windows != nil {
+	if node.Windows != nil {
 		claused := false
-		for i, window := range *s.Windows {
+		for i, window := range *node.Windows {
 			// add WINDOW clause if is hasn't already been added
 			if !claused {
 				buf.WriteString(WINDOW)
 				claused = true
 			}
 			buf.WriteString(v.Visit(window))
-			if (len(*s.Windows) - 1) != i {
+			if (len(*node.Windows) - 1) != i {
 				buf.WriteString(COMMA)
 			}
 		}
@@ -567,17 +571,17 @@ func (v ToSqlVisitor) VisitSelectCoreNode(s SelectCoreNode) string {
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitSelectStatementNode(s SelectStatementNode) string {
+func (v ToSqlVisitor) VisitSelectStatementNode(node SelectStatementNode) string {
 	var buf bytes.Buffer
 
 	// add WITH statement to the buffer
-	if s.With != nil {
-		buf.WriteString(v.Visit(s.With))
+	if node.With != nil {
+		buf.WriteString(v.Visit(node.With))
 	}
 
 	// add SELECT core to the buffer
-	if s.Cores != nil {
-		for _, core := range s.Cores {
+	if node.Cores != nil {
+		for _, core := range node.Cores {
 			if core != nil {
 				buf.WriteString(v.VisitSelectCoreNode(*core))
 			}
@@ -585,32 +589,32 @@ func (v ToSqlVisitor) VisitSelectStatementNode(s SelectStatementNode) string {
 	}
 
 	// add ORDER BY clauses to the buffer
-	if s.Orders != nil {
+	if node.Orders != nil {
 		buf.WriteString(ORDER_BY)
-		for i, order := range *s.Orders {
+		for i, order := range *node.Orders {
 			buf.WriteString(v.Visit(order))
-			if (len(*s.Orders) - 1) != i {
+			if (len(*node.Orders) - 1) != i {
 				buf.WriteString(COMMA)
 			}
 		}
 	}
 
 	// add LIMIT clause to the buffer
-	if s.Limit != nil {
+	if node.Limit != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitLimitNode(*s.Limit))
+		buf.WriteString(v.VisitLimitNode(*node.Limit))
 	}
 
 	// add OFFSET clause to the buffer
-	if s.Offset != nil {
+	if node.Offset != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitOffsetNode(*s.Offset))
+		buf.WriteString(v.VisitOffsetNode(*node.Offset))
 	}
 
 	// add LOCK clause to the buffer
-	if s.Lock != nil {
+	if node.Lock != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitLockNode(*s.Lock))
+		buf.WriteString(v.VisitLockNode(*node.Lock))
 	}
 
 	return strings.TrimSpace(buf.String())
