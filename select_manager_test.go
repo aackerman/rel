@@ -365,6 +365,19 @@ func TestSelectManagerWindowFrameRangeBoundedFollowing(t *testing.T) {
 	}
 }
 
+func TestSelectManagerWindowFrameRangeCurrentRow(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.From(users)
+	window := mgr.Window(Sql("a_window"))
+	window.Range(&CurrentRowNode{})
+	sql := mgr.ToSql()
+	expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (RANGE CURRENT ROW)"
+	if sql != expected {
+		t.Logf("TestSelectManagerWindowFrameRangeBoundedFollowing sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestSelectManagerJoinMultipleTables(t *testing.T) {
 	users := NewTable("users")
 	comments := NewTable("comments")
