@@ -80,7 +80,7 @@ func (t *Table) SelectManager(n *Table) *SelectManager {
 }
 
 func (t *Table) InsertManager() *InsertManager {
-	return NewInsertManager(t)
+	return NewInsertManager(TableEngine)
 }
 
 func (t *Table) SetTableAlias(name string) {
