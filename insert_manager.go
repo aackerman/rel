@@ -22,11 +22,29 @@ func (mgr *InsertManager) Into(table *Table) *InsertManager {
 	return mgr
 }
 
+func (mgr *InsertManager) Insert(column AttributeNode, value interface{}) *InsertManager {
+	if mgr.Ast.Values == nil {
+		mgr.Ast.Values = &ValuesNode{
+			Values:  make([]interface{}, 0),
+			Columns: make([]AttributeNode, 0),
+		}
+	}
+
+	if mgr.Ast.Columns == nil {
+		slice := make([]AttributeNode, 0)
+		mgr.Ast.Columns = &slice
+	}
+	*mgr.Ast.Columns = append(*mgr.Ast.Columns, column)
+	mgr.Ast.Values.Columns = append(mgr.Ast.Values.Columns, column)
+	mgr.Ast.Values.Values = append(mgr.Ast.Values.Values, value)
+	return mgr
+}
+
 func (mgr *InsertManager) SetValues(values *ValuesNode) {
 	mgr.Ast.Values = values
 }
 
-func (mgr *InsertManager) CreateValues(values []Visitable, columns []SqlLiteralNode) *ValuesNode {
+func (mgr *InsertManager) CreateValues(values []interface{}, columns []AttributeNode) *ValuesNode {
 	return &ValuesNode{
 		Values:  values,
 		Columns: columns,

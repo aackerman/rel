@@ -1,7 +1,7 @@
 package rel
 
 type ValuesNode struct {
-	Values  []Visitable
-	Columns []SqlLiteralNode
+	Values  []interface{}
+	Columns []AttributeNode
 	BaseVisitable
 }

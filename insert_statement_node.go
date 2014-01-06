@@ -2,7 +2,7 @@ package rel
 
 type InsertStatementNode struct {
 	Relation *Table
-	Columns  *[]SqlLiteralNode
+	Columns  *[]AttributeNode
 	Values   *ValuesNode
 	BaseVisitable
 }

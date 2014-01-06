@@ -141,11 +141,27 @@ func (v ToSqlVisitor) VisitInNode(node InNode) string {
 	return ""
 }
 
+func (v ToSqlVisitor) VisitInsertValue(i interface{}) string {
+	ret := ""
+	switch val := i.(type) {
+	case bool:
+		if val {
+			ret = "'t'"
+		} else {
+			ret = "'f'"
+		}
+	case SqlLiteralNode:
+		ret = val.Raw
+	}
+
+	return ret
+}
+
 func (v ToSqlVisitor) VisitValuesNode(node ValuesNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("VALUES (")
 	for i, value := range node.Values {
-		buf.WriteString(v.Visit(value))
+		buf.WriteString(v.VisitInsertValue(value))
 		// Join on ", "
 		if i != len(node.Values)-1 {
 			buf.WriteString(", ")
@@ -161,14 +177,15 @@ func (v ToSqlVisitor) VisitInsertStatementNode(node InsertStatementNode) string 
 	buf.WriteString(v.Visit(node.Relation))
 
 	if node.Columns != nil && len(*node.Columns) > 0 {
-		buf.WriteString(SPACE)
+		buf.WriteString(" (")
 		for i, column := range *node.Columns {
-			buf.WriteString(v.QuoteColumnName(column))
+			buf.WriteString(v.QuoteColumnName(column.Name))
 			// Join on ", "
 			if i != len(*node.Columns)-1 {
 				buf.WriteString(", ")
 			}
 		}
+		buf.WriteString(")")
 	}
 
 	if node.Values != nil {
