@@ -109,9 +109,16 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 	case *WithRecursiveNode:
 		ret = v.VisitWithRecursiveNode(*val)
 	case *Table:
+		if val == nil {
+			return v.VisitNil()
+		}
 		ret = v.VisitTable(*val)
 	case *MultiStatementManager:
 		ret = v.VisitMultiStatementManager(*val)
+	case *InsertStatementNode:
+		ret = v.VisitInsertStatementNode(*val)
+	case *ValuesNode:
+		ret = v.VisitValuesNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -132,6 +139,48 @@ func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 func (v ToSqlVisitor) VisitInNode(node InNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
+}
+
+func (v ToSqlVisitor) VisitValuesNode(node ValuesNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("VALUES (")
+	for i, value := range node.Values {
+		buf.WriteString(v.Visit(value))
+		// Join on ", "
+		if i != len(node.Values)-1 {
+			buf.WriteString(", ")
+		}
+	}
+	buf.WriteString(")")
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitInsertStatementNode(node InsertStatementNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("INSERT INTO ")
+	buf.WriteString(v.Visit(node.Relation))
+
+	if node.Columns != nil && len(*node.Columns) > 0 {
+		buf.WriteString(SPACE)
+		for i, column := range *node.Columns {
+			buf.WriteString(v.QuoteColumnName(column))
+			// Join on ", "
+			if i != len(*node.Columns)-1 {
+				buf.WriteString(", ")
+			}
+		}
+	}
+
+	if node.Values != nil {
+		buf.WriteString(SPACE)
+		buf.WriteString(v.Visit(node.Values))
+	}
+
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitNil() string {
+	return "NULL"
 }
 
 func (v ToSqlVisitor) VisitWithRecursiveNode(node WithRecursiveNode) string {
