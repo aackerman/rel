@@ -12,14 +12,11 @@ type SelectManager struct {
 }
 
 func NewSelectManager(e Engine, t *Table) *SelectManager {
-	stmt := SelectStatementNode{Cores: make([]*SelectCoreNode, 0)}
-	core := NewSelectCoreNode()
-	stmt.Cores = append(stmt.Cores, &core)
-	ctx := stmt.Cores[len(stmt.Cores)-1]
+	stmt := NewSelectStatementNode()
 	manager := SelectManager{
 		Engine: e,
 		Ast:    stmt,
-		Ctx:    ctx,
+		Ctx:    stmt.Cores[len(stmt.Cores)-1],
 	}
 	// setup initial join source
 	manager.From(t)

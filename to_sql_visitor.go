@@ -171,6 +171,60 @@ func (v ToSqlVisitor) VisitValuesNode(node ValuesNode) string {
 	return buf.String()
 }
 
+func (v ToSqlVisitor) VisitUpdateStatementNode(node UpdateStatementNode) string {
+	var buf bytes.Buffer
+
+	var wheres []Visitable
+
+	if node.Orders == nil && node.Limit == nil {
+		wheres = *node.Wheres
+	} else {
+		stmt := NewSelectStatementNode()
+		core := stmt.Cores[0]
+		core.SetFrom(node.Relation)
+		core.Wheres = &wheres
+
+		if core.Projections == nil {
+			slice := make([]Visitable, 0)
+			core.Projections = &slice
+		}
+		*core.Projections = append(*core.Projections, node.Key)
+		stmt.Limit = node.Limit
+		stmt.Orders = node.Orders
+
+		wheres = append(wheres, &InNode{
+			Left:  node.Key,
+			Right: stmt,
+		})
+	}
+	buf.WriteString("UPDATE ")
+	buf.WriteString(v.Visit(node.Relation))
+
+	if node.Values != nil {
+		buf.WriteString("VALUES ")
+		for i, value := range *node.Values {
+			buf.WriteString(v.Visit(value))
+			// Join on ", "
+			if i != len(*node.Values)-1 {
+				buf.WriteString(", ")
+			}
+		}
+	}
+
+	if node.Wheres != nil {
+		buf.WriteString("WHERE ")
+		for i, where := range *node.Wheres {
+			buf.WriteString(v.Visit(where))
+			// Join on " AND "
+			if i != len(*node.Wheres)-1 {
+				buf.WriteString(" AND ")
+			}
+		}
+	}
+
+	return buf.String()
+}
+
 func (v ToSqlVisitor) VisitInsertStatementNode(node InsertStatementNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("INSERT INTO ")

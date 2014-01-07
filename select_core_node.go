@@ -19,3 +19,7 @@ func NewSelectCoreNode() SelectCoreNode {
 		},
 	}
 }
+
+func (node *SelectCoreNode) SetFrom(v Visitable) {
+	node.Source.Left = v
+}
