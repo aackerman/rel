@@ -13,28 +13,28 @@ func NewAttributeNode(v Visitable, name string) AttributeNode {
 	}
 }
 
-func (a AttributeNode) Eq(n Visitable) EqualityNode {
-	return NewEqualityNode(a, n)
+func (node AttributeNode) Eq(v Visitable) EqualityNode {
+	return NewEqualityNode(node, v)
 }
 
-func (a AttributeNode) Lt(i int) LessThanNode {
-	return LessThanNode{Left: a, Right: Sql(i)}
+func (node AttributeNode) Lt(v Visitable) LessThanNode {
+	return LessThanNode{Left: node, Right: v}
 }
 
-func (a AttributeNode) Gt(i int) GreaterThanNode {
-	return GreaterThanNode{Left: a, Right: Sql(i)}
+func (node AttributeNode) Gt(v Visitable) GreaterThanNode {
+	return GreaterThanNode{Left: node, Right: v}
 }
 
-func (a AttributeNode) Desc() DescendingNode {
-	return DescendingNode{Expr: a}
+func (node AttributeNode) Desc() DescendingNode {
+	return DescendingNode{Expr: node}
 }
 
-func (a AttributeNode) Asc() AscendingNode {
-	return AscendingNode{Expr: a}
+func (node AttributeNode) Asc() AscendingNode {
+	return AscendingNode{Expr: node}
 }
 
-func (a AttributeNode) Count() CountNode {
-	return CountNode{Expressions: a}
+func (node AttributeNode) Count() CountNode {
+	return CountNode{Expressions: node}
 }
 
 func (node AttributeNode) As(v Visitable) AsNode {
@@ -70,6 +70,6 @@ func (node AttributeNode) NotEqAny(n Visitable) GroupingNode {
 	return GroupingNode{}
 }
 
-func (a AttributeNode) NotEqAll(n Visitable) GroupingNode {
+func (node AttributeNode) NotEqAll(n Visitable) GroupingNode {
 	return GroupingNode{}
 }
