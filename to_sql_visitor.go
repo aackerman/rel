@@ -423,7 +423,11 @@ func (v ToSqlVisitor) VisitNamedWindowNode(node NamedWindowNode) string {
 func (v ToSqlVisitor) VisitGroupingNode(node GroupingNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("(")
-	buf.WriteString(v.Visit(node.Expr))
+	for _, expr := range node.Expr {
+		if expr != nil {
+			buf.WriteString(v.Visit(expr))
+		}
+	}
 	buf.WriteString(")")
 	return buf.String()
 }

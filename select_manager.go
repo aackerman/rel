@@ -50,7 +50,8 @@ func (s *SelectManager) From(t *Table) *SelectManager {
 }
 
 func (s *SelectManager) As(n SqlLiteralNode) *TableAliasNode {
-	grouping := &GroupingNode{Expr: s.Ast}
+	grouping := new(GroupingNode)
+	grouping.Expr = append(grouping.Expr, s.Ast)
 	return &TableAliasNode{Relation: grouping, Name: n}
 }
 

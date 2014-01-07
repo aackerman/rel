@@ -1,6 +1,6 @@
 package rel
 
 type GroupingNode struct {
-	Expr Visitable
+	Expr []Visitable
 	BaseVisitable
 }
