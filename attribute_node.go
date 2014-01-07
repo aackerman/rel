@@ -54,3 +54,18 @@ func (a AttributeNode) In(v Visitable) Visitable {
 	}
 	return ret
 }
+
+func (a AttributeNode) NotEq(n Visitable) *NotEqualNode {
+	return &NotEqualNode{
+		Left:  a,
+		Right: n,
+	}
+}
+
+func (a AttributeNode) NotEqAny(n Visitable) GroupingNode {
+	return GroupingNode{}
+}
+
+func (a AttributeNode) NotEqAll(n Visitable) GroupingNode {
+	return GroupingNode{}
+}

@@ -119,6 +119,10 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitInsertStatementNode(*val)
 	case *ValuesNode:
 		ret = v.VisitValuesNode(*val)
+	case *SelectCoreNode:
+		ret = v.VisitSelectCoreNode(*val)
+	case *NotEqualNode:
+		ret = v.VisitNotEqualNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -139,6 +143,19 @@ func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 func (v ToSqlVisitor) VisitInNode(node InNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
+}
+
+func (v ToSqlVisitor) VisitNotEqualNode(node NotEqualNode) string {
+	var buf bytes.Buffer
+	if node.Right == nil {
+		buf.WriteString(v.Visit(node.Left))
+		buf.WriteString(" IS NOT NULL")
+	} else {
+		buf.WriteString(v.Visit(node.Left))
+		buf.WriteString(" != ")
+		buf.WriteString(v.Visit(node.Right))
+	}
+	return buf.String()
 }
 
 // FIXME: find a better way to handle insert values
@@ -778,7 +795,7 @@ func (v ToSqlVisitor) VisitSelectStatementNode(node SelectStatementNode) string 
 	if node.Cores != nil {
 		for _, core := range node.Cores {
 			if core != nil {
-				buf.WriteString(v.Visit(*core))
+				buf.WriteString(v.Visit(core))
 			}
 		}
 	}

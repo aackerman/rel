@@ -1,27 +1,8 @@
 package rel
 
-import (
-	"log"
-)
-
 // BaseVisitable satisfies the Visitable Interface
 // All other nodes should have an embedded BaseVisitable
 type BaseVisitable struct{}
-
-func (a BaseVisitable) NotEq(n Visitable) NotEqualNode {
-	log.Fatal("BaseVisitable#NotEq not implemented")
-	return NotEqualNode{}
-}
-
-func (a BaseVisitable) NotEqAny(n Visitable) GroupingNode {
-	log.Fatal("BaseVisitable#NotEqAny not implemented")
-	return GroupingNode{}
-}
-
-func (a BaseVisitable) NotEqAll(n Visitable) GroupingNode {
-	log.Fatal("BaseVisitable#NotEqAll not implemented")
-	return GroupingNode{}
-}
 
 func (a BaseVisitable) NewTrueNode() TrueNode {
 	return TrueNode{}
