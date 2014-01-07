@@ -21,6 +21,10 @@ func (node AttributeNode) Lt(v Visitable) LessThanNode {
 	return LessThanNode{Left: node, Right: v}
 }
 
+func (node AttributeNode) LtEq(v Visitable) *LessThanOrEqualNode {
+	return &LessThanOrEqualNode{Left: node, Right: v}
+}
+
 func (node AttributeNode) Gt(v Visitable) GreaterThanNode {
 	return GreaterThanNode{Left: node, Right: v}
 }

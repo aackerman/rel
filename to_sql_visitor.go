@@ -125,6 +125,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitNotEqualNode(*val)
 	case *GreaterThanOrEqualNode:
 		ret = v.VisitGreaterThanOrEqualNode(*val)
+	case *LessThanOrEqualNode:
+		ret = v.VisitLessThanOrEqualNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -151,6 +153,14 @@ func (v ToSqlVisitor) VisitGreaterThanOrEqualNode(node GreaterThanOrEqualNode) s
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" >= ")
+	buf.WriteString(v.Visit(node.Right))
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitLessThanOrEqualNode(node LessThanOrEqualNode) string {
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(node.Left))
+	buf.WriteString(" <= ")
 	buf.WriteString(v.Visit(node.Right))
 	return buf.String()
 }
