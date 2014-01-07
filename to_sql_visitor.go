@@ -171,6 +171,10 @@ func (v ToSqlVisitor) VisitValuesNode(node ValuesNode) string {
 	return buf.String()
 }
 
+func (v ToSqlVisitor) VisitTrueNode(node TrueNode) string {
+	return "TRUE"
+}
+
 func (v ToSqlVisitor) VisitUpdateStatementNode(node UpdateStatementNode) string {
 	var buf bytes.Buffer
 
