@@ -23,7 +23,7 @@ func TestAttributeNotEqNil(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" IS NOT NULL"
 	if sql != expected {
-		t.Logf("TestAttributeNotEqSql sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeNotEqNil sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -35,7 +35,19 @@ func TestAttributeGt(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" > 10"
 	if sql != expected {
-		t.Logf("TestAttributeNotEqSql sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeGt sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestAttributeGtEq(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").GtEq(Sql(10)))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" >= 10"
+	if sql != expected {
+		t.Logf("TestAttributeGtEq sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }

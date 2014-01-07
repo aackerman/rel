@@ -25,6 +25,10 @@ func (node AttributeNode) Gt(v Visitable) GreaterThanNode {
 	return GreaterThanNode{Left: node, Right: v}
 }
 
+func (node AttributeNode) GtEq(v Visitable) *GreaterThanOrEqualNode {
+	return &GreaterThanOrEqualNode{Left: node, Right: v}
+}
+
 func (node AttributeNode) Desc() DescendingNode {
 	return DescendingNode{Expr: node}
 }
