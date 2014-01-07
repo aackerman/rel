@@ -127,7 +127,7 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 }
 
 func (v ToSqlVisitor) VisitTopNode(node TopNode) string {
-	log.Fatal("NOT IMPLEMENTED")
+	log.Fatal("NOT IMPLEMENTED FOR THIS DB")
 	return ""
 }
 
@@ -141,6 +141,7 @@ func (v ToSqlVisitor) VisitInNode(node InNode) string {
 	return ""
 }
 
+// FIXME: find a better way to handle insert values
 func (v ToSqlVisitor) VisitInsertValue(i interface{}) string {
 	ret := ""
 	switch val := i.(type) {
@@ -777,7 +778,7 @@ func (v ToSqlVisitor) VisitSelectStatementNode(node SelectStatementNode) string 
 	if node.Cores != nil {
 		for _, core := range node.Cores {
 			if core != nil {
-				buf.WriteString(v.VisitSelectCoreNode(*core))
+				buf.WriteString(v.Visit(*core))
 			}
 		}
 	}
