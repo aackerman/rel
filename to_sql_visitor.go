@@ -179,6 +179,26 @@ func (v ToSqlVisitor) VisitFalseNode(node FalseNode) string {
 	return "FALSE"
 }
 
+func (v ToSqlVisitor) VisitDeleteStatementNode(node DeleteStatementNode) string {
+	var buf bytes.Buffer
+
+	buf.WriteString("DELETE FROM ")
+	buf.WriteString(v.Visit(node.Relation))
+
+	if node.Wheres != nil {
+		buf.WriteString(WHERE)
+		for i, where := range *node.Wheres {
+			buf.WriteString(v.Visit(where))
+			// Join on " AND "
+			if i != len(*node.Wheres)-1 {
+				buf.WriteString(AND)
+			}
+		}
+	}
+
+	return buf.String()
+}
+
 func (v ToSqlVisitor) VisitUpdateStatementNode(node UpdateStatementNode) string {
 	var buf bytes.Buffer
 
@@ -225,7 +245,7 @@ func (v ToSqlVisitor) VisitUpdateStatementNode(node UpdateStatementNode) string 
 			buf.WriteString(v.Visit(where))
 			// Join on " AND "
 			if i != len(*node.Wheres)-1 {
-				buf.WriteString(" AND ")
+				buf.WriteString(AND)
 			}
 		}
 	}
