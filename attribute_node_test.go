@@ -27,3 +27,15 @@ func TestAttributeNotEqNil(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestAttributeGt(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").Gt(Sql(10)))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" > 10"
+	if sql != expected {
+		t.Logf("TestAttributeNotEqSql sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
