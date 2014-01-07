@@ -37,32 +37,36 @@ func (a AttributeNode) Count() CountNode {
 	return CountNode{Expressions: a}
 }
 
-func (a AttributeNode) As(n Visitable) AsNode {
+func (node AttributeNode) As(v Visitable) AsNode {
 	return AsNode{
-		Left:  a,
-		Right: n,
+		Left:  node,
+		Right: v,
 	}
 }
 
-func (a AttributeNode) In(v Visitable) Visitable {
+func (node AttributeNode) In(v Visitable) Visitable {
 	var ret Visitable
 	switch val := v.(type) {
 	case SelectManager:
-		ret = &InNode{Left: a, Right: val.Ast}
+		ret = &InNode{Left: node, Right: val.Ast}
 	default:
-		ret = &InNode{Left: a, Right: v}
+		ret = &InNode{Left: node, Right: v}
 	}
 	return ret
 }
 
-func (a AttributeNode) NotEq(n Visitable) *NotEqualNode {
+func (node AttributeNode) NotEq(v Visitable) *NotEqualNode {
 	return &NotEqualNode{
-		Left:  a,
-		Right: n,
+		Left:  node,
+		Right: v,
 	}
 }
 
-func (a AttributeNode) NotEqAny(n Visitable) GroupingNode {
+func (node AttributeNode) NotEqual(v Visitable) *NotEqualNode {
+	return node.NotEq(v)
+}
+
+func (node AttributeNode) NotEqAny(n Visitable) GroupingNode {
 	return GroupingNode{}
 }
 
