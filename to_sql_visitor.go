@@ -34,6 +34,8 @@ func (v ToSqlVisitor) Accept(a Visitable) string {
 func (v ToSqlVisitor) Visit(a Visitable) string {
 	ret := ""
 	switch val := a.(type) {
+	case nil:
+		ret = v.VisitNil()
 	case SelectStatementNode:
 		ret = v.VisitSelectStatementNode(val)
 	case AndNode:
@@ -127,6 +129,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitGreaterThanOrEqualNode(*val)
 	case *LessThanOrEqualNode:
 		ret = v.VisitLessThanOrEqualNode(*val)
+	case *OrNode:
+		ret = v.VisitOrNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -147,6 +151,14 @@ func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 func (v ToSqlVisitor) VisitInNode(node InNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
+}
+
+func (v ToSqlVisitor) VisitOrNode(node OrNode) string {
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(node.Left))
+	buf.WriteString(" OR ")
+	buf.WriteString(v.Visit(node.Right))
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitGreaterThanOrEqualNode(node GreaterThanOrEqualNode) string {
