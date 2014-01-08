@@ -93,6 +93,16 @@ func (node AttributeNode) GtEqAny(visitable ...Visitable) *GroupingNode {
 	return grouping
 }
 
+func (node AttributeNode) GtEqAll(visitable ...Visitable) *GroupingNode {
+	var nodes []Visitable
+	grouping := new(GroupingNode)
+	for _, v := range visitable {
+		nodes = append(nodes, node.GtEq(v))
+	}
+	grouping.Expr = append(grouping.Expr, &AndNode{Children: &nodes})
+	return grouping
+}
+
 func (node AttributeNode) GtAll(visitable ...Visitable) *GroupingNode {
 	var nodes []Visitable
 	grouping := new(GroupingNode)
