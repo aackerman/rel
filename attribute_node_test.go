@@ -136,6 +136,18 @@ func TestAttributeLt(t *testing.T) {
 	}
 }
 
+func TestAttributeLtEq(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").Lt(Sql(10)))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" <= 10"
+	if sql != expected {
+		t.Logf("TestAttributeLt sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestAttributeLtAny(t *testing.T) {
 	users := NewTable("users")
 	mgr := users.Select(users.Attr("id"))
@@ -156,18 +168,6 @@ func TestAttributeLtAll(t *testing.T) {
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" < 1 AND \"users\".\"id\" < 2)"
 	if sql != expected {
 		t.Logf("TestAttributeLtAll sql: \n%s != \n%s", sql, expected)
-		t.Fail()
-	}
-}
-
-func TestAttributeLtEq(t *testing.T) {
-	users := NewTable("users")
-	mgr := users.Select(users.Attr("id"))
-	mgr.Where(users.Attr("id").LtEq(Sql(10)))
-	sql := mgr.ToSql()
-	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" <= 10"
-	if sql != expected {
-		t.Logf("TestAttributeLtEq sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
