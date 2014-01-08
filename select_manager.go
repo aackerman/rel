@@ -106,7 +106,7 @@ func (s *SelectManager) Take(i int) *SelectManager {
 	return s
 }
 
-func (s *SelectManager) Exists() ExistsNode {
+func (s *SelectManager) Exists() *ExistsNode {
 	return NewExistsNode(s.Ast)
 }
 

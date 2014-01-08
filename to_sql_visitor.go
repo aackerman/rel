@@ -42,6 +42,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitInNode(val)
 	case SqlLiteralNode:
 		ret = v.VisitSqlLiteralNode(val)
+	case *SqlLiteralNode:
+		ret = v.VisitSqlLiteralNode(*val)
 	case JoinSource:
 		ret = v.VisitJoinSourceNode(val)
 	case EqualityNode:
@@ -54,6 +56,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitGroupNode(val)
 	case ExistsNode:
 		ret = v.VisitExistsNode(val)
+	case *ExistsNode:
+		ret = v.VisitExistsNode(*val)
 	case AsNode:
 		ret = v.VisitAsNode(val)
 	case Table:
@@ -131,6 +135,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitLessThanOrEqualNode(*val)
 	case *OrNode:
 		ret = v.VisitOrNode(*val)
+	case *AvgNode:
+		ret = v.VisitAvgNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -151,6 +157,28 @@ func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 func (v ToSqlVisitor) VisitInNode(node InNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
+}
+
+func (v ToSqlVisitor) VisitAvgNode(node AvgNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("AVG(")
+	if node.Distinct {
+		buf.WriteString("DISINCT ")
+	}
+	for i, expr := range node.Expressions {
+		buf.WriteString(v.Visit(expr))
+		// Join on ", "
+		if i != len(node.Expressions)-1 {
+			buf.WriteString(", ")
+		}
+	}
+	buf.WriteString(")")
+
+	if node.Alias != nil {
+		buf.WriteString(" AS ")
+		buf.WriteString(v.Visit(node.Alias))
+	}
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitOrNode(node OrNode) string {
@@ -479,8 +507,18 @@ func (v ToSqlVisitor) VisitAndNode(node AndNode) string {
 func (v ToSqlVisitor) VisitCountNode(node CountNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("COUNT(")
-	buf.WriteString(v.Visit(node.Expressions))
+	if node.Distinct {
+		buf.WriteString("DISINCT ")
+	}
+	for i, expr := range node.Expressions {
+		buf.WriteString(v.Visit(expr))
+		// Join on ", "
+		if i != len(node.Expressions)-1 {
+			buf.WriteString(", ")
+		}
+	}
 	buf.WriteString(")")
+
 	if node.Alias != nil {
 		buf.WriteString(" AS ")
 		buf.WriteString(v.Visit(node.Alias))
@@ -601,8 +639,15 @@ func (v ToSqlVisitor) VisitHavingNode(node HavingNode) string {
 func (v ToSqlVisitor) VisitExistsNode(node ExistsNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("EXISTS (")
-	buf.WriteString(v.Visit(node.Expressions))
+	for i, expr := range node.Expressions {
+		buf.WriteString(v.Visit(expr))
+		// Join on ", "
+		if i != len(node.Expressions)-1 {
+			buf.WriteString(", ")
+		}
+	}
 	buf.WriteString(")")
+
 	if node.Alias != nil {
 		buf.WriteString(" AS ")
 		buf.WriteString(v.Visit(node.Alias))

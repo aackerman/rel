@@ -1,8 +1,9 @@
 package rel
 
 type FunctionNode struct {
-	Expressions Visitable
+	Expressions []Visitable
 	Alias       *SqlLiteralNode
+	Distinct    bool
 	BaseVisitable
 }
 

@@ -2,13 +2,15 @@ package rel
 
 type ExistsNode FunctionNode
 
-func NewExistsNode(n Visitable) ExistsNode {
-	return ExistsNode{Expressions: n}
+func NewExistsNode(v Visitable) *ExistsNode {
+	exists := new(ExistsNode)
+	exists.Expressions = append(exists.Expressions, v)
+	return exists
 }
 
-func (e ExistsNode) As(n Visitable) AsNode {
+func (node ExistsNode) As(v Visitable) AsNode {
 	return AsNode{
-		Left:  e,
-		Right: n,
+		Left:  node,
+		Right: v,
 	}
 }
