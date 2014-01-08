@@ -7,7 +7,7 @@ type Visitable interface {
 	NewStringJoinNode() StringJoinNode
 	NewInnerJoinNode() InnerJoinNode
 	NewOuterJoinNode() OuterJoinNode
-	NewAndNode(...Visitable) AndNode
+	NewAndNode(...Visitable) *AndNode
 	NewOnNode() OnNode
 	NewNotNode() NotNode
 	NewGroupingNode() GroupingNode

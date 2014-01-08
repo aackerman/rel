@@ -38,8 +38,6 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitNil()
 	case SelectStatementNode:
 		ret = v.VisitSelectStatementNode(val)
-	case AndNode:
-		ret = v.VisitAndNode(val)
 	case InNode:
 		ret = v.VisitInNode(val)
 	case SqlLiteralNode:
@@ -86,6 +84,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitDescendingNode(val)
 	case CountNode:
 		ret = v.VisitCountNode(val)
+	case *AndNode:
+		ret = v.VisitAndNode(*val)
 	case *TableAliasNode:
 		ret = v.VisitTableAliasNode(*val)
 	case *InnerJoinNode:

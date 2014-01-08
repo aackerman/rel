@@ -28,8 +28,8 @@ func (a BaseVisitable) NewOuterJoinNode() OuterJoinNode {
 	return OuterJoinNode{}
 }
 
-func (a BaseVisitable) NewAndNode(n ...Visitable) AndNode {
-	return AndNode{Children: &n}
+func (a BaseVisitable) NewAndNode(n ...Visitable) *AndNode {
+	return &AndNode{Children: &n}
 }
 
 func (a BaseVisitable) NewOnNode() OnNode {
