@@ -17,8 +17,46 @@ func (node AttributeNode) Eq(v Visitable) EqualityNode {
 	return NewEqualityNode(node, v)
 }
 
-func (node AttributeNode) Lt(v Visitable) LessThanNode {
-	return LessThanNode{Left: node, Right: v}
+func (node AttributeNode) Lt(v Visitable) *LessThanNode {
+	return &LessThanNode{Left: node, Right: v}
+}
+
+func (node AttributeNode) LtAny(visitable ...Visitable) *GroupingNode {
+	var nodes []*LessThanNode
+	grouping := new(GroupingNode)
+	for _, v := range visitable {
+		nodes = append(nodes, node.Lt(v))
+	}
+	if len(nodes) > 0 {
+		// unshift first node
+		m, nodes := nodes[0], nodes[1:]
+		var memo Visitable = m
+		for _, n := range nodes {
+			memo = &OrNode{Left: memo, Right: n}
+		}
+		grouping.Expr = append(grouping.Expr, memo)
+	}
+	return grouping
+}
+
+func (node AttributeNode) LtAll(visitable ...Visitable) *GroupingNode {
+	var nodes []Visitable
+	grouping := new(GroupingNode)
+	for _, v := range visitable {
+		nodes = append(nodes, node.Lt(v))
+	}
+	grouping.Expr = append(grouping.Expr, &AndNode{Children: &nodes})
+	return grouping
+}
+
+func (node AttributeNode) GtAll(visitable ...Visitable) *GroupingNode {
+	var nodes []Visitable
+	grouping := new(GroupingNode)
+	for _, v := range visitable {
+		nodes = append(nodes, node.Gt(v))
+	}
+	grouping.Expr = append(grouping.Expr, &AndNode{Children: &nodes})
+	return grouping
 }
 
 func (node AttributeNode) LtEq(v Visitable) *LessThanOrEqualNode {
