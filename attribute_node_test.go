@@ -47,7 +47,7 @@ func TestAttributeNotEqAll(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" != 1 AND \"users\".\"id\" != 2)"
 	if sql != expected {
-		t.Logf("TestAttributeNotEqNil sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeNotEqAll sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -83,7 +83,7 @@ func TestAttributeGtEqAny(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" >= 1 OR \"users\".\"id\" >= 2)"
 	if sql != expected {
-		t.Logf("TestAttributeGtEq sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeGtEqAny sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -95,7 +95,7 @@ func TestAttributeGtEqAll(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" >= 1 AND \"users\".\"id\" >= 2)"
 	if sql != expected {
-		t.Logf("TestAttributeGtEq sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeGtEqAll sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -107,7 +107,7 @@ func TestAttributeGtAll(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" > 1 AND \"users\".\"id\" > 2)"
 	if sql != expected {
-		t.Logf("TestAttributeGtEq sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeGtAll sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -119,7 +119,7 @@ func TestAttributeGtAny(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" > 1 OR \"users\".\"id\" > 2)"
 	if sql != expected {
-		t.Logf("TestAttributeGtEq sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeGtAny sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -143,7 +143,19 @@ func TestAttributeLtAny(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" < 1 OR \"users\".\"id\" < 2)"
 	if sql != expected {
-		t.Logf("TestAttributeLt sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeLtAny sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestAttributeLtAll(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").LtAll(Sql(1), Sql(2)))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" < 1 AND \"users\".\"id\" < 2)"
+	if sql != expected {
+		t.Logf("TestAttributeLtAll sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
