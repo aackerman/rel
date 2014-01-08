@@ -160,6 +160,18 @@ func TestAttributeLtEqAny(t *testing.T) {
 	}
 }
 
+func TestAttributeLtEqAll(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").LtEqAll(Sql(1), Sql(2)))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" <= 1 AND \"users\".\"id\" <= 2)"
+	if sql != expected {
+		t.Logf("TestAttributeLt sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestAttributeLtAny(t *testing.T) {
 	users := NewTable("users")
 	mgr := users.Select(users.Attr("id"))

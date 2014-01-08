@@ -35,6 +35,13 @@ func (node AttributeNode) LtEqAny(visitable ...Visitable) *GroupingNode {
 	return node.GroupAny(visitable...)
 }
 
+func (node AttributeNode) LtEqAll(visitable ...Visitable) *GroupingNode {
+	for i, v := range visitable {
+		visitable[i] = node.LtEq(v)
+	}
+	return node.GroupAll(visitable...)
+}
+
 func (node AttributeNode) LtAll(visitable ...Visitable) *GroupingNode {
 	for i, v := range visitable {
 		visitable[i] = node.Lt(v)
