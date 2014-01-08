@@ -17,14 +17,6 @@ func (node AttributeNode) Eq(v Visitable) EqualityNode {
 	return NewEqualityNode(node, v)
 }
 
-func (node AttributeNode) Average() *AvgNode {
-	avg := new(AvgNode)
-	avg.Expressions = append(avg.Expressions, node)
-	alias := Sql("avg_id")
-	avg.Alias = &alias
-	return avg
-}
-
 func (node AttributeNode) Lt(v Visitable) *LessThanNode {
 	return &LessThanNode{Left: node, Right: v}
 }

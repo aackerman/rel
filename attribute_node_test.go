@@ -195,14 +195,3 @@ func TestAttributeLtAll(t *testing.T) {
 		t.Fail()
 	}
 }
-
-func TestAttributeAverage(t *testing.T) {
-	users := NewTable("users")
-	mgr := users.Select(users.Attr("id").Average())
-	sql := mgr.ToSql()
-	expected := "SELECT AVG(\"users\".\"id\") AS avg_id FROM \"users\""
-	if sql != expected {
-		t.Logf("TestAttributeLtAll sql: \n%s != \n%s", sql, expected)
-		t.Fail()
-	}
-}
