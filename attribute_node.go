@@ -49,16 +49,6 @@ func (node AttributeNode) LtAll(visitable ...Visitable) *GroupingNode {
 	return grouping
 }
 
-func (node AttributeNode) GtAll(visitable ...Visitable) *GroupingNode {
-	var nodes []Visitable
-	grouping := new(GroupingNode)
-	for _, v := range visitable {
-		nodes = append(nodes, node.Gt(v))
-	}
-	grouping.Expr = append(grouping.Expr, &AndNode{Children: &nodes})
-	return grouping
-}
-
 func (node AttributeNode) LtEq(v Visitable) *LessThanOrEqualNode {
 	return &LessThanOrEqualNode{Left: node, Right: v}
 }

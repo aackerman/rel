@@ -76,6 +76,18 @@ func TestAttributeGtEq(t *testing.T) {
 	}
 }
 
+func TestAttributeGtAny(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").GtAny(Sql(1), Sql(2)))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" > 1 OR \"users\".\"id\" > 2)"
+	if sql != expected {
+		t.Logf("TestAttributeGtEq sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
 func TestAttributeLt(t *testing.T) {
 	users := NewTable("users")
 	mgr := users.Select(users.Attr("id"))
