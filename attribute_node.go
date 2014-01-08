@@ -29,6 +29,24 @@ func (node AttributeNode) Gt(v Visitable) GreaterThanNode {
 	return GreaterThanNode{Left: node, Right: v}
 }
 
+func (node AttributeNode) GtEqAny(visitable ...Visitable) *GroupingNode {
+	var nodes []*NotEqualNode
+	grouping := new(GroupingNode)
+	for _, v := range visitable {
+		nodes = append(nodes, node.Gt(v))
+	}
+	if len(nodes) > 0 {
+		// unshift first node
+		m, nodes := nodes[0], nodes[1:]
+		var memo Visitable = m
+		for _, n := range nodes {
+			memo = &OrNode{Left: memo, Right: n}
+		}
+		grouping.Expr = append(grouping.Expr, memo)
+	}
+	return grouping
+}
+
 func (node AttributeNode) GtEq(v Visitable) *GreaterThanOrEqualNode {
 	return &GreaterThanOrEqualNode{Left: node, Right: v}
 }
