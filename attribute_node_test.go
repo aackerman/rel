@@ -290,3 +290,15 @@ func TestAttributeMatchesAll(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestAttributeDoesNotMatch(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("name").DoesNotMatch(Sql("%bacon%")))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"name\" NOT LIKE '%bacon%'"
+	if sql != expected {
+		t.Logf("TestAttributeMatches sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
