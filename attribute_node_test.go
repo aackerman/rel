@@ -326,3 +326,27 @@ func TestAttributeDoesNotMatchAll(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestAttributeAsc(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Order(users.Attr("id").Asc())
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" ORDER BY \"users\".\"id\" ASC"
+	if sql != expected {
+		t.Logf("TestAttributeAsc sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestAttributeDesc(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Order(users.Attr("id").Desc())
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" ORDER BY \"users\".\"id\" DESC"
+	if sql != expected {
+		t.Logf("TestAttributeDesc sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
