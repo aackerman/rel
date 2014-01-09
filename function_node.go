@@ -13,13 +13,13 @@ type MinNode FunctionNode
 type AvgNode FunctionNode
 type CountNode FunctionNode
 
-func (n CountNode) Desc() DescendingNode {
-	return DescendingNode{Expr: n}
+func (node *CountNode) Desc() *DescendingNode {
+	return &DescendingNode{Expr: node}
 }
 
-func (n CountNode) As(v Visitable) AsNode {
-	return AsNode{
-		Left:  n,
+func (node *CountNode) As(v Visitable) *AsNode {
+	return &AsNode{
+		Left:  node,
 		Right: v,
 	}
 }

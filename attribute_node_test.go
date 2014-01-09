@@ -198,10 +198,9 @@ func TestAttributeLtAll(t *testing.T) {
 
 func TestAttributeCount(t *testing.T) {
 	users := NewTable("users")
-	mgr := users.Select(users.Attr("id"))
-	mgr.Where(users.Attr("id").LtAll(Sql(1), Sql(2)))
+	mgr := users.Select(users.Attr("id").Count())
 	sql := mgr.ToSql()
-	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" < 1 AND \"users\".\"id\" < 2)"
+	expected := "SELECT COUNT(\"users\".\"id\") FROM \"users\""
 	if sql != expected {
 		t.Logf("TestAttributeLtAll sql: \n%s != \n%s", sql, expected)
 		t.Fail()

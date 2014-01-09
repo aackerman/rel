@@ -89,20 +89,20 @@ func (node AttributeNode) GtEq(v Visitable) *GreaterThanOrEqualNode {
 	return &GreaterThanOrEqualNode{Left: node, Right: v}
 }
 
-func (node AttributeNode) Desc() DescendingNode {
-	return DescendingNode{Expr: node}
+func (node AttributeNode) Desc() *DescendingNode {
+	return &DescendingNode{Expr: node}
 }
 
-func (node AttributeNode) Asc() AscendingNode {
-	return AscendingNode{Expr: node}
+func (node AttributeNode) Asc() *AscendingNode {
+	return &AscendingNode{Expr: node}
 }
 
 func (node AttributeNode) Count() *CountNode {
 	return &CountNode{Expressions: []Visitable{node}}
 }
 
-func (node AttributeNode) As(v Visitable) AsNode {
-	return AsNode{
+func (node AttributeNode) As(v Visitable) *AsNode {
+	return &AsNode{
 		Left:  node,
 		Right: v,
 	}

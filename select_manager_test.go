@@ -451,7 +451,7 @@ func TestSelectManagerWithRecursiveSupport(t *testing.T) {
 
 	union := recursiveTerm.Union(recursiveTerm.Ast, nonRecursiveTerm.Ast)
 
-	asStmt := AsNode{Left: replies, Right: union}
+	asStmt := &AsNode{Left: replies, Right: union}
 
 	mgr := NewSelectManager(TableEngine, nil)
 	mgr.WithRecursive(asStmt).From(replies).Project(Star())
