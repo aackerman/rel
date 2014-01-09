@@ -386,3 +386,15 @@ func TestAttributeInAll(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestAttributeNotIn(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").NotIn([]Visitable{Sql(1), Sql(2), Sql(3)}))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" NOT IN (1, 2, 3)"
+	if sql != expected {
+		t.Logf("TestAttributeIn sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}

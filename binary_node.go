@@ -23,7 +23,6 @@ type LessThanNode BinaryNode
 type LessThanOrEqualNode BinaryNode
 type MatchesNode BinaryNode
 type NotEqualNode BinaryNode
-type NotInNode BinaryNode
 type OrNode BinaryNode
 type UnionNode BinaryNode
 type UnionAllNode BinaryNode

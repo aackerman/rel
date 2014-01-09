@@ -18,3 +18,9 @@ type InNode struct {
 	Right []Visitable
 	BaseVisitable
 }
+
+type NotInNode struct {
+	Left  Visitable
+	Right []Visitable
+	BaseVisitable
+}

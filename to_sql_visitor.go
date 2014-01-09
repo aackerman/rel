@@ -141,6 +141,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitMatchesNode(*val)
 	case *DoesNotMatchNode:
 		ret = v.VisitDoesNotMatchNode(*val)
+	case *NotInNode:
+		ret = v.VisitNotInNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -156,6 +158,24 @@ func (v ToSqlVisitor) VisitTopNode(node TopNode) string {
 func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
+}
+
+func (v ToSqlVisitor) VisitNotInNode(node NotInNode) string {
+	if len(node.Right) == 0 {
+		return "1=1"
+	}
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(node.Left))
+	buf.WriteString(" NOT IN (")
+	for i, expr := range node.Right {
+		buf.WriteString(v.Visit(expr))
+		// Join on ", "
+		if i != len(node.Right)-1 {
+			buf.WriteString(", ")
+		}
+	}
+	buf.WriteString(")")
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitInNode(node InNode) string {

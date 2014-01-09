@@ -135,6 +135,19 @@ func (node AttributeNode) In(visitables []Visitable) Visitable {
 	return in
 }
 
+func (node AttributeNode) NotIn(visitables []Visitable) Visitable {
+	notin := &NotInNode{Left: node}
+	for _, v := range visitables {
+		switch val := v.(type) {
+		case SelectManager:
+			notin.Right = append(notin.Right, val.Ast)
+		default:
+			notin.Right = append(notin.Right, v)
+		}
+	}
+	return notin
+}
+
 func (node AttributeNode) InAny(visitableslices ...[]Visitable) Visitable {
 	visitables := make([]Visitable, len(visitableslices))
 	for i, visitableslice := range visitableslices {
