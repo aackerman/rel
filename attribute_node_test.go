@@ -218,3 +218,15 @@ func TestAttributeEq(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestAttributeEqNil(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").Eq(nil))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" IS NULL"
+	if sql != expected {
+		t.Logf("TestAttributeEqNil sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
