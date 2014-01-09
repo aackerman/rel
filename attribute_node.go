@@ -148,6 +148,22 @@ func (node AttributeNode) NotIn(visitables []Visitable) Visitable {
 	return notin
 }
 
+func (node AttributeNode) NotInAny(visitableslices ...[]Visitable) Visitable {
+	visitables := make([]Visitable, len(visitableslices))
+	for i, visitableslice := range visitableslices {
+		visitables[i] = node.NotIn(visitableslice)
+	}
+	return node.GroupAny(visitables...)
+}
+
+func (node AttributeNode) NotInAll(visitableslices ...[]Visitable) Visitable {
+	visitables := make([]Visitable, len(visitableslices))
+	for i, visitableslice := range visitableslices {
+		visitables[i] = node.NotIn(visitableslice)
+	}
+	return node.GroupAll(visitables...)
+}
+
 func (node AttributeNode) InAny(visitableslices ...[]Visitable) Visitable {
 	visitables := make([]Visitable, len(visitableslices))
 	for i, visitableslice := range visitableslices {

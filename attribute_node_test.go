@@ -394,7 +394,31 @@ func TestAttributeNotIn(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" NOT IN (1, 2, 3)"
 	if sql != expected {
-		t.Logf("TestAttributeIn sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeNotIn sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestAttributeNotInAny(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").NotInAny([]Visitable{Sql(1), Sql(2)}, []Visitable{Sql(3), Sql(4)}))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" NOT IN (1, 2) OR \"users\".\"id\" NOT IN (3, 4))"
+	if sql != expected {
+		t.Logf("TestAttributeNotInAny sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestAttributeNotInAll(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").NotInAll([]Visitable{Sql(1), Sql(2)}, []Visitable{Sql(3), Sql(4)}))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" NOT IN (1, 2) AND \"users\".\"id\" NOT IN (3, 4))"
+	if sql != expected {
+		t.Logf("TestAttributeNotInAll sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
