@@ -202,7 +202,19 @@ func TestAttributeCount(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT COUNT(\"users\".\"id\") FROM \"users\""
 	if sql != expected {
-		t.Logf("TestAttributeLtAll sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeCount sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestAttributeEq(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").Eq(Sql(10)))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" = 10"
+	if sql != expected {
+		t.Logf("TestAttributeEq sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
