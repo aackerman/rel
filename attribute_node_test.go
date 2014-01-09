@@ -350,3 +350,15 @@ func TestAttributeDesc(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestAttributeIn(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").In([]Visitable{Sql(1), Sql(2), Sql(3)}))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" IN (1, 2, 3)"
+	if sql != expected {
+		t.Logf("TestAttributeDesc sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}

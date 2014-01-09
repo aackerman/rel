@@ -13,4 +13,8 @@ func NewEqualityNode(left Visitable, right Visitable) EqualityNode {
 	}
 }
 
-type InNode EqualityNode
+type InNode struct {
+	Left  Visitable
+	Right []Visitable
+	BaseVisitable
+}

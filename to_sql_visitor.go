@@ -38,8 +38,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitNil()
 	case SelectStatementNode:
 		ret = v.VisitSelectStatementNode(val)
-	case InNode:
-		ret = v.VisitInNode(val)
+	case *InNode:
+		ret = v.VisitInNode(*val)
 	case SqlLiteralNode:
 		ret = v.VisitSqlLiteralNode(val)
 	case *SqlLiteralNode:
@@ -159,8 +159,21 @@ func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 }
 
 func (v ToSqlVisitor) VisitInNode(node InNode) string {
-	log.Fatal("NOT IMPLEMENTED")
-	return ""
+	if len(node.Right) == 0 {
+		return "1=0"
+	}
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(node.Left))
+	buf.WriteString(" IN (")
+	for i, expr := range node.Right {
+		buf.WriteString(v.Visit(expr))
+		// Join on ", "
+		if i != len(node.Right)-1 {
+			buf.WriteString(", ")
+		}
+	}
+	buf.WriteString(")")
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitDoesNotMatchNode(node DoesNotMatchNode) string {
@@ -320,7 +333,7 @@ func (v ToSqlVisitor) VisitUpdateStatementNode(node UpdateStatementNode) string 
 
 		wheres = append(wheres, &InNode{
 			Left:  node.Key,
-			Right: stmt,
+			Right: []Visitable{stmt},
 		})
 	}
 	buf.WriteString("UPDATE ")

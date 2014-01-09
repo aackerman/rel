@@ -122,15 +122,17 @@ func (node AttributeNode) As(v Visitable) *AsNode {
 	}
 }
 
-func (node AttributeNode) In(v Visitable) Visitable {
-	var ret Visitable
-	switch val := v.(type) {
-	case SelectManager:
-		ret = &InNode{Left: node, Right: val.Ast}
-	default:
-		ret = &InNode{Left: node, Right: v}
+func (node AttributeNode) In(visitables []Visitable) Visitable {
+	in := &InNode{Left: node}
+	for _, v := range visitables {
+		switch val := v.(type) {
+		case SelectManager:
+			in.Right = append(in.Right, val.Ast)
+		default:
+			in.Right = append(in.Right, v)
+		}
 	}
-	return ret
+	return in
 }
 
 func (node AttributeNode) NotEq(v Visitable) *NotEqualNode {
