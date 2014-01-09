@@ -266,3 +266,27 @@ func TestAttributeMatches(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestAttributeMatchesAny(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("name").MatchesAny(Sql("%chunky%"), Sql("%bacon%")))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"name\" LIKE '%chunky%' OR \"users\".\"name\" LIKE '%bacon%')"
+	if sql != expected {
+		t.Logf("TestAttributeMatches sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestAttributeMatchesAll(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("name").MatchesAll(Sql("%chunky%"), Sql("%bacon%")))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"name\" LIKE '%chunky%' AND \"users\".\"name\" LIKE '%bacon%')"
+	if sql != expected {
+		t.Logf("TestAttributeMatches sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}

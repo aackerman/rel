@@ -165,6 +165,20 @@ func (node AttributeNode) Matches(v Visitable) *MatchesNode {
 	}
 }
 
+func (node AttributeNode) MatchesAny(visitable ...Visitable) *GroupingNode {
+	for i, v := range visitable {
+		visitable[i] = node.Matches(v)
+	}
+	return node.GroupAny(visitable...)
+}
+
+func (node AttributeNode) MatchesAll(visitable ...Visitable) *GroupingNode {
+	for i, v := range visitable {
+		visitable[i] = node.Matches(v)
+	}
+	return node.GroupAll(visitable...)
+}
+
 func (node AttributeNode) GroupAny(visitable ...Visitable) *GroupingNode {
 	grouping := new(GroupingNode)
 	if len(visitable) > 0 {
