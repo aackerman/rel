@@ -98,9 +98,7 @@ func (node AttributeNode) Asc() AscendingNode {
 }
 
 func (node AttributeNode) Count() *CountNode {
-	count := new(CountNode)
-	count.Expressions = append(count.Expressions, node)
-	return count
+	return &CountNode{Expressions: []Visitable{node}}
 }
 
 func (node AttributeNode) As(v Visitable) AsNode {
@@ -161,7 +159,9 @@ func (node AttributeNode) GroupAny(visitable ...Visitable) *GroupingNode {
 }
 
 func (node AttributeNode) GroupAll(visitable ...Visitable) *GroupingNode {
-	grouping := new(GroupingNode)
-	grouping.Expr = append(grouping.Expr, &AndNode{Children: &visitable})
-	return grouping
+	return &GroupingNode{
+		Expr: []Visitable{
+			&AndNode{Children: &visitable},
+		},
+	}
 }
