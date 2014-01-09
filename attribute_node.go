@@ -135,6 +135,22 @@ func (node AttributeNode) In(visitables []Visitable) Visitable {
 	return in
 }
 
+func (node AttributeNode) InAny(visitableslices ...[]Visitable) Visitable {
+	visitables := make([]Visitable, len(visitableslices))
+	for i, visitableslice := range visitableslices {
+		visitables[i] = node.In(visitableslice)
+	}
+	return node.GroupAny(visitables...)
+}
+
+func (node AttributeNode) InAll(visitableslices ...[]Visitable) Visitable {
+	visitables := make([]Visitable, len(visitableslices))
+	for i, visitableslice := range visitableslices {
+		visitables[i] = node.In(visitableslice)
+	}
+	return node.GroupAll(visitables...)
+}
+
 func (node AttributeNode) NotEq(v Visitable) *NotEqualNode {
 	return &NotEqualNode{
 		Left:  node,

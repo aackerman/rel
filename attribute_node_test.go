@@ -358,7 +358,31 @@ func TestAttributeIn(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" IN (1, 2, 3)"
 	if sql != expected {
-		t.Logf("TestAttributeDesc sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeIn sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestAttributeInAny(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").InAny([]Visitable{Sql(1), Sql(2)}, []Visitable{Sql(3), Sql(4)}))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" IN (1, 2) OR \"users\".\"id\" IN (3, 4))"
+	if sql != expected {
+		t.Logf("TestAttributeInAny sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestAttributeInAll(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").InAll([]Visitable{Sql(1), Sql(2)}, []Visitable{Sql(3), Sql(4)}))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" IN (1, 2) AND \"users\".\"id\" IN (3, 4))"
+	if sql != expected {
+		t.Logf("TestAttributeInAll sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
