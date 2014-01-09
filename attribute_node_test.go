@@ -230,3 +230,15 @@ func TestAttributeEqNil(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestAttributeEqAny(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("id").EqAny(Sql(1), Sql(2)))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"id\" = 1 OR \"users\".\"id\" = 2)"
+	if sql != expected {
+		t.Logf("TestAttributeEqAny sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}

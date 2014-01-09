@@ -17,6 +17,13 @@ func (node AttributeNode) Eq(v Visitable) EqualityNode {
 	return NewEqualityNode(node, v)
 }
 
+func (node AttributeNode) EqAny(visitable ...Visitable) *GroupingNode {
+	for i, v := range visitable {
+		visitable[i] = node.Eq(v)
+	}
+	return node.GroupAny(visitable...)
+}
+
 func (node AttributeNode) Lt(v Visitable) *LessThanNode {
 	return &LessThanNode{Left: node, Right: v}
 }
