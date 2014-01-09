@@ -137,6 +137,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitOrNode(*val)
 	case *AvgNode:
 		ret = v.VisitAvgNode(*val)
+	case *MatchesNode:
+		ret = v.VisitMatchesNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -157,6 +159,14 @@ func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 func (v ToSqlVisitor) VisitInNode(node InNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
+}
+
+func (v ToSqlVisitor) VisitMatchesNode(node MatchesNode) string {
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(node.Left))
+	buf.WriteString(" LIKE ")
+	buf.WriteString(v.Visit(node.Right))
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitAvgNode(node AvgNode) string {

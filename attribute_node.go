@@ -158,6 +158,13 @@ func (node AttributeNode) NotEqAll(visitable ...Visitable) *GroupingNode {
 	return node.GroupAll(visitable...)
 }
 
+func (node AttributeNode) Matches(v Visitable) *MatchesNode {
+	return &MatchesNode{
+		Left:  node,
+		Right: v,
+	}
+}
+
 func (node AttributeNode) GroupAny(visitable ...Visitable) *GroupingNode {
 	grouping := new(GroupingNode)
 	if len(visitable) > 0 {
