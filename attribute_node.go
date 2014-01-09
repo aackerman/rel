@@ -158,6 +158,13 @@ func (node AttributeNode) NotEqAll(visitable ...Visitable) *GroupingNode {
 	return node.GroupAll(visitable...)
 }
 
+func (node AttributeNode) DoesNotMatch(v Visitable) *DoesNotMatchNode {
+	return &DoesNotMatchNode{
+		Left:  node,
+		Right: v,
+	}
+}
+
 func (node AttributeNode) Matches(v Visitable) *MatchesNode {
 	return &MatchesNode{
 		Left:  node,
