@@ -165,6 +165,20 @@ func (node AttributeNode) DoesNotMatch(v Visitable) *DoesNotMatchNode {
 	}
 }
 
+func (node AttributeNode) DoesNotMatchAny(visitable ...Visitable) *GroupingNode {
+	for i, v := range visitable {
+		visitable[i] = node.DoesNotMatch(v)
+	}
+	return node.GroupAny(visitable...)
+}
+
+func (node AttributeNode) DoesNotMatchAll(visitable ...Visitable) *GroupingNode {
+	for i, v := range visitable {
+		visitable[i] = node.DoesNotMatch(v)
+	}
+	return node.GroupAll(visitable...)
+}
+
 func (node AttributeNode) Matches(v Visitable) *MatchesNode {
 	return &MatchesNode{
 		Left:  node,

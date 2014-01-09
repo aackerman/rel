@@ -274,7 +274,7 @@ func TestAttributeMatchesAny(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"name\" LIKE '%chunky%' OR \"users\".\"name\" LIKE '%bacon%')"
 	if sql != expected {
-		t.Logf("TestAttributeMatches sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeMatchesAny sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -286,7 +286,7 @@ func TestAttributeMatchesAll(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"name\" LIKE '%chunky%' AND \"users\".\"name\" LIKE '%bacon%')"
 	if sql != expected {
-		t.Logf("TestAttributeMatches sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeMatchesAll sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
@@ -298,7 +298,31 @@ func TestAttributeDoesNotMatch(t *testing.T) {
 	sql := mgr.ToSql()
 	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"name\" NOT LIKE '%bacon%'"
 	if sql != expected {
-		t.Logf("TestAttributeMatches sql: \n%s != \n%s", sql, expected)
+		t.Logf("TestAttributeDoesNotMatch sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestAttributeDoesNotMatchAny(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("name").DoesNotMatchAny(Sql("%chunky%"), Sql("%bacon%")))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"name\" NOT LIKE '%chunky%' OR \"users\".\"name\" NOT LIKE '%bacon%')"
+	if sql != expected {
+		t.Logf("TestAttributeDoesNotMatchAny sql: \n%s != \n%s", sql, expected)
+		t.Fail()
+	}
+}
+
+func TestAttributeDoesNotMatchAll(t *testing.T) {
+	users := NewTable("users")
+	mgr := users.Select(users.Attr("id"))
+	mgr.Where(users.Attr("name").DoesNotMatchAll(Sql("%chunky%"), Sql("%bacon%")))
+	sql := mgr.ToSql()
+	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE (\"users\".\"name\" NOT LIKE '%chunky%' AND \"users\".\"name\" NOT LIKE '%bacon%')"
+	if sql != expected {
+		t.Logf("TestAttributeDoesNotMatchAll sql: \n%s != \n%s", sql, expected)
 		t.Fail()
 	}
 }
