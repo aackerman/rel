@@ -22,10 +22,6 @@ const (
 	DISTINCT = "DISTINCT"
 )
 
-func NewToSqlVisitor(c *Connection) ToSqlVisitor {
-	return ToSqlVisitor{conn: c}
-}
-
 func (v ToSqlVisitor) Accept(a Visitable) string {
 	return v.Visit(a)
 }
@@ -143,6 +139,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitDoesNotMatchNode(*val)
 	case *NotInNode:
 		ret = v.VisitNotInNode(*val)
+	case *BinNode:
+		ret = v.VisitBinNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -158,6 +156,10 @@ func (v ToSqlVisitor) VisitTopNode(node TopNode) string {
 func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
+}
+
+func (v ToSqlVisitor) VisitBinNode(node BinNode) string {
+	return v.Visit(node.Expr)
 }
 
 func (v ToSqlVisitor) VisitNotInNode(node NotInNode) string {

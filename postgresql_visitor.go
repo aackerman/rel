@@ -1,3 +1,5 @@
 package rel
 
-type PostgreSQLVisitor ToSqlVisitor
+type PostgreSQLVisitor struct {
+	ToSqlVisitor
+}

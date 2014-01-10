@@ -5,7 +5,6 @@ type UnaryNode struct {
 	BaseVisitable
 }
 
-type BinNode UnaryNode
 type GroupNode UnaryNode
 type HavingNode UnaryNode
 type LimitNode UnaryNode
