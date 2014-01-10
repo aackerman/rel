@@ -18,8 +18,6 @@ type LockNode UnaryNode
 type DistinctOnNode UnaryNode
 type WithNode UnaryNode
 type WithRecursiveNode UnaryNode
-type DescendingNode OrderingNode
-type AscendingNode OrderingNode
 type RowsNode UnaryNode
 type RangeNode UnaryNode
 type CurrentRowNode UnaryNode
