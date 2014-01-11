@@ -1,3 +1,7 @@
 package rel
 
-type InfixOperationNode BinaryNode
+type InfixOperationNode struct {
+	Operator SqlLiteralNode
+	Left     Visitable
+	Right    Visitable
+}
