@@ -887,7 +887,8 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 				claused = true
 			}
 			buf.WriteString(v.Visit(group))
-			if (len(*node.Groups) - 1) != i {
+			// Join on ", "
+			if i != len(*node.Groups)-1 {
 				buf.WriteString(COMMA)
 			}
 		}
@@ -909,7 +910,8 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 				claused = true
 			}
 			buf.WriteString(v.Visit(window))
-			if (len(*node.Windows) - 1) != i {
+			// Join on ", "
+			if i != len(*node.Windows)-1 {
 				buf.WriteString(COMMA)
 			}
 		}
