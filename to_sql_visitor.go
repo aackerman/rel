@@ -921,13 +921,13 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 func (v ToSqlVisitor) VisitSelectStatementNode(node SelectStatementNode) string {
 	var buf bytes.Buffer
 
-	// add WITH statement to the buffer
+	// add WITH clause to the buffer
 	if node.With != nil {
 		buf.WriteString(v.Visit(node.With))
 		buf.WriteString(SPACE)
 	}
 
-	// add SELECT core to the buffer
+	// add core SELECT clause to the buffer
 	if node.Cores != nil {
 		for _, core := range node.Cores {
 			if core != nil {
