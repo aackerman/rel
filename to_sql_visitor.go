@@ -155,6 +155,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitNotInNode(*val)
 	case *BinNode:
 		ret = v.VisitBinNode(*val)
+	case *ExtractNode:
+		ret = v.VisitExtractNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -170,6 +172,20 @@ func (v ToSqlVisitor) VisitTopNode(node TopNode) string {
 func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
+}
+
+func (v ToSqlVisitor) VisitExtractNode(node ExtractNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("EXTRACT(")
+	buf.WriteString(strings.ToUpper(node.Field.Raw))
+	buf.WriteString(" FROM ")
+	buf.WriteString(v.Visit(node.Expr))
+	buf.WriteString(")")
+	if node.Alias != nil {
+		buf.WriteString(" AS ")
+		buf.WriteString(v.Visit(node.Alias))
+	}
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitBinNode(node BinNode) string {
@@ -237,7 +253,7 @@ func (v ToSqlVisitor) VisitMatchesNode(node MatchesNode) string {
 
 func (v ToSqlVisitor) VisitNamedFunctionNode(node NamedFunctionNode) string {
 	var buf bytes.Buffer
-	buf.WriteString(node.Name)
+	buf.WriteString(node.Name.Raw)
 	buf.WriteString("(")
 	if node.Distinct {
 		buf.WriteString("DISINCT ")

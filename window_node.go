@@ -1,6 +1,8 @@
 package rel
 
 type WindowNode struct {
+	Orders  *[]Visitable
+	Framing Visitable
 	BaseVisitable
 }
 
