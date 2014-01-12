@@ -94,6 +94,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitGroupingNode(*val)
 	case *NamedWindowNode:
 		ret = v.VisitNamedWindowNode(*val)
+	case *WindowNode:
+		ret = v.VisitWindowNode(*val)
 	case *RowsNode:
 		ret = v.VisitRowsNode(*val)
 	case *PrecedingNode:
@@ -498,7 +500,34 @@ func (v ToSqlVisitor) VisitNamedWindowNode(node NamedWindowNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.QuoteColumnName(node.Name))
 	buf.WriteString(" AS (")
+	visitOrders := (node.Orders != nil && len(*node.Orders) > 0)
+	visitFraming := (node.Framing != nil)
+	if visitOrders {
+		buf.WriteString("ORDER BY ")
+		for i, order := range *node.Orders {
+			buf.WriteString(v.Visit(order))
+			// Join on ", "
+			if i != len(*node.Orders)-1 {
+				buf.WriteString(", ")
+			}
+		}
+	}
 
+	if visitOrders && visitFraming {
+		buf.WriteString(SPACE)
+	}
+
+	if visitFraming {
+		buf.WriteString(v.Visit(node.Framing))
+	}
+
+	buf.WriteString(")")
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitWindowNode(node WindowNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("(")
 	visitOrders := (node.Orders != nil && len(*node.Orders) > 0)
 	visitFraming := (node.Framing != nil)
 	if visitOrders {
