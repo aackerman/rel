@@ -108,6 +108,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitRangeNode(*val)
 	case *DistinctNode:
 		ret = v.VisitDistinctNode(*val)
+	case *WithNode:
+		ret = v.VisitWithNode(*val)
 	case *WithRecursiveNode:
 		ret = v.VisitWithRecursiveNode(*val)
 	case *Table:
@@ -413,6 +415,13 @@ func (v ToSqlVisitor) VisitInsertStatementNode(node InsertStatementNode) string 
 
 func (v ToSqlVisitor) VisitNil() string {
 	return "NULL"
+}
+
+func (v ToSqlVisitor) VisitWithNode(node WithNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("WITH ")
+	buf.WriteString(v.Visit(node.Expr))
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitWithRecursiveNode(node WithRecursiveNode) string {
