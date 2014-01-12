@@ -827,14 +827,21 @@ func (v ToSqlVisitor) VisitJoinSourceNode(node JoinSource) string {
 	return buf.String()
 }
 
+func (v ToSqlVisitor) VisitOuterJoinNode(node OuterJoinNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("LEFT OUTER JOIN ")
+	buf.WriteString(v.Visit(node.Left))
+	buf.WriteString(SPACE)
+	buf.WriteString(v.Visit(node.Right))
+	return buf.String()
+}
+
 func (v ToSqlVisitor) VisitInnerJoinNode(node InnerJoinNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(" INNER JOIN ")
 	buf.WriteString(v.Visit(node.Left))
-	if node.Right != nil {
-		buf.WriteString(SPACE)
-		buf.WriteString(v.Visit(node.Right))
-	}
+	buf.WriteString(SPACE)
+	buf.WriteString(v.Visit(node.Right))
 	return buf.String()
 }
 
