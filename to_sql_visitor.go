@@ -129,6 +129,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitSelectCoreNode(*val)
 	case *NotEqualNode:
 		ret = v.VisitNotEqualNode(*val)
+	case *NotNode:
+		ret = v.VisitNotNode(*val)
 	case *GreaterThanOrEqualNode:
 		ret = v.VisitGreaterThanOrEqualNode(*val)
 	case *LessThanOrEqualNode:
@@ -164,6 +166,13 @@ func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 
 func (v ToSqlVisitor) VisitBinNode(node BinNode) string {
 	return v.Visit(node.Expr)
+}
+
+func (v ToSqlVisitor) VisitNotNode(node NotNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("NOT ")
+	buf.WriteString(v.Visit(node.Expr))
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitNotInNode(node NotInNode) string {
