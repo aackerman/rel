@@ -157,6 +157,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitBinNode(*val)
 	case *ExtractNode:
 		ret = v.VisitExtractNode(*val)
+	case *InfixOperationNode:
+		ret = v.VisitInfixOperationNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
@@ -172,6 +174,16 @@ func (v ToSqlVisitor) VisitTopNode(node TopNode) string {
 func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
+}
+
+func (v ToSqlVisitor) VisitInfixOperationNode(node InfixOperationNode) string {
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(node.Left))
+	buf.WriteString(SPACE)
+	buf.WriteString(v.Visit(node.Operator))
+	buf.WriteString(SPACE)
+	buf.WriteString(v.Visit(node.Right))
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitExtractNode(node ExtractNode) string {
