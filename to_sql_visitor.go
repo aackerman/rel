@@ -139,6 +139,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitOrNode(*val)
 	case *AvgNode:
 		ret = v.VisitAvgNode(*val)
+	case *MinNode:
+		ret = v.VisitMinNode(*val)
 	case *MatchesNode:
 		ret = v.VisitMatchesNode(*val)
 	case *DoesNotMatchNode:
@@ -230,6 +232,28 @@ func (v ToSqlVisitor) VisitMatchesNode(node MatchesNode) string {
 func (v ToSqlVisitor) VisitAvgNode(node AvgNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("AVG(")
+	if node.Distinct {
+		buf.WriteString("DISINCT ")
+	}
+	for i, expr := range node.Expressions {
+		buf.WriteString(v.Visit(expr))
+		// Join on ", "
+		if i != len(node.Expressions)-1 {
+			buf.WriteString(", ")
+		}
+	}
+	buf.WriteString(")")
+
+	if node.Alias != nil {
+		buf.WriteString(" AS ")
+		buf.WriteString(v.Visit(node.Alias))
+	}
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitMinNode(node MinNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("MIN(")
 	if node.Distinct {
 		buf.WriteString("DISINCT ")
 	}
