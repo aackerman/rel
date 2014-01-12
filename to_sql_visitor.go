@@ -840,8 +840,10 @@ func (v ToSqlVisitor) VisitInnerJoinNode(node InnerJoinNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(" INNER JOIN ")
 	buf.WriteString(v.Visit(node.Left))
-	buf.WriteString(SPACE)
-	buf.WriteString(v.Visit(node.Right))
+	if node.Right != nil {
+		buf.WriteString(SPACE)
+		buf.WriteString(v.Visit(node.Right))
+	}
 	return buf.String()
 }
 
