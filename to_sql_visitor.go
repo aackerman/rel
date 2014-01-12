@@ -139,6 +139,10 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		ret = v.VisitOrNode(*val)
 	case *AvgNode:
 		ret = v.VisitAvgNode(*val)
+	case *NamedFunctionNode:
+		ret = v.VisitNamedFunctionNode(*val)
+	case *SumNode:
+		ret = v.VisitSumNode(*val)
 	case *MinNode:
 		ret = v.VisitMinNode(*val)
 	case *MaxNode:
@@ -228,6 +232,51 @@ func (v ToSqlVisitor) VisitMatchesNode(node MatchesNode) string {
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" LIKE ")
 	buf.WriteString(v.Visit(node.Right))
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitNamedFunctionNode(node NamedFunctionNode) string {
+	var buf bytes.Buffer
+	buf.WriteString(node.Name)
+	buf.WriteString("(")
+	if node.Distinct {
+		buf.WriteString("DISINCT ")
+	}
+	for i, expr := range node.Expressions {
+		buf.WriteString(v.Visit(expr))
+		// Join on ", "
+		if i != len(node.Expressions)-1 {
+			buf.WriteString(", ")
+		}
+	}
+	buf.WriteString(")")
+
+	if node.Alias != nil {
+		buf.WriteString(" AS ")
+		buf.WriteString(v.Visit(node.Alias))
+	}
+	return buf.String()
+}
+
+func (v ToSqlVisitor) VisitSumNode(node SumNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("SUM(")
+	if node.Distinct {
+		buf.WriteString("DISINCT ")
+	}
+	for i, expr := range node.Expressions {
+		buf.WriteString(v.Visit(expr))
+		// Join on ", "
+		if i != len(node.Expressions)-1 {
+			buf.WriteString(", ")
+		}
+	}
+	buf.WriteString(")")
+
+	if node.Alias != nil {
+		buf.WriteString(" AS ")
+		buf.WriteString(v.Visit(node.Alias))
+	}
 	return buf.String()
 }
 
