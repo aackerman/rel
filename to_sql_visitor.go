@@ -28,142 +28,141 @@ func (v ToSqlVisitor) Accept(a Visitable) string {
 
 // FIXME: Only visit pointers to visitables
 func (v ToSqlVisitor) Visit(a Visitable) string {
-	ret := ""
 	switch val := a.(type) {
 	case nil:
-		ret = v.VisitNil()
+		return v.VisitNil()
 	case SelectStatementNode:
-		ret = v.VisitSelectStatementNode(val)
+		return v.VisitSelectStatementNode(val)
 	case *InNode:
-		ret = v.VisitInNode(*val)
+		return v.VisitInNode(*val)
 	case SqlLiteralNode:
-		ret = v.VisitSqlLiteralNode(val)
+		return v.VisitSqlLiteralNode(val)
 	case *SqlLiteralNode:
-		ret = v.VisitSqlLiteralNode(*val)
+		return v.VisitSqlLiteralNode(*val)
 	case JoinSource:
-		ret = v.VisitJoinSourceNode(val)
+		return v.VisitJoinSourceNode(val)
 	case EqualityNode:
-		ret = v.VisitEqualityNode(val)
+		return v.VisitEqualityNode(val)
 	case HavingNode:
-		ret = v.VisitHavingNode(val)
+		return v.VisitHavingNode(val)
 	case AttributeNode:
-		ret = v.VisitAttributeNode(val)
+		return v.VisitAttributeNode(val)
 	case GroupNode:
-		ret = v.VisitGroupNode(val)
+		return v.VisitGroupNode(val)
 	case ExistsNode:
-		ret = v.VisitExistsNode(val)
+		return v.VisitExistsNode(val)
 	case *ExistsNode:
-		ret = v.VisitExistsNode(*val)
+		return v.VisitExistsNode(*val)
 	case *AsNode:
-		ret = v.VisitAsNode(*val)
+		return v.VisitAsNode(*val)
 	case Table:
-		ret = v.VisitTable(val)
+		return v.VisitTable(val)
 	case *LessThanNode:
-		ret = v.VisitLessThanNode(*val)
+		return v.VisitLessThanNode(*val)
 	case UnionNode:
-		ret = v.VisitUnionNode(val)
+		return v.VisitUnionNode(val)
 	case UnionAllNode:
-		ret = v.VisitUnionAllNode(val)
+		return v.VisitUnionAllNode(val)
 	case SelectManager:
-		ret = v.VisitSelectManager(val)
+		return v.VisitSelectManager(val)
 	case *GreaterThanNode:
-		ret = v.VisitGreaterThanNode(*val)
+		return v.VisitGreaterThanNode(*val)
 	case IntersectNode:
-		ret = v.VisitIntersectNode(val)
+		return v.VisitIntersectNode(val)
 	case ExceptNode:
-		ret = v.VisitExceptNode(val)
+		return v.VisitExceptNode(val)
 	case TableAliasNode:
-		ret = v.VisitTableAliasNode(val)
+		return v.VisitTableAliasNode(val)
 	case InnerJoinNode:
-		ret = v.VisitInnerJoinNode(val)
+		return v.VisitInnerJoinNode(val)
 	case OnNode:
-		ret = v.VisitOnNode(val)
+		return v.VisitOnNode(val)
 	case *AscendingNode:
-		ret = v.VisitAscendingNode(*val)
+		return v.VisitAscendingNode(*val)
 	case *DescendingNode:
-		ret = v.VisitDescendingNode(*val)
+		return v.VisitDescendingNode(*val)
 	case *CountNode:
-		ret = v.VisitCountNode(*val)
+		return v.VisitCountNode(*val)
 	case *AndNode:
-		ret = v.VisitAndNode(*val)
+		return v.VisitAndNode(*val)
 	case *TableAliasNode:
-		ret = v.VisitTableAliasNode(*val)
+		return v.VisitTableAliasNode(*val)
 	case *InnerJoinNode:
-		ret = v.VisitInnerJoinNode(*val)
+		return v.VisitInnerJoinNode(*val)
 	case *GroupingNode:
-		ret = v.VisitGroupingNode(*val)
+		return v.VisitGroupingNode(*val)
 	case *NamedWindowNode:
-		ret = v.VisitNamedWindowNode(*val)
+		return v.VisitNamedWindowNode(*val)
 	case *WindowNode:
-		ret = v.VisitWindowNode(*val)
+		return v.VisitWindowNode(*val)
 	case *RowsNode:
-		ret = v.VisitRowsNode(*val)
+		return v.VisitRowsNode(*val)
 	case *PrecedingNode:
-		ret = v.VisitPrecedingNode(*val)
+		return v.VisitPrecedingNode(*val)
 	case *FollowingNode:
-		ret = v.VisitFollowingNode(*val)
+		return v.VisitFollowingNode(*val)
 	case *CurrentRowNode:
-		ret = v.VisitCurrentRowNode(*val)
+		return v.VisitCurrentRowNode(*val)
 	case *BetweenNode:
-		ret = v.VisitBetweenNode(*val)
+		return v.VisitBetweenNode(*val)
 	case *RangeNode:
-		ret = v.VisitRangeNode(*val)
+		return v.VisitRangeNode(*val)
 	case *DistinctNode:
-		ret = v.VisitDistinctNode(*val)
+		return v.VisitDistinctNode(*val)
 	case *WithNode:
-		ret = v.VisitWithNode(*val)
+		return v.VisitWithNode(*val)
 	case *WithRecursiveNode:
-		ret = v.VisitWithRecursiveNode(*val)
+		return v.VisitWithRecursiveNode(*val)
 	case *Table:
 		if val == nil {
 			return v.VisitNil()
 		}
-		ret = v.VisitTable(*val)
+		return v.VisitTable(*val)
 	case *MultiStatementManager:
-		ret = v.VisitMultiStatementManager(*val)
+		return v.VisitMultiStatementManager(*val)
 	case *InsertStatementNode:
-		ret = v.VisitInsertStatementNode(*val)
+		return v.VisitInsertStatementNode(*val)
 	case *ValuesNode:
-		ret = v.VisitValuesNode(*val)
+		return v.VisitValuesNode(*val)
 	case *SelectCoreNode:
-		ret = v.VisitSelectCoreNode(*val)
+		return v.VisitSelectCoreNode(*val)
 	case *NotEqualNode:
-		ret = v.VisitNotEqualNode(*val)
+		return v.VisitNotEqualNode(*val)
 	case *NotNode:
-		ret = v.VisitNotNode(*val)
+		return v.VisitNotNode(*val)
 	case *GreaterThanOrEqualNode:
-		ret = v.VisitGreaterThanOrEqualNode(*val)
+		return v.VisitGreaterThanOrEqualNode(*val)
 	case *LessThanOrEqualNode:
-		ret = v.VisitLessThanOrEqualNode(*val)
+		return v.VisitLessThanOrEqualNode(*val)
 	case *OrNode:
-		ret = v.VisitOrNode(*val)
+		return v.VisitOrNode(*val)
 	case *AvgNode:
-		ret = v.VisitAvgNode(*val)
+		return v.VisitAvgNode(*val)
 	case *NamedFunctionNode:
-		ret = v.VisitNamedFunctionNode(*val)
+		return v.VisitNamedFunctionNode(*val)
 	case *SumNode:
-		ret = v.VisitSumNode(*val)
+		return v.VisitSumNode(*val)
 	case *MinNode:
-		ret = v.VisitMinNode(*val)
+		return v.VisitMinNode(*val)
 	case *MaxNode:
-		ret = v.VisitMaxNode(*val)
+		return v.VisitMaxNode(*val)
 	case *MatchesNode:
-		ret = v.VisitMatchesNode(*val)
+		return v.VisitMatchesNode(*val)
 	case *DoesNotMatchNode:
-		ret = v.VisitDoesNotMatchNode(*val)
+		return v.VisitDoesNotMatchNode(*val)
 	case *NotInNode:
-		ret = v.VisitNotInNode(*val)
+		return v.VisitNotInNode(*val)
 	case *BinNode:
-		ret = v.VisitBinNode(*val)
+		return v.VisitBinNode(*val)
 	case *ExtractNode:
-		ret = v.VisitExtractNode(*val)
+		return v.VisitExtractNode(*val)
 	case *InfixOperationNode:
-		ret = v.VisitInfixOperationNode(*val)
+		return v.VisitInfixOperationNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
+		return ""
 	}
-	return ret
 }
 
 func (v ToSqlVisitor) VisitTopNode(node TopNode) string {
