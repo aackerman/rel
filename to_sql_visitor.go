@@ -1013,15 +1013,10 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 	}
 
 	// add select projections
-	if node.Projections != nil {
-		claused := false
+	if node.Projections != nil && len(*node.Projections) > 0 {
+		buf.WriteString(SPACE)
 		for i, projection := range *node.Projections {
-
 			if projection != nil {
-				if !claused {
-					buf.WriteString(SPACE)
-					claused = true
-				}
 				buf.WriteString(v.Visit(projection))
 				// Join on ", "
 				if i != len(*node.Projections)-1 {
@@ -1032,6 +1027,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 	}
 
 	// add FROM statement to the buffer
+	// FIXME: this should not require a type switch
 	if node.Source != nil && node.Source.Left != nil {
 		if t, ok := node.Source.Left.(Table); ok && t.Name != "" {
 			buf.WriteString(" FROM ")
@@ -1043,16 +1039,10 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 	}
 
 	// add WHERE statement to the buffer
-	if node.Wheres != nil {
-		claused := false
+	if node.Wheres != nil && len(*node.Wheres) > 0 {
+		buf.WriteString(WHERE)
 		for i, where := range *node.Wheres {
-			// add WHERE clause if it hasn't already been added
-			if !claused {
-				buf.WriteString(WHERE)
-				claused = true
-			}
 			buf.WriteString(v.Visit(where))
-
 			// Join on ", "
 			if i != len(*node.Wheres)-1 {
 				buf.WriteString(COMMA)
@@ -1061,14 +1051,9 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 	}
 
 	// add GROUP BY statement to the buffer
-	if node.Groups != nil {
-		claused := false
+	if node.Groups != nil && len(*node.Groups) > 0 {
+		buf.WriteString(GROUP_BY)
 		for i, group := range *node.Groups {
-			// add GROUP BY clause if it hasn't already been added
-			if !claused {
-				buf.WriteString(GROUP_BY)
-				claused = true
-			}
 			buf.WriteString(v.Visit(group))
 			// Join on ", "
 			if i != len(*node.Groups)-1 {
@@ -1084,14 +1069,9 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 	}
 
 	// add WINDOW statements to the buffer
-	if node.Windows != nil {
-		claused := false
+	if node.Windows != nil && len(*node.Windows) > 0 {
+		buf.WriteString(WINDOW)
 		for i, window := range *node.Windows {
-			// add WINDOW clause if is hasn't already been added
-			if !claused {
-				buf.WriteString(WINDOW)
-				claused = true
-			}
 			buf.WriteString(v.Visit(window))
 			// Join on ", "
 			if i != len(*node.Windows)-1 {
