@@ -19,6 +19,7 @@ func (v SQLiteVisitor) Visit(a Visitable) string {
 	}
 }
 
+// VisitLockNode is overwritten for the SQLiteVisitor
 // Locks are not supported in SQLite
 func (v SQLiteVisitor) VisitLockNode(node LockNode) string {
 	return ""
