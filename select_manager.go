@@ -197,11 +197,11 @@ func (mgr *SelectManager) WithRecursive(node Visitable) *SelectManager {
 	return mgr
 }
 
-func (mgr *SelectManager) Window(a SqlLiteralNode) *NamedWindowNode {
+func (mgr *SelectManager) Window(node SqlLiteralNode) *NamedWindowNode {
 	if mgr.Ctx.Windows == nil {
 		mgr.Ctx.Windows = &[]Visitable{}
 	}
-	window := &NamedWindowNode{Name: a}
+	window := &NamedWindowNode{Name: node}
 	*mgr.Ctx.Windows = append(*mgr.Ctx.Windows, window)
 	return window
 }
