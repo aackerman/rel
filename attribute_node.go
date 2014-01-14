@@ -205,46 +205,52 @@ func (node AttributeNode) NotEqAll(visitable ...Visitable) *GroupingNode {
 	return node.GroupAll(visitable...)
 }
 
-func (node AttributeNode) DoesNotMatch(v Visitable) *DoesNotMatchNode {
+func (node AttributeNode) DoesNotMatch(literal SqlLiteralNode) *DoesNotMatchNode {
+	var v Visitable = &QuotedNode{Raw: literal.Raw}
 	return &DoesNotMatchNode{
 		Left:  node,
 		Right: v,
 	}
 }
 
-func (node AttributeNode) DoesNotMatchAny(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.DoesNotMatch(v)
+func (node AttributeNode) DoesNotMatchAny(literals ...SqlLiteralNode) *GroupingNode {
+	visitables := make([]Visitable, len(literals))
+	for i, literal := range literals {
+		visitables[i] = node.DoesNotMatch(literal)
 	}
-	return node.GroupAny(visitable...)
+	return node.GroupAny(visitables...)
 }
 
-func (node AttributeNode) DoesNotMatchAll(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.DoesNotMatch(v)
+func (node AttributeNode) DoesNotMatchAll(literals ...SqlLiteralNode) *GroupingNode {
+	visitables := make([]Visitable, len(literals))
+	for i, literal := range literals {
+		visitables[i] = node.DoesNotMatch(literal)
 	}
-	return node.GroupAll(visitable...)
+	return node.GroupAll(visitables...)
 }
 
-func (node AttributeNode) Matches(v Visitable) *MatchesNode {
+func (node AttributeNode) Matches(literal SqlLiteralNode) *MatchesNode {
+	var v Visitable = &QuotedNode{Raw: literal.Raw}
 	return &MatchesNode{
 		Left:  node,
 		Right: v,
 	}
 }
 
-func (node AttributeNode) MatchesAny(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.Matches(v)
+func (node AttributeNode) MatchesAny(literals ...SqlLiteralNode) *GroupingNode {
+	visitables := make([]Visitable, len(literals))
+	for i, literal := range literals {
+		visitables[i] = node.Matches(literal)
 	}
-	return node.GroupAny(visitable...)
+	return node.GroupAny(visitables...)
 }
 
-func (node AttributeNode) MatchesAll(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.Matches(v)
+func (node AttributeNode) MatchesAll(literals ...SqlLiteralNode) *GroupingNode {
+	visitables := make([]Visitable, len(literals))
+	for i, literal := range literals {
+		visitables[i] = node.Matches(literal)
 	}
-	return node.GroupAll(visitable...)
+	return node.GroupAll(visitables...)
 }
 
 func (node AttributeNode) GroupAny(visitable ...Visitable) *GroupingNode {
