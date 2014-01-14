@@ -41,8 +41,8 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		return v.VisitSqlLiteralNode(*val)
 	case JoinSource:
 		return v.VisitJoinSourceNode(val)
-	case EqualityNode:
-		return v.VisitEqualityNode(val)
+	case *EqualityNode:
+		return v.VisitEqualityNode(*val)
 	case HavingNode:
 		return v.VisitHavingNode(val)
 	case AttributeNode:

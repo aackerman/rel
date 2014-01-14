@@ -13,8 +13,8 @@ func NewAttributeNode(v Visitable, name string) AttributeNode {
 	}
 }
 
-func (node AttributeNode) Eq(v Visitable) EqualityNode {
-	return NewEqualityNode(node, v)
+func (node AttributeNode) Eq(visitable Visitable) *EqualityNode {
+	return &EqualityNode{Left: node, Right: visitable}
 }
 
 func (node AttributeNode) EqAny(visitable ...Visitable) *GroupingNode {
