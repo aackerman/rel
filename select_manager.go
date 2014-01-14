@@ -23,207 +23,198 @@ func NewSelectManager(e Engine, t *Table) *SelectManager {
 	return &manager
 }
 
-func (s *SelectManager) ToSql() string {
-	return s.Engine.Visitor().Accept(s.Ast)
+func (mgr *SelectManager) ToSql() string {
+	return mgr.Engine.Visitor().Accept(mgr.Ast)
 }
 
-func (s *SelectManager) Project(projections ...Visitable) *SelectManager {
+func (mgr *SelectManager) Project(projections ...Visitable) *SelectManager {
 	for _, projection := range projections {
-		if s.Ctx.Projections == nil {
-			nodeslice := make([]Visitable, 0)
-			s.Ctx.Projections = &nodeslice
+		if mgr.Ctx.Projections == nil {
+			mgr.Ctx.Projections = &[]Visitable{}
 		}
 
-		if s.Ctx.Projections != nil {
-			*s.Ctx.Projections = append(*s.Ctx.Projections, projection)
-		}
+		*mgr.Ctx.Projections = append(*mgr.Ctx.Projections, projection)
 	}
-	return s
+	return mgr
 }
 
-func (s *SelectManager) From(t *Table) *SelectManager {
-	if t != nil {
-		var v Visitable = t
-		s.Ctx.Source.Left = v
+func (mgr *SelectManager) From(table *Table) *SelectManager {
+	if table != nil {
+		var visitable Visitable = table
+		mgr.Ctx.Source.Left = visitable
 	}
-	return s
+	return mgr
 }
 
-func (s *SelectManager) As(n SqlLiteralNode) *TableAliasNode {
-	grouping := new(GroupingNode)
-	grouping.Expr = append(grouping.Expr, s.Ast)
-	return &TableAliasNode{Relation: grouping, Name: n}
+func (mgr *SelectManager) As(node SqlLiteralNode) *TableAliasNode {
+	return &TableAliasNode{
+		Relation: &GroupingNode{Expr: []Visitable{mgr.Ast}},
+		Name:     node,
+	}
 }
 
-func (s *SelectManager) On(a ...Visitable) *SelectManager {
-	right := s.Ctx.Source.Right
+func (mgr *SelectManager) On(visitables ...Visitable) *SelectManager {
+	right := mgr.Ctx.Source.Right
 
 	if len(right) > 0 {
 		last := right[len(right)-1]
 		switch val := last.(type) {
 		case *InnerJoinNode:
-			val.Right = NewOnNode(s.collapse(a...))
+			val.Right = NewOnNode(mgr.collapse(visitables...))
 		case *OuterJoinNode:
-			val.Right = NewOnNode(s.collapse(a...))
+			val.Right = NewOnNode(mgr.collapse(visitables...))
 		default:
 			log.Fatal("Unable to call On with input type %T", val)
 		}
 	}
 
-	return s
+	return mgr
 }
 
-func (s *SelectManager) Join(right Visitable) *SelectManager {
-	return s.InnerJoin(right)
+func (mgr *SelectManager) Join(right Visitable) *SelectManager {
+	return mgr.InnerJoin(right)
 }
 
-func (s *SelectManager) InnerJoin(join Visitable) *SelectManager {
-	s.Ctx.Source.Right = append(s.Ctx.Source.Right, &InnerJoinNode{Left: join})
-	return s
+func (mgr *SelectManager) InnerJoin(visitable Visitable) *SelectManager {
+	mgr.Ctx.Source.Right = append(mgr.Ctx.Source.Right, &InnerJoinNode{Left: visitable})
+	return mgr
 }
 
-func (s *SelectManager) OuterJoin(right Visitable) *SelectManager {
-	return s
+// FIXME: Not Implmented yet
+func (mgr *SelectManager) OuterJoin(right Visitable) *SelectManager {
+	return mgr
 }
 
-func (s *SelectManager) StringJoin(right Visitable) *SelectManager {
-	return s
+// FIXME: Not Implmented yet
+func (mgr *SelectManager) StringJoin(right Visitable) *SelectManager {
+	return mgr
 }
 
-func (s *SelectManager) Lock() *SelectManager {
-	s.LockForUpdate()
-	return s
+func (mgr *SelectManager) Lock() *SelectManager {
+	mgr.LockForUpdate()
+	return mgr
 }
 
-func (s *SelectManager) LockForUpdate() *SelectManager {
-	s.Ast.Lock = NewLockNode(Sql("FOR UPDATE"))
-	return s
+func (mgr *SelectManager) LockForUpdate() *SelectManager {
+	mgr.Ast.Lock = NewLockNode(Sql("FOR UPDATE"))
+	return mgr
 }
 
-func (s *SelectManager) Take(i int) *SelectManager {
-	limit := NewLimitNode(Sql(i))
-	s.Ast.Limit = &limit
-	return s
+func (mgr *SelectManager) Take(i int) *SelectManager {
+	mgr.Ast.Limit = NewLimitNode(Sql(i))
+	return mgr
 }
 
-func (s *SelectManager) Exists() *ExistsNode {
-	return NewExistsNode(s.Ast)
+func (mgr *SelectManager) Exists() *ExistsNode {
+	return NewExistsNode(mgr.Ast)
 }
 
-func (s *SelectManager) Order(exprs ...Visitable) *SelectManager {
-	if len(exprs) > 0 {
-		if s.Ast.Orders == nil {
-			orders := make([]Visitable, 0)
-			s.Ast.Orders = &orders
+func (mgr *SelectManager) Order(expressions ...Visitable) *SelectManager {
+	if len(expressions) > 0 {
+		if mgr.Ast.Orders == nil {
+			mgr.Ast.Orders = &[]Visitable{}
 		}
-		for _, expr := range exprs {
-			*s.Ast.Orders = append(*s.Ast.Orders, expr)
+		for _, expression := range expressions {
+			*mgr.Ast.Orders = append(*mgr.Ast.Orders, expression)
 		}
 	}
-	return s
+	return mgr
 }
 
-func (s *SelectManager) Where(n Visitable) *SelectManager {
-	if s.Ctx.Wheres == nil {
-		wheres := make([]Visitable, 0)
-		s.Ctx.Wheres = &wheres
+func (mgr *SelectManager) Where(n Visitable) *SelectManager {
+	if mgr.Ctx.Wheres == nil {
+		mgr.Ctx.Wheres = &[]Visitable{}
 	}
 
 	if expr, ok := n.(SelectManager); ok {
-		*s.Ctx.Wheres = append(*s.Ctx.Wheres, expr.Ast)
+		*mgr.Ctx.Wheres = append(*mgr.Ctx.Wheres, expr.Ast)
 	} else {
-		*s.Ctx.Wheres = append(*s.Ctx.Wheres, n)
+		*mgr.Ctx.Wheres = append(*mgr.Ctx.Wheres, n)
 	}
 
-	return s
+	return mgr
 }
 
-func (s *SelectManager) Group(columns ...Visitable) *SelectManager {
-	var group GroupNode
+func (mgr *SelectManager) Group(columns ...Visitable) *SelectManager {
 	if len(columns) > 0 {
-		if s.Ctx.Groups == nil {
-			groups := make([]GroupNode, 0)
-			s.Ctx.Groups = &groups
+		if mgr.Ctx.Groups == nil {
+			mgr.Ctx.Groups = &[]GroupNode{}
 		}
 		for _, column := range columns {
-			group = NewGroupNode(column)
-			*s.Ctx.Groups = append(*s.Ctx.Groups, group)
+			*mgr.Ctx.Groups = append(*mgr.Ctx.Groups, NewGroupNode(column))
 		}
 	}
-	return s
+	return mgr
 }
 
-func (s *SelectManager) Intersect(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
-	return NewMultiStatementManager(s.Engine).Intersect(stmt1, stmt2)
+func (mgr *SelectManager) Intersect(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
+	return NewMultiStatementManager(mgr.Engine).Intersect(stmt1, stmt2)
 }
 
-func (s *SelectManager) Union(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
-	return NewMultiStatementManager(s.Engine).Union(stmt1, stmt2)
+func (mgr *SelectManager) Union(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
+	return NewMultiStatementManager(mgr.Engine).Union(stmt1, stmt2)
 }
 
-func (s *SelectManager) UnionAll(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
-	return NewMultiStatementManager(s.Engine).UnionAll(stmt1, stmt2)
+func (mgr *SelectManager) UnionAll(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
+	return NewMultiStatementManager(mgr.Engine).UnionAll(stmt1, stmt2)
 }
 
-func (s *SelectManager) Except(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
-	return NewMultiStatementManager(s.Engine).Except(stmt1, stmt2)
+func (mgr *SelectManager) Except(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
+	return NewMultiStatementManager(mgr.Engine).Except(stmt1, stmt2)
 }
 
-func (s *SelectManager) Skip(i int) *SelectManager {
-	offset := NewOffsetNode(Sql(i))
-	s.Ast.Offset = &offset
-	return s
+func (mgr *SelectManager) Skip(i int) *SelectManager {
+	mgr.Ast.Offset = NewOffsetNode(Sql(i))
+	return mgr
 }
 
-func (s *SelectManager) Offset(i int) *SelectManager {
-	return s.Skip(i)
+func (mgr *SelectManager) Offset(i int) *SelectManager {
+	return mgr.Skip(i)
 }
 
-func (s *SelectManager) Having(a ...Visitable) *SelectManager {
-	having := NewHavingNode(s.collapse(a...))
-	s.Ctx.Having = &having
-	return s
+func (mgr *SelectManager) Having(visitables ...Visitable) *SelectManager {
+	mgr.Ctx.Having = NewHavingNode(mgr.collapse(visitables...))
+	return mgr
 }
 
-func (s *SelectManager) Distinct() *SelectManager {
-	s.Ctx.SetQuanifier = &DistinctNode{}
-	return s
+func (mgr *SelectManager) Distinct() *SelectManager {
+	mgr.Ctx.SetQuanifier = &DistinctNode{}
+	return mgr
 }
 
-func (s *SelectManager) NotDistinct() *SelectManager {
-	s.Ctx.SetQuanifier = nil
-	return s
+func (mgr *SelectManager) NotDistinct() *SelectManager {
+	mgr.Ctx.SetQuanifier = nil
+	return mgr
 }
 
-func (s *SelectManager) With(node Visitable) *SelectManager {
-	s.Ast.With = &WithNode{Expr: node}
-	return s
+func (mgr *SelectManager) With(node Visitable) *SelectManager {
+	mgr.Ast.With = &WithNode{Expr: node}
+	return mgr
 }
 
-func (s *SelectManager) WithRecursive(node Visitable) *SelectManager {
-	s.Ast.With = &WithRecursiveNode{Expr: node}
-	return s
+func (mgr *SelectManager) WithRecursive(node Visitable) *SelectManager {
+	mgr.Ast.With = &WithRecursiveNode{Expr: node}
+	return mgr
 }
 
-func (s *SelectManager) Window(a SqlLiteralNode) *NamedWindowNode {
-	if s.Ctx.Windows == nil {
-		slice := make([]Visitable, 0)
-		s.Ctx.Windows = &slice
+func (mgr *SelectManager) Window(a SqlLiteralNode) *NamedWindowNode {
+	if mgr.Ctx.Windows == nil {
+		mgr.Ctx.Windows = &[]Visitable{}
 	}
 	window := &NamedWindowNode{Name: a}
-	*s.Ctx.Windows = append(*s.Ctx.Windows, window)
+	*mgr.Ctx.Windows = append(*mgr.Ctx.Windows, window)
 	return window
 }
 
-func (s *SelectManager) collapse(a ...Visitable) Visitable {
+func (mgr *SelectManager) collapse(visitables ...Visitable) Visitable {
 	var v Visitable
 
 	// use the first Node if there is only one
 	// else create and And node
-	if len(a) == 1 {
-		v = a[0]
+	if len(visitables) == 1 {
+		v = visitables[0]
 	} else {
-		v = s.NewAndNode(a...)
+		v = mgr.NewAndNode(visitables...)
 	}
 	return v
 }

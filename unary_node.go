@@ -35,20 +35,20 @@ func NewGroupNode(n Visitable) GroupNode {
 	return GroupNode{Expr: n}
 }
 
-func NewHavingNode(n Visitable) HavingNode {
-	return HavingNode{Expr: n}
+func NewHavingNode(n Visitable) *HavingNode {
+	return &HavingNode{Expr: n}
 }
 
-func NewLimitNode(n Visitable) LimitNode {
-	return LimitNode{Expr: n}
+func NewLimitNode(n Visitable) *LimitNode {
+	return &LimitNode{Expr: n}
 }
 
 func NewNotNode(n Visitable) NotNode {
 	return NotNode{Expr: n}
 }
 
-func NewOffsetNode(n Visitable) OffsetNode {
-	return OffsetNode{Expr: n}
+func NewOffsetNode(n Visitable) *OffsetNode {
+	return &OffsetNode{Expr: n}
 }
 
 func NewOnNode(n Visitable) OnNode {
