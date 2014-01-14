@@ -15,8 +15,7 @@ type NamedWindowNode struct {
 
 func (node *NamedWindowNode) Order(v Visitable) {
 	if node.Orders == nil {
-		slice := make([]Visitable, 0)
-		node.Orders = &slice
+		node.Orders = &[]Visitable{}
 	}
 	*node.Orders = append(*node.Orders, v)
 }
