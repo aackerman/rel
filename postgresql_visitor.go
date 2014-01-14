@@ -8,12 +8,12 @@ type PostgreSQLVisitor struct {
 	ToSqlVisitor
 }
 
-func (v PostgreSQLVisitor) Accept(a Visitable) string {
-	return v.Visit(a)
+func (v PostgreSQLVisitor) Accept(visitable Visitable) string {
+	return v.Visit(visitable)
 }
 
-func (v PostgreSQLVisitor) Visit(a Visitable) string {
-	switch val := a.(type) {
+func (v PostgreSQLVisitor) Visit(visitable Visitable) string {
+	switch val := visitable.(type) {
 	case *MatchesNode:
 		return v.VisitMatchesNode(*val)
 	case *DoesNotMatchNode:
@@ -21,7 +21,7 @@ func (v PostgreSQLVisitor) Visit(a Visitable) string {
 	case *DistinctOnNode:
 		return v.VisitDistinctOnNode(*val)
 	default:
-		return v.ToSqlVisitor.Visit(a)
+		return v.ToSqlVisitor.Visit(visitable)
 	}
 }
 
