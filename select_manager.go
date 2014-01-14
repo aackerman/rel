@@ -64,7 +64,7 @@ func (mgr *SelectManager) On(visitables ...Visitable) *SelectManager {
 		case *OuterJoinNode:
 			val.Right = NewOnNode(mgr.collapse(visitables...))
 		default:
-			log.Fatal("Unable to call On with input type %T", val)
+			log.Fatalf("Unable to call On with input type %T", val)
 		}
 	}
 
