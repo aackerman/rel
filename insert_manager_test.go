@@ -14,7 +14,7 @@ func TestInsertManager(t *testing.T) {
 }
 
 func TestInsertManagerCreateValues(t *testing.T) {
-	mgr := NewInsertManager(TableEngine)
+	mgr := NewInsertManager(DefaultEngine)
 	values := make([]interface{}, 0)
 	values = append(values, Star())
 	columns := make([]AttributeNode, 0)
@@ -30,7 +30,7 @@ func TestInsertManagerCreateValues(t *testing.T) {
 
 func TestInsertManagerInsertsFalse(t *testing.T) {
 	users := NewTable("users")
-	mgr := NewInsertManager(TableEngine)
+	mgr := NewInsertManager(DefaultEngine)
 	mgr.Ast.Relation = users
 	mgr.Insert(users.Attr("bool"), false)
 	sql := mgr.ToSql()

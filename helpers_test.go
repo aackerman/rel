@@ -12,8 +12,6 @@ type ConnectionPool struct {
 	conn *Connection
 }
 
-type Connection struct{}
-
 func (e BaseEngine) Connection() *Connection {
 	return e.pool.Connection()
 }
@@ -34,14 +32,6 @@ func (e BaseEngine) QuoteTableName(name string) string {
 }
 
 func (e BaseEngine) QuoteColumnName(name string) string {
-	return "\"" + name + "\""
-}
-
-func (c *Connection) QuoteTableName(name string) string {
-	return "\"" + name + "\""
-}
-
-func (c *Connection) QuoteColumnName(name string) string {
 	return "\"" + name + "\""
 }
 

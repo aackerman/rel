@@ -13,10 +13,10 @@ type Table struct {
 	BaseVisitable
 }
 
-var TableEngine Engine = NewEngine()
+var DefaultEngine Engine
 
 func NewTable(name string) *Table {
-	return &Table{Name: name, Engine: TableEngine}
+	return &Table{Name: name, Engine: DefaultEngine}
 }
 
 func (t *Table) Project(a ...Visitable) *SelectManager {
@@ -80,7 +80,7 @@ func (t *Table) SelectManager(n *Table) *SelectManager {
 }
 
 func (t *Table) InsertManager() *InsertManager {
-	return NewInsertManager(TableEngine)
+	return NewInsertManager(DefaultEngine)
 }
 
 func (t *Table) SetTableAlias(name string) {

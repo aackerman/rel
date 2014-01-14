@@ -5,6 +5,7 @@ import (
 )
 
 func TestAttributeNotEqSql(t *testing.T) {
+	Register("BASE", NewEngine())
 	users := NewTable("users")
 	mgr := users.Select(users.Attr("id"))
 	mgr.Where(users.Attr("id").NotEq(Sql(10)))

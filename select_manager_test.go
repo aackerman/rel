@@ -26,7 +26,7 @@ func TestSelectManagerExists(t *testing.T) {
 	table := NewTable("users")
 	manager := table.From(table)
 	manager.Project(Sql("*"))
-	m2 := NewSelectManager(TableEngine, nil)
+	m2 := NewSelectManager(DefaultEngine, nil)
 	m2.Project(manager.Exists())
 	sql := m2.ToSql()
 	expected := fmt.Sprintf("SELECT EXISTS (%s)", manager.ToSql())
@@ -40,7 +40,7 @@ func TestSelectManagerExistsAs(t *testing.T) {
 	table := NewTable("users")
 	manager := table.From(table)
 	manager.Project(Sql("*"))
-	m2 := NewSelectManager(TableEngine, nil)
+	m2 := NewSelectManager(DefaultEngine, nil)
 	m2.Project(manager.Exists().As(Sql("foo")))
 	sql := m2.ToSql()
 	expected := fmt.Sprintf("SELECT EXISTS (%s) AS foo", manager.ToSql())
@@ -62,10 +62,10 @@ func TestSelectManagerOffset(t *testing.T) {
 
 func TestSelectManagerUnion(t *testing.T) {
 	table := NewTable("users")
-	m1 := NewSelectManager(TableEngine, table)
+	m1 := NewSelectManager(DefaultEngine, table)
 	m1.Project(Star())
 	m1.Where(table.Attr("age").Lt(Sql(18)))
-	m2 := NewSelectManager(TableEngine, table)
+	m2 := NewSelectManager(DefaultEngine, table)
 	m2.Project(Star())
 	m2.Where(table.Attr("age").Gt(Sql(99)))
 	mgr := m1.Union(m1.Ast, m2.Ast)
@@ -79,10 +79,10 @@ func TestSelectManagerUnion(t *testing.T) {
 
 func TestSelectManagerUnionAll(t *testing.T) {
 	table := NewTable("users")
-	m1 := NewSelectManager(TableEngine, table)
+	m1 := NewSelectManager(DefaultEngine, table)
 	m1.Project(Star())
 	m1.Where(table.Attr("age").Lt(Sql(18)))
-	m2 := NewSelectManager(TableEngine, table)
+	m2 := NewSelectManager(DefaultEngine, table)
 	m2.Project(Star())
 	m2.Where(table.Attr("age").Gt(Sql(99)))
 	mgr := m1.UnionAll(m1.Ast, m2.Ast)
@@ -96,10 +96,10 @@ func TestSelectManagerUnionAll(t *testing.T) {
 
 func TestSelectManagerIntersect(t *testing.T) {
 	table := NewTable("users")
-	m1 := NewSelectManager(TableEngine, table)
+	m1 := NewSelectManager(DefaultEngine, table)
 	m1.Project(Star())
 	m1.Where(table.Attr("age").Lt(Sql(18)))
-	m2 := NewSelectManager(TableEngine, table)
+	m2 := NewSelectManager(DefaultEngine, table)
 	m2.Project(Star())
 	m2.Where(table.Attr("age").Gt(Sql(99)))
 	mgr := m1.Intersect(m1.Ast, m2.Ast)
@@ -113,10 +113,10 @@ func TestSelectManagerIntersect(t *testing.T) {
 
 func TestSelectManagerExcept(t *testing.T) {
 	table := NewTable("users")
-	m1 := NewSelectManager(TableEngine, table)
+	m1 := NewSelectManager(DefaultEngine, table)
 	m1.Project(Star())
 	m1.Where(table.Attr("age").Lt(Sql(99)))
-	m2 := NewSelectManager(TableEngine, table)
+	m2 := NewSelectManager(DefaultEngine, table)
 	m2.Project(Star())
 	m2.Where(table.Attr("age").Lt(Sql(50)))
 	mgr := m1.Except(m1.Ast, m2.Ast)
@@ -443,17 +443,17 @@ func TestSelectManagerWithRecursiveSupport(t *testing.T) {
 	replies := NewTable("replies")
 	repliesId := replies.Attr("id")
 
-	recursiveTerm := NewSelectManager(TableEngine, nil)
+	recursiveTerm := NewSelectManager(DefaultEngine, nil)
 	recursiveTerm.From(comments).Project(commentsId, commentsParentId).Where(commentsId.Eq(Sql(42)))
 
-	nonRecursiveTerm := NewSelectManager(TableEngine, nil)
+	nonRecursiveTerm := NewSelectManager(DefaultEngine, nil)
 	nonRecursiveTerm.From(comments).Project(commentsId, commentsParentId).Join(replies).On(commentsParentId.Eq(repliesId))
 
 	union := recursiveTerm.Union(recursiveTerm.Ast, nonRecursiveTerm.Ast)
 
 	asStmt := &AsNode{Left: replies, Right: union}
 
-	mgr := NewSelectManager(TableEngine, nil)
+	mgr := NewSelectManager(DefaultEngine, nil)
 	mgr.WithRecursive(asStmt).From(replies).Project(Star())
 
 	sql := mgr.ToSql()

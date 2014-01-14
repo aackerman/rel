@@ -22,13 +22,13 @@ const (
 	DISTINCT = "DISTINCT"
 )
 
-func (v ToSqlVisitor) Accept(a Visitable) string {
-	return v.Visit(a)
+func (v ToSqlVisitor) Accept(visitable Visitable) string {
+	return v.Visit(visitable)
 }
 
 // FIXME: Only visit pointers to visitables
-func (v ToSqlVisitor) Visit(a Visitable) string {
-	switch val := a.(type) {
+func (v ToSqlVisitor) Visit(visitable Visitable) string {
+	switch val := visitable.(type) {
 	case nil:
 		return v.VisitNil()
 	case SelectStatementNode:
@@ -160,7 +160,7 @@ func (v ToSqlVisitor) Visit(a Visitable) string {
 		return v.VisitInfixOperationNode(*val)
 	default:
 		debug.PrintStack()
-		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", a)
+		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", visitable)
 		return ""
 	}
 }
