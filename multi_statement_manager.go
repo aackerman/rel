@@ -1,5 +1,7 @@
 package rel
 
+// A TreeManager allowing for EXCEPT, INTERSECT,
+// UNION and UNION ALL statements
 type MultiStatementManager struct {
 	Engine Engine
 	Ast    Visitable
