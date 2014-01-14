@@ -15,7 +15,7 @@ type SelectCoreNode struct {
 func NewSelectCoreNode() SelectCoreNode {
 	return SelectCoreNode{
 		Source: &JoinSource{
-			Right: make([]Visitable, 0),
+			Right: []Visitable{},
 		},
 	}
 }

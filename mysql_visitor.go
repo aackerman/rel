@@ -8,16 +8,16 @@ type MysqlVisitor struct {
 	ToSqlVisitor
 }
 
-func (v MysqlVisitor) Accept(a Visitable) string {
-	return v.Visit(a)
+func (v MysqlVisitor) Accept(visitable Visitable) string {
+	return v.Visit(visitable)
 }
 
-func (v MysqlVisitor) Visit(a Visitable) string {
-	switch val := a.(type) {
+func (v MysqlVisitor) Visit(visitable Visitable) string {
+	switch val := visitable.(type) {
 	case *BinNode:
 		return v.VisitBinNode(*val)
 	default:
-		return v.ToSqlVisitor.Visit(a)
+		return v.ToSqlVisitor.Visit(visitable)
 	}
 }
 
