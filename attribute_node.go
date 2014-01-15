@@ -14,267 +14,149 @@ func NewAttributeNode(v Visitable, name string) AttributeNode {
 }
 
 func (node AttributeNode) Eq(visitable Visitable) *EqualityNode {
-	return &EqualityNode{Left: node, Right: visitable}
+	return predicationEq(node, visitable)
 }
 
-func (node AttributeNode) EqAny(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.Eq(v)
-	}
-	return node.GroupAny(visitable...)
+func (node AttributeNode) EqAny(visitables ...Visitable) *GroupingNode {
+	return predicationEqAny(node, visitables...)
 }
 
-func (node AttributeNode) EqAll(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.Eq(v)
-	}
-	return node.GroupAll(visitable...)
+func (node AttributeNode) EqAll(visitables ...Visitable) *GroupingNode {
+	return predicationEqAll(node, visitables...)
 }
 
-func (node AttributeNode) Lt(v Visitable) *LessThanNode {
-	return &LessThanNode{Left: node, Right: v}
+func (node AttributeNode) Lt(visitable Visitable) *LessThanNode {
+	return predicationLt(node, visitable)
 }
 
-func (node AttributeNode) LtAny(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.Lt(v)
-	}
-	return node.GroupAny(visitable...)
+func (node AttributeNode) LtAny(visitables ...Visitable) *GroupingNode {
+	return predicationLtAny(node, visitables...)
 }
 
-func (node AttributeNode) LtEqAny(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.LtEq(v)
-	}
-	return node.GroupAny(visitable...)
-}
-
-func (node AttributeNode) LtEqAll(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.LtEq(v)
-	}
-	return node.GroupAll(visitable...)
-}
-
-func (node AttributeNode) LtAll(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.Lt(v)
-	}
-	return node.GroupAll(visitable...)
+func (node AttributeNode) LtAll(visitables ...Visitable) *GroupingNode {
+	return predicationLtAll(node, visitables...)
 }
 
 func (node AttributeNode) LtEq(v Visitable) *LessThanOrEqualNode {
 	return &LessThanOrEqualNode{Left: node, Right: v}
 }
 
-func (node AttributeNode) Gt(v Visitable) *GreaterThanNode {
-	return &GreaterThanNode{Left: node, Right: v}
+func (node AttributeNode) LtEqAny(visitables ...Visitable) *GroupingNode {
+	return predicationLtEqAny(node, visitables...)
 }
 
-func (node AttributeNode) GtAny(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.Gt(v)
-	}
-	return node.GroupAny(visitable...)
+func (node AttributeNode) LtEqAll(visitables ...Visitable) *GroupingNode {
+	return predicationLtEqAll(node, visitables...)
 }
 
-func (node AttributeNode) GtEqAny(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.GtEq(v)
-	}
-	return node.GroupAny(visitable...)
+func (node AttributeNode) Gt(visitable Visitable) *GreaterThanNode {
+	return predicationGt(node, visitable)
 }
 
-func (node AttributeNode) GtEqAll(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.GtEq(v)
-	}
-	return node.GroupAll(visitable...)
+func (node AttributeNode) GtAny(visitables ...Visitable) *GroupingNode {
+	return predicationGtAny(node, visitables...)
 }
 
-func (node AttributeNode) GtAll(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.Gt(v)
-	}
-	return node.GroupAll(visitable...)
+func (node AttributeNode) GtAll(visitables ...Visitable) *GroupingNode {
+	return predicationGtAll(node, visitables...)
 }
 
-func (node AttributeNode) GtEq(v Visitable) *GreaterThanOrEqualNode {
-	return &GreaterThanOrEqualNode{Left: node, Right: v}
+func (node AttributeNode) GtEq(visitable Visitable) *GreaterThanOrEqualNode {
+	return predicationGtEq(node, visitable)
+}
+
+func (node AttributeNode) GtEqAny(visitables ...Visitable) *GroupingNode {
+	return predicationGtEqAny(node, visitables...)
+}
+
+func (node AttributeNode) GtEqAll(visitables ...Visitable) *GroupingNode {
+	return predicationGtEqAll(node, visitables...)
 }
 
 func (node AttributeNode) Desc() *DescendingNode {
-	return &DescendingNode{Expr: node}
+	return predicationDesc(node)
 }
 
 func (node AttributeNode) Asc() *AscendingNode {
-	return &AscendingNode{Expr: node}
+	return predicationAsc(node)
 }
 
 func (node AttributeNode) Count() *CountNode {
-	return &CountNode{Expressions: []Visitable{node}}
+	return predicationCount(node)
 }
 
 func (node AttributeNode) Extract(literal SqlLiteralNode) *ExtractNode {
-	return &ExtractNode{Expressions: []Visitable{node}, Field: &literal}
+	return predicationExtract(node, literal)
 }
 
-func (node AttributeNode) As(v Visitable) *AsNode {
-	return &AsNode{
-		Left:  node,
-		Right: v,
-	}
+func (node AttributeNode) As(visitable Visitable) *AsNode {
+	return predicationAs(node, visitable)
 }
 
 func (node AttributeNode) In(visitables []Visitable) Visitable {
-	in := &InNode{Left: node}
-	for _, v := range visitables {
-		switch val := v.(type) {
-		case SelectManager:
-			in.Right = append(in.Right, val.Ast)
-		default:
-			in.Right = append(in.Right, v)
-		}
-	}
-	return in
-}
-
-func (node AttributeNode) NotIn(visitables []Visitable) Visitable {
-	notin := &NotInNode{Left: node}
-	for _, v := range visitables {
-		switch val := v.(type) {
-		case SelectManager:
-			notin.Right = append(notin.Right, val.Ast)
-		default:
-			notin.Right = append(notin.Right, v)
-		}
-	}
-	return notin
-}
-
-func (node AttributeNode) NotInAny(visitableslices ...[]Visitable) Visitable {
-	visitables := make([]Visitable, len(visitableslices))
-	for i, visitableslice := range visitableslices {
-		visitables[i] = node.NotIn(visitableslice)
-	}
-	return node.GroupAny(visitables...)
-}
-
-func (node AttributeNode) NotInAll(visitableslices ...[]Visitable) Visitable {
-	visitables := make([]Visitable, len(visitableslices))
-	for i, visitableslice := range visitableslices {
-		visitables[i] = node.NotIn(visitableslice)
-	}
-	return node.GroupAll(visitables...)
+	return predicationIn(node, visitables)
 }
 
 func (node AttributeNode) InAny(visitableslices ...[]Visitable) Visitable {
-	visitables := make([]Visitable, len(visitableslices))
-	for i, visitableslice := range visitableslices {
-		visitables[i] = node.In(visitableslice)
-	}
-	return node.GroupAny(visitables...)
+	return predicationInAny(node, visitableslices...)
 }
 
 func (node AttributeNode) InAll(visitableslices ...[]Visitable) Visitable {
-	visitables := make([]Visitable, len(visitableslices))
-	for i, visitableslice := range visitableslices {
-		visitables[i] = node.In(visitableslice)
-	}
-	return node.GroupAll(visitables...)
+	return predicationInAll(node, visitableslices...)
 }
 
-func (node AttributeNode) NotEq(v Visitable) *NotEqualNode {
-	return &NotEqualNode{
-		Left:  node,
-		Right: v,
-	}
+func (node AttributeNode) NotIn(visitables []Visitable) Visitable {
+	return predicationNotIn(node, visitables)
 }
 
-func (node AttributeNode) NotEqual(v Visitable) *NotEqualNode {
-	return node.NotEq(v)
+func (node AttributeNode) NotInAny(visitableslices ...[]Visitable) Visitable {
+	return predicationNotInAny(node, visitableslices...)
 }
 
-func (node AttributeNode) NotEqAny(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.NotEq(v)
-	}
-	return node.GroupAny(visitable...)
+func (node AttributeNode) NotInAll(visitableslices ...[]Visitable) Visitable {
+	return predicationNotInAll(node, visitableslices...)
 }
 
-func (node AttributeNode) NotEqAll(visitable ...Visitable) *GroupingNode {
-	for i, v := range visitable {
-		visitable[i] = node.NotEq(v)
-	}
-	return node.GroupAll(visitable...)
+func (node AttributeNode) NotEq(visitable Visitable) *NotEqualNode {
+	return predicationNotEq(node, visitable)
+}
+
+func (node AttributeNode) NotEqAny(visitables ...Visitable) *GroupingNode {
+	return predicationNotEqAny(node, visitables...)
+}
+
+func (node AttributeNode) NotEqAll(visitables ...Visitable) *GroupingNode {
+	return predicationNotEqAll(node, visitables...)
 }
 
 func (node AttributeNode) DoesNotMatch(literal SqlLiteralNode) *DoesNotMatchNode {
-	var v Visitable = &QuotedNode{Raw: literal.Raw}
-	return &DoesNotMatchNode{
-		Left:  node,
-		Right: v,
-	}
+	return predicationDoesNotMatch(node, literal)
 }
 
 func (node AttributeNode) DoesNotMatchAny(literals ...SqlLiteralNode) *GroupingNode {
-	visitables := make([]Visitable, len(literals))
-	for i, literal := range literals {
-		visitables[i] = node.DoesNotMatch(literal)
-	}
-	return node.GroupAny(visitables...)
+	return predicationDoesNotMatchAny(node, literals...)
 }
 
 func (node AttributeNode) DoesNotMatchAll(literals ...SqlLiteralNode) *GroupingNode {
-	visitables := make([]Visitable, len(literals))
-	for i, literal := range literals {
-		visitables[i] = node.DoesNotMatch(literal)
-	}
-	return node.GroupAll(visitables...)
+	return predicationDoesNotMatchAll(node, literals...)
 }
 
 func (node AttributeNode) Matches(literal SqlLiteralNode) *MatchesNode {
-	var v Visitable = &QuotedNode{Raw: literal.Raw}
-	return &MatchesNode{
-		Left:  node,
-		Right: v,
-	}
+	return predicationMatches(node, literal)
 }
 
 func (node AttributeNode) MatchesAny(literals ...SqlLiteralNode) *GroupingNode {
-	visitables := make([]Visitable, len(literals))
-	for i, literal := range literals {
-		visitables[i] = node.Matches(literal)
-	}
-	return node.GroupAny(visitables...)
+	return predicationMatchesAny(node, literals...)
 }
 
 func (node AttributeNode) MatchesAll(literals ...SqlLiteralNode) *GroupingNode {
-	visitables := make([]Visitable, len(literals))
-	for i, literal := range literals {
-		visitables[i] = node.Matches(literal)
-	}
-	return node.GroupAll(visitables...)
+	return predicationMatchesAll(node, literals...)
 }
 
-func (node AttributeNode) GroupAny(visitable ...Visitable) *GroupingNode {
-	grouping := new(GroupingNode)
-	if len(visitable) > 0 {
-		// unshift first node
-		m, visitable := visitable[0], visitable[1:]
-		var memo Visitable = m
-		for _, n := range visitable {
-			memo = &OrNode{Left: memo, Right: n}
-		}
-		grouping.Expr = append(grouping.Expr, memo)
-	}
-	return grouping
+func (node AttributeNode) GroupAny(visitables ...Visitable) *GroupingNode {
+	return predicationGroupAny(node, visitables...)
 }
 
-func (node AttributeNode) GroupAll(visitable ...Visitable) *GroupingNode {
-	return &GroupingNode{
-		Expr: []Visitable{
-			&AndNode{Children: &visitable},
-		},
-	}
+func (node AttributeNode) GroupAll(visitables ...Visitable) *GroupingNode {
+	return predicationGroupAll(node, visitables...)
 }
