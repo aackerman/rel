@@ -13,7 +13,7 @@ func TestBinNodeEq(t *testing.T) {
 }
 
 func TestBinNodeMysqlToSql(t *testing.T) {
-	viz := MysqlVisitor{ToSqlVisitor{conn: new(Connection)}}
+	viz := MysqlVisitor{ToSqlVisitor{Conn: new(Connection)}}
 	bin := &BinNode{Expr: Sql("zomg")}
 	sql := viz.Accept(bin)
 	if sql != "BINARY zomg" {

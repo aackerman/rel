@@ -8,7 +8,7 @@ import (
 )
 
 type ToSqlVisitor struct {
-	conn *Connection
+	Conn *Connection
 }
 
 const (
@@ -196,7 +196,12 @@ func (v ToSqlVisitor) VisitExtractNode(node ExtractNode) string {
 	buf.WriteString("EXTRACT(")
 	buf.WriteString(strings.ToUpper(node.Field.Raw))
 	buf.WriteString(" FROM ")
-	buf.WriteString(v.Visit(node.Expr))
+	for i, expression := range node.Expressions {
+		buf.WriteString(v.Visit(expression))
+		if i != len(node.Expressions)-1 {
+			buf.WriteString(", ")
+		}
+	}
 	buf.WriteString(")")
 	if node.Alias != nil {
 		buf.WriteString(" AS ")
@@ -926,18 +931,18 @@ func (v ToSqlVisitor) VisitTable(table Table) string {
 func (v ToSqlVisitor) QuoteTableName(visitable Visitable) string {
 	switch rel := visitable.(type) {
 	case Table:
-		return v.conn.QuoteTableName(rel.Name)
+		return v.Conn.QuoteTableName(rel.Name)
 	case *Table:
-		return v.conn.QuoteTableName(rel.Name)
+		return v.Conn.QuoteTableName(rel.Name)
 	case TableAliasNode:
 		if rel.Quoted == true {
-			return v.conn.QuoteTableName(rel.Name.Raw)
+			return v.Conn.QuoteTableName(rel.Name.Raw)
 		} else {
 			return rel.Name.Raw
 		}
 	case *TableAliasNode:
 		if rel.Quoted == true {
-			return v.conn.QuoteTableName(rel.Name.Raw)
+			return v.Conn.QuoteTableName(rel.Name.Raw)
 		} else {
 			return rel.Name.Raw
 		}
@@ -949,7 +954,7 @@ func (v ToSqlVisitor) QuoteTableName(visitable Visitable) string {
 }
 
 func (v ToSqlVisitor) QuoteColumnName(literal SqlLiteralNode) string {
-	return v.conn.QuoteColumnName(literal.Raw)
+	return v.Conn.QuoteColumnName(literal.Raw)
 }
 
 func (v ToSqlVisitor) VisitJoinSourceNode(node JoinSource) string {

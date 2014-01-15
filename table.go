@@ -2,6 +2,7 @@ package rel
 
 import (
 	"bytes"
+	"log"
 	"strconv"
 )
 
@@ -16,6 +17,9 @@ type Table struct {
 var DefaultEngine Engine
 
 func NewTable(name string) *Table {
+	if DefaultEngine == nil {
+		log.Fatal("Please register an engine before proceding")
+	}
 	return &Table{Name: name, Engine: DefaultEngine}
 }
 

@@ -115,6 +115,10 @@ func (node AttributeNode) Count() *CountNode {
 	return &CountNode{Expressions: []Visitable{node}}
 }
 
+func (node AttributeNode) Extract(literal SqlLiteralNode) *ExtractNode {
+	return &ExtractNode{Expressions: []Visitable{node}, Field: &literal}
+}
+
 func (node AttributeNode) As(v Visitable) *AsNode {
 	return &AsNode{
 		Left:  node,

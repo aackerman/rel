@@ -12,6 +12,9 @@ type SelectManager struct {
 }
 
 func NewSelectManager(e Engine, t *Table) *SelectManager {
+	if e == nil {
+		log.Fatal("Please register an engine before proceding")
+	}
 	stmt := NewSelectStatementNode()
 	manager := SelectManager{
 		Engine: e,

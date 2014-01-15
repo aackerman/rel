@@ -1,6 +1,7 @@
-package rel
+package rel_test
 
 import (
+	. "."
 	"testing"
 )
 

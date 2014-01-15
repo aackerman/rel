@@ -1,4 +1,12 @@
-package rel
+package rel_test
+
+import (
+	. "."
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
+
+	"testing"
+)
 
 type BaseEngine struct {
 	pool        ConnectionPool
@@ -23,7 +31,7 @@ func (e BaseEngine) Visitor() Visitor {
 func NewEngine() *BaseEngine {
 	e := new(BaseEngine)
 	e.pool = ConnectionPool{conn: new(Connection)}
-	e.visitor = ToSqlVisitor{conn: e.pool.Connection()}
+	e.visitor = ToSqlVisitor{Conn: e.pool.Connection()}
 	return e
 }
 
@@ -46,4 +54,9 @@ func (e BaseEngine) TableExists(tableName string) bool {
 
 func (p *ConnectionPool) Connection() *Connection {
 	return p.conn
+}
+
+func TestRel(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Rel Suite")
 }

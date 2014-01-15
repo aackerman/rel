@@ -1,9 +1,9 @@
 package rel
 
 type ExtractNode struct {
-	Expr  Visitable
-	Field *SqlLiteralNode
-	Alias *SqlLiteralNode
+	Expressions []Visitable
+	Field       *SqlLiteralNode
+	Alias       *SqlLiteralNode
 	BaseVisitable
 }
 

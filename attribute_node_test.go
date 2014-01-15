@@ -1,11 +1,14 @@
-package rel
+package rel_test
 
 import (
+	. "."
+	// . "github.com/onsi/ginkgo"
+	// . "github.com/onsi/gomega"
 	"testing"
 )
 
 func TestAttributeNotEqSql(t *testing.T) {
-	Register("BASE", NewEngine())
+	Register("postgresql", NewEngine())
 	users := NewTable("users")
 	mgr := users.Select(users.Attr("id"))
 	mgr.Where(users.Attr("id").NotEq(Sql(10)))
