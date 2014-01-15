@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestCoundNodeAs(t *testing.T) {
+func TestCountNodeAs(t *testing.T) {
 	table := NewTable("users")
 	mgr := table.Select(table.Attr("id").Count().As(Sql("foo")))
 	sql := mgr.ToSql()
@@ -16,7 +16,7 @@ func TestCoundNodeAs(t *testing.T) {
 	}
 }
 
-func TestCoundNodeEq(t *testing.T) {
+func TestCountNodeEq(t *testing.T) {
 	count1 := CountNode{Expressions: []Visitable{Sql("foo")}}
 	count2 := CountNode{Expressions: []Visitable{Sql("foo")}}
 	if !count1.Eq(count2) {
