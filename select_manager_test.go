@@ -7,6 +7,7 @@ import (
 )
 
 func TestSelectManagerJoinSources(t *testing.T) {
+	Register("postgresql", NewEngine())
 	t.Skip("TestSelectManagerJoinSources not implemented")
 }
 
