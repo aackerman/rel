@@ -1,33 +1,20 @@
-package rel
+package rel_test
 
 import (
-	"testing"
+	. "."
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
-func TestDeleteStatementNodeEq(t *testing.T) {
-	ds1 := DeleteStatementNode{
-		Wheres: &[]Visitable{Sql("a"), Sql("b"), Sql("c")},
-	}
+var _ = Describe("DeleteStatementNode", func() {
+	It("can be equal to other DeleteStatementNode's", func() {
+		ds1 := DeleteStatementNode{
+			Wheres: &[]Visitable{Sql("a"), Sql("b"), Sql("c")},
+		}
 
-	ds2 := DeleteStatementNode{
-		Wheres: &[]Visitable{Sql("a"), Sql("b"), Sql("c")},
-	}
-
-	if !ds1.Eq(ds2) {
-		t.Fail()
-	}
-}
-
-func TestDeleteStatementNodeNotEq(t *testing.T) {
-	ds1 := DeleteStatementNode{
-		Wheres: &[]Visitable{Sql("a"), Sql("b"), Sql("c")},
-	}
-
-	ds2 := DeleteStatementNode{
-		Wheres: &[]Visitable{Sql("1"), Sql("2"), Sql("3")},
-	}
-
-	if ds1.Eq(ds2) {
-		t.Fail()
-	}
-}
+		ds2 := DeleteStatementNode{
+			Wheres: &[]Visitable{Sql("a"), Sql("b"), Sql("c")},
+		}
+		Expect(ds1.Eq(ds2)).To(BeTrue())
+	})
+})
