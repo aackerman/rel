@@ -2,13 +2,14 @@ package rel_test
 
 import (
 	. "."
-	"testing"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
-func TestAsNodeEq(t *testing.T) {
-	as1 := AsNode{Left: Sql("foo"), Right: Sql("bar")}
-	as2 := AsNode{Left: Sql("foo"), Right: Sql("bar")}
-	if !as1.Eq(as2) {
-		t.Fail()
-	}
-}
+var _ = Describe("AsNode", func() {
+	It("can be equal to other AsNode's", func() {
+		as1 := AsNode{Left: Sql("foo"), Right: Sql("bar")}
+		as2 := AsNode{Left: Sql("foo"), Right: Sql("bar")}
+		Expect(as1.Eq(as2)).To(BeTrue())
+	})
+})
