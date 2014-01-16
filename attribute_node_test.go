@@ -6,13 +6,15 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+var users *Table
+
 var _ = Describe("AttributeNode", func() {
 	BeforeEach(func() {
 		Register("postgresql", NewEngine())
+		users = NewTable("users")
 	})
 
 	It("can use the NotEq predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").NotEq(Sql(10)))
 		sql := mgr.ToSql()
@@ -21,7 +23,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the NotEqAny predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").NotEqAny(Sql(1), Sql(2)))
 		sql := mgr.ToSql()
@@ -30,7 +31,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the NotEq predication allowing for nil input", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").NotEq(nil))
 		sql := mgr.ToSql()
@@ -39,7 +39,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the NotEqAll predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").NotEqAll(Sql(1), Sql(2)))
 		sql := mgr.ToSql()
@@ -48,7 +47,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the Gt predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").Gt(Sql(10)))
 		sql := mgr.ToSql()
@@ -57,7 +55,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the GtAny predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").GtAny(Sql(1), Sql(2)))
 		sql := mgr.ToSql()
@@ -66,7 +63,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the GtAll predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").GtAll(Sql(1), Sql(2)))
 		sql := mgr.ToSql()
@@ -75,7 +71,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the GtEq predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").GtEq(Sql(10)))
 		sql := mgr.ToSql()
@@ -84,7 +79,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the GtEqAny predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").GtEqAny(Sql(1), Sql(2)))
 		sql := mgr.ToSql()
@@ -93,7 +87,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the GtEqAll predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").GtEqAll(Sql(1), Sql(2)))
 		sql := mgr.ToSql()
@@ -102,7 +95,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the Lt predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").Lt(Sql(10)))
 		sql := mgr.ToSql()
@@ -111,7 +103,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the LtAny predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").LtAny(Sql(1), Sql(2)))
 		sql := mgr.ToSql()
@@ -120,7 +111,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the LtAll predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").LtAll(Sql(1), Sql(2)))
 		sql := mgr.ToSql()
@@ -129,7 +119,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the LtEq predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").LtEq(Sql(10)))
 		sql := mgr.ToSql()
@@ -138,7 +127,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the LtEqAny predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").LtEqAny(Sql(1), Sql(2)))
 		sql := mgr.ToSql()
@@ -147,7 +135,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the LtEqAll predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").LtEqAll(Sql(1), Sql(2)))
 		sql := mgr.ToSql()
@@ -156,7 +143,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the Count predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id").Count())
 		sql := mgr.ToSql()
 		expected := "SELECT COUNT(\"users\".\"id\") FROM \"users\""
@@ -164,7 +150,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the Eq predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").Eq(Sql(10)))
 		sql := mgr.ToSql()
@@ -173,7 +158,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the Eq predication with nil input", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").Eq(nil))
 		sql := mgr.ToSql()
@@ -182,7 +166,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the EqAny predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").EqAny(Sql(1), Sql(2)))
 		sql := mgr.ToSql()
@@ -191,7 +174,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the EqAll predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").EqAll(Sql(1), Sql(2)))
 		sql := mgr.ToSql()
@@ -200,7 +182,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the Matches predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("name").Matches(Sql("%bacon%")))
 		sql := mgr.ToSql()
@@ -209,7 +190,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the MatchesAny predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("name").MatchesAny(Sql("%chunky%"), Sql("%bacon%")))
 		sql := mgr.ToSql()
@@ -218,7 +198,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the MatchesAll predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("name").MatchesAll(Sql("%chunky%"), Sql("%bacon%")))
 		sql := mgr.ToSql()
@@ -227,7 +206,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the DoesNotMatch predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("name").DoesNotMatch(Sql("%bacon%")))
 		sql := mgr.ToSql()
@@ -236,7 +214,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the DoesNotMatchAny predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("name").DoesNotMatchAny(Sql("%chunky%"), Sql("%bacon%")))
 		sql := mgr.ToSql()
@@ -245,7 +222,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the DoesNotMatchAll predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("name").DoesNotMatchAll(Sql("%chunky%"), Sql("%bacon%")))
 		sql := mgr.ToSql()
@@ -254,7 +230,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the Asc predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Order(users.Attr("id").Asc())
 		sql := mgr.ToSql()
@@ -263,7 +238,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the NotEq predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Order(users.Attr("id").Desc())
 		sql := mgr.ToSql()
@@ -272,7 +246,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the In predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").In([]Visitable{Sql(1), Sql(2), Sql(3)}))
 		sql := mgr.ToSql()
@@ -281,7 +254,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the InAny predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").InAny([]Visitable{Sql(1), Sql(2)}, []Visitable{Sql(3), Sql(4)}))
 		sql := mgr.ToSql()
@@ -290,7 +262,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the InAll predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").InAll([]Visitable{Sql(1), Sql(2)}, []Visitable{Sql(3), Sql(4)}))
 		sql := mgr.ToSql()
@@ -299,7 +270,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the NotIn predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").NotIn([]Visitable{Sql(1), Sql(2), Sql(3)}))
 		sql := mgr.ToSql()
@@ -308,7 +278,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the NotInAny predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").NotInAny([]Visitable{Sql(1), Sql(2)}, []Visitable{Sql(3), Sql(4)}))
 		sql := mgr.ToSql()
@@ -317,7 +286,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the NotInAll predication", func() {
-		users := NewTable("users")
 		mgr := users.Select(users.Attr("id"))
 		mgr.Where(users.Attr("id").NotInAll([]Visitable{Sql(1), Sql(2)}, []Visitable{Sql(3), Sql(4)}))
 		sql := mgr.ToSql()
