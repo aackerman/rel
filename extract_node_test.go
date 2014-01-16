@@ -7,6 +7,10 @@ import (
 )
 
 var _ = Describe("ExtractNode", func() {
+	BeforeEach(func() {
+		Register("postgresql", NewEngine())
+	})
+
 	It("should extract field", func() {
 		table := NewTable("users")
 		mgr := table.From(table)

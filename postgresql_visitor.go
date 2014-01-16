@@ -4,6 +4,7 @@ import (
 	"bytes"
 )
 
+// Used to handle generating Postgres specific sql
 type PostgreSQLVisitor struct {
 	ToSqlVisitor
 }

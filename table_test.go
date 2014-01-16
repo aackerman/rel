@@ -2,149 +2,115 @@ package rel_test
 
 import (
 	. "."
-	"testing"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
-func TestTableName(t *testing.T) {
-	table := NewTable("users")
-	if table.Name != "users" {
-		t.Fail()
-	}
-}
+var _ = Describe("Table", func() {
+	BeforeEach(func() {
+		Register("postgresql", NewEngine())
+	})
 
-func TestTableAlias(t *testing.T) {
-	table := NewTable("users")
-	alias := table.Alias()
-	if alias.Name.Raw != "users_2" {
-		t.Fail()
-	}
-}
+	It("has a name", func() {
+		table := NewTable("users")
+		Expect(table.Name).To(Equal("users"))
+	})
 
-func TestTableSetTableAlias(t *testing.T) {
-	table := NewTable("users")
-	table.SetTableAlias("foo")
-	manager := table.From(table)
-	manager.Skip(10)
-	sql := manager.ToSql()
-	expected := "SELECT FROM \"users\" \"foo\" OFFSET 10"
-	if sql != expected {
-		t.Logf("TestTableSetTableAlias sql: \n%s != \n%s", sql, expected)
-		t.Fail()
-	}
-}
+	It("has a table alias", func() {
+		table := NewTable("users")
+		alias := table.Alias()
+		Expect(alias.Name.Raw).To(Equal("users_2"))
+	})
 
-func TestTableOrder(t *testing.T) {
-	table := NewTable("users")
-	sm := table.Order(Sql("foo"))
-	sql := sm.ToSql()
-	expected := "SELECT FROM \"users\" ORDER BY foo"
-	if sql != expected {
-		t.Logf("TestTableOrder sql: %s != %s", sql, expected)
-		t.Fail()
-	}
-}
+	It("can set the table alias", func() {
+		table := NewTable("users")
+		table.SetTableAlias("foo")
+		manager := table.From(table)
+		manager.Skip(10)
+		sql := manager.ToSql()
+		expected := "SELECT FROM \"users\" \"foo\" OFFSET 10"
+		Expect(sql).To(Equal(expected))
+	})
 
-func TestTableTake(t *testing.T) {
-	table := NewTable("users")
-	sm := table.Take(1)
-	sm.Project(Sql("*"))
-	sql := sm.ToSql()
-	expected := "SELECT * FROM \"users\" LIMIT 1"
-	if sql != expected {
-		t.Logf("TestTableOrder sql: %s != %s", sql, expected)
-		t.Fail()
-	}
-}
+	It("has an order method", func() {
+		table := NewTable("users")
+		sm := table.Order(Sql("foo"))
+		sql := sm.ToSql()
+		expected := "SELECT FROM \"users\" ORDER BY foo"
+		Expect(sql).To(Equal(expected))
+	})
 
-func TestTableWhere(t *testing.T) {
-	table := NewTable("users")
-	sm := table.Where(table.Attr("id").Eq(Sql(1)))
-	sm.Project(table.Attr("id"))
-	sql := sm.ToSql()
-	expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" = 1"
-	if sql != expected {
-		t.Logf("TestTableWhere sql: %s != %s", sql, expected)
-		t.Fail()
-	}
-}
+	It("has a take method", func() {
+		table := NewTable("users")
+		sm := table.Take(1)
+		sm.Project(Sql("*"))
+		sql := sm.ToSql()
+		expected := "SELECT * FROM \"users\" LIMIT 1"
+		Expect(sql).To(Equal(expected))
+	})
 
-func TestTableProject(t *testing.T) {
-	table := NewTable("users")
-	query := table.Project(Sql("*"))
-	sql := query.ToSql()
-	expected := "SELECT * FROM \"users\""
-	if sql != expected {
-		t.Logf("TestTableProject sql: %s != %s", sql, expected)
-		t.Fail()
-	}
-}
+	It("has a where method", func() {
+		table := NewTable("users")
+		sm := table.Where(table.Attr("id").Eq(Sql(1)))
+		sm.Project(table.Attr("id"))
+		sql := sm.ToSql()
+		expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" = 1"
+		Expect(sql).To(Equal(expected))
+	})
 
-func TestTableSkip(t *testing.T) {
-	table := NewTable("users")
-	query := table.Skip(2)
-	sql := query.ToSql()
-	expected := "SELECT FROM \"users\" OFFSET 2"
-	if sql != expected {
-		t.Logf("TestTableSkip sql: %s != %s", sql, expected)
-		t.Fail()
-	}
-}
+	It("has a project method", func() {
+		table := NewTable("users")
+		query := table.Project(Sql("*"))
+		sql := query.ToSql()
+		expected := "SELECT * FROM \"users\""
+		Expect(sql).To(Equal(expected))
+	})
 
-func TestTableOffset(t *testing.T) {
-	table := NewTable("users")
-	query := table.Offset(2)
-	sql := query.ToSql()
-	expected := "SELECT FROM \"users\" OFFSET 2"
-	if sql != expected {
-		t.Logf("TestTableOffset sql: %s != %s", sql, expected)
-		t.Fail()
-	}
-}
+	It("has a skip method", func() {
+		table := NewTable("users")
+		query := table.Skip(2)
+		sql := query.ToSql()
+		expected := "SELECT FROM \"users\" OFFSET 2"
+		Expect(sql).To(Equal(expected))
+	})
 
-func TestTableHaving(t *testing.T) {
-	table := NewTable("users")
-	query := table.Having(table.Attr("id").Eq(Sql(10)))
-	sql := query.ToSql()
-	expected := "SELECT FROM \"users\" HAVING \"users\".\"id\" = 10"
-	if sql != expected {
-		t.Logf("TestTableHaving sql: \n%s != \n%s", sql, expected)
-		t.Fail()
-	}
-}
+	It("has an offset method", func() {
+		table := NewTable("users")
+		query := table.Offset(2)
+		sql := query.ToSql()
+		expected := "SELECT FROM \"users\" OFFSET 2"
+		Expect(sql).To(Equal(expected))
+	})
 
-func TestTableGroup(t *testing.T) {
-	table := NewTable("users")
-	query := table.Group(table.Attr("id"))
-	sql := query.ToSql()
-	expected := "SELECT FROM \"users\" GROUP BY \"users\".\"id\""
-	if sql != expected {
-		t.Logf("TestTableGroup sql: \n%s != \n%s", sql, expected)
-		t.Fail()
-	}
-}
+	It("has a having method", func() {
+		table := NewTable("users")
+		query := table.Having(table.Attr("id").Eq(Sql(10)))
+		sql := query.ToSql()
+		expected := "SELECT FROM \"users\" HAVING \"users\".\"id\" = 10"
+		Expect(sql).To(Equal(expected))
+	})
 
-func TestTableMultipleProjections(t *testing.T) {
-	table := NewTable("users")
-	query := table.Project(Sql("*"), Sql("*"))
-	sql := query.ToSql()
-	expected := "SELECT *, * FROM \"users\""
-	if sql != expected {
-		t.Logf("TestTableMultipleProjections sql: \n%s != \n%s", sql, expected)
-		t.Fail()
-	}
-}
+	It("has a group method", func() {
+		table := NewTable("users")
+		query := table.Group(table.Attr("id"))
+		sql := query.ToSql()
+		expected := "SELECT FROM \"users\" GROUP BY \"users\".\"id\""
+		Expect(sql).To(Equal(expected))
+	})
 
-func TestTableEquality(t *testing.T) {
-	t.SkipNow()
-}
+	It("Table#Project accepts multiple arguments", func() {
+		table := NewTable("users")
+		query := table.Project(Sql("*"), Sql("*"))
+		sql := query.ToSql()
+		expected := "SELECT *, * FROM \"users\""
+		Expect(sql).To(Equal(expected))
+	})
 
-func TestTableSelectManager(t *testing.T) {
-	table := NewTable("")
-	sm := table.From(table)
-	sql := sm.ToSql()
-	expected := "SELECT"
-	if sql != expected {
-		t.Logf("TestTableSelectManager sql: \n%s != \n%s", sql, expected)
-		t.Fail()
-	}
-}
+	It("can return a selectmanager", func() {
+		table := NewTable("")
+		sm := table.From(table)
+		sql := sm.ToSql()
+		expected := "SELECT"
+		Expect(sql).To(Equal(expected))
+	})
+})

@@ -7,6 +7,10 @@ import (
 )
 
 var _ = Describe("BinNode", func() {
+	BeforeEach(func() {
+		Register("postgresql", NewEngine())
+	})
+
 	It("can be Equal to another BinNode", func() {
 		bin1 := BinNode{Expr: Sql("zomg")}
 		bin2 := BinNode{Expr: Sql("zomg")}
