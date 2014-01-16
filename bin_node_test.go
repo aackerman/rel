@@ -1,23 +1,22 @@
-package rel
+package rel_test
 
 import (
-	"testing"
+	. "."
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
-func TestBinNodeEq(t *testing.T) {
-	bin1 := BinNode{Expr: Sql("zomg")}
-	bin2 := BinNode{Expr: Sql("zomg")}
-	if !bin1.Eq(bin2) {
-		t.Fail()
-	}
-}
+var _ = Describe("BinNode", func() {
+	It("can be Equal to another BinNode", func() {
+		bin1 := BinNode{Expr: Sql("zomg")}
+		bin2 := BinNode{Expr: Sql("zomg")}
+		Expect(bin1).To(Equal(bin2))
+	})
 
-func TestBinNodeMysqlToSql(t *testing.T) {
-	viz := MysqlVisitor{ToSqlVisitor{Conn: new(Connection)}}
-	bin := &BinNode{Expr: Sql("zomg")}
-	sql := viz.Accept(bin)
-	if sql != "BINARY zomg" {
-		t.Log(sql)
-		t.Fail()
-	}
-}
+	It("is visited differently using the MysqlVisitor", func() {
+		viz := MysqlVisitor{ToSqlVisitor{Conn: new(Connection)}}
+		bin := &BinNode{Expr: Sql("zomg")}
+		sql := viz.Accept(bin)
+		Expect(sql).To(Equal("BINARY zomg"))
+	})
+})
