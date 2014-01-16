@@ -6,6 +6,7 @@ import (
 )
 
 func TestInsertManager(t *testing.T) {
+	Register("postgresql", NewEngine())
 	sql := ""
 	expected := ""
 	if sql != expected {

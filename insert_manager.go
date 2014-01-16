@@ -1,5 +1,9 @@
 package rel
 
+import (
+	"log"
+)
+
 type InsertManager struct {
 	Engine Engine
 	Ast    *InsertStatementNode
@@ -7,6 +11,9 @@ type InsertManager struct {
 }
 
 func NewInsertManager(engine Engine) *InsertManager {
+	if engine == nil {
+		log.Fatal("Cannot accept a nil Engine")
+	}
 	return &InsertManager{
 		Engine: engine,
 		Ast:    &InsertStatementNode{},
