@@ -17,7 +17,6 @@ var _ = Describe("AttributeNode", func() {
 	})
 
 	It("can use the NotEq predication", func() {
-
 		mgr.Where(users.Attr("id").NotEq(Sql(10)))
 		sql := mgr.ToSql()
 		expected := "SELECT \"users\".\"id\" FROM \"users\" WHERE \"users\".\"id\" != 10"

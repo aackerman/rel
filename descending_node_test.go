@@ -1,28 +1,27 @@
-package rel
+package rel_test
 
 import (
-	"testing"
+	. "."
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
-func TestDescendingNodeEq(t *testing.T) {
-	desc1 := DescendingNode{Expr: Sql("zomg")}
-	desc2 := DescendingNode{Expr: Sql("zomg")}
-	if !desc1.Eq(desc2) {
-		t.Fail()
-	}
-}
+var _ = Describe("DescendingNode", func() {
+	It("can be equal to other DescendingNode's", func() {
+		desc1 := DescendingNode{Expr: Sql("zomg")}
+		desc2 := DescendingNode{Expr: Sql("zomg")}
+		Expect(desc1.Eq(desc2)).To(BeTrue())
+	})
 
-func TestDescendingNodeDirection(t *testing.T) {
-	desc := DescendingNode{Expr: Sql("zomg")}
-	if desc.Direction() != "DESC" {
-		t.Fail()
-	}
-}
+	It("it has a direction", func() {
+		desc := DescendingNode{Expr: Sql("zomg")}
+		Expect(desc.Direction()).To(Equal("DESC"))
+	})
 
-func TestDescendingNodeReverse(t *testing.T) {
-	desc := DescendingNode{Expr: Sql("zomg")}
-	asc := desc.Reverse()
-	if asc.Expr != Sql("zomg") {
-		t.Fail()
-	}
-}
+	It("can reverse direction", func() {
+		desc := DescendingNode{Expr: Sql("zomg")}
+		asc := desc.Reverse()
+		Expect(asc.Direction()).To(Equal("ASC"))
+		Expect(asc.Expr).To(Equal(Sql("zomg")))
+	})
+})
