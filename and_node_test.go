@@ -10,6 +10,6 @@ var _ = Describe("AndNode", func() {
 	It("can be equal to other AndNode's", func() {
 		and1 := AndNode{Children: &[]Visitable{Sql("foo"), Sql("bar")}}
 		and2 := AndNode{Children: &[]Visitable{Sql("foo"), Sql("bar")}}
-		Expect(and1).To(Equal(and2))
+		Expect(and1.Eq(and2)).To(BeTrue())
 	})
 })
