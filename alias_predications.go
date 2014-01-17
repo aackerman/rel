@@ -5,7 +5,7 @@ type Aliaser interface {
 	Visitable
 }
 
-func aliaserAs(caller Aliaser, literal SqlLiteralNode) *AsNode {
+func aliasPredicationAs(caller Aliaser, literal SqlLiteralNode) *AsNode {
 	return &AsNode{
 		Left:  caller,
 		Right: literal,

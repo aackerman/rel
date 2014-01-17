@@ -83,8 +83,8 @@ func (node InfixOperationNode) Extract(literal SqlLiteralNode) *ExtractNode {
 	return predicationExtract(node, literal)
 }
 
-func (node InfixOperationNode) As(visitable Visitable) *AsNode {
-	return predicationAs(node, visitable)
+func (node InfixOperationNode) As(literal SqlLiteralNode) *AsNode {
+	return aliasPredicationAs(node, literal)
 }
 
 func (node InfixOperationNode) In(visitables []Visitable) Visitable {

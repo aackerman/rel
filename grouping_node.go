@@ -81,8 +81,8 @@ func (node GroupingNode) Extract(literal SqlLiteralNode) *ExtractNode {
 	return predicationExtract(node, literal)
 }
 
-func (node GroupingNode) As(visitable Visitable) *AsNode {
-	return predicationAs(node, visitable)
+func (node GroupingNode) As(literal SqlLiteralNode) *AsNode {
+	return aliasPredicationAs(node, literal)
 }
 
 func (node GroupingNode) In(visitables []Visitable) Visitable {

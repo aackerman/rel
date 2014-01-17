@@ -120,13 +120,6 @@ func predicationExtract(node Predicator, literal SqlLiteralNode) *ExtractNode {
 	return &ExtractNode{Expressions: []Visitable{node}, Field: &literal}
 }
 
-func predicationAs(node Predicator, v Visitable) *AsNode {
-	return &AsNode{
-		Left:  node,
-		Right: v,
-	}
-}
-
 func predicationIn(node Predicator, visitables []Visitable) Visitable {
 	in := &InNode{Left: node}
 	for _, v := range visitables {
