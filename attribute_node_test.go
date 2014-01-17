@@ -21,6 +21,11 @@ var _ = Describe("AttributeNode", func() {
 		var _ Predicator = AttributeNode{}
 	})
 
+	It("implements Orderer", func() {
+		// compile time test
+		var _ Orderer = AttributeNode{}
+	})
+
 	It("can use the NotEq predication", func() {
 		mgr.Where(users.Attr("id").NotEq(Sql(10)))
 		sql := mgr.ToSql()

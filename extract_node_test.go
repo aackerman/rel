@@ -11,6 +11,11 @@ var _ = Describe("ExtractNode", func() {
 		Register("postgresql", NewEngine())
 	})
 
+	It("implements Orderer", func() {
+		// compile time test
+		var _ Orderer = &ExtractNode{}
+	})
+
 	It("should extract field", func() {
 		table := NewTable("users")
 		mgr := table.From(table)
