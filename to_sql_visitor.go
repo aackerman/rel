@@ -180,8 +180,15 @@ func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 }
 
 func (v ToSqlVisitor) VisitOverNode(node OverNode) string {
-	log.Fatal("NOT IMPLEMENTED")
-	return ""
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(node.Left))
+	buf.WriteString(" OVER ")
+	if node.Right == nil {
+		buf.WriteString("()")
+	} else {
+		buf.WriteString(v.Visit(node.Right))
+	}
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitQuotedNode(node QuotedNode) string {
