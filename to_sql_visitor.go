@@ -162,6 +162,8 @@ func (v ToSqlVisitor) Visit(visitable Visitable) string {
 		return v.VisitQuotedNode(*val)
 	case *OverNode:
 		return v.VisitOverNode(*val)
+	case *AssignmentNode:
+		return v.VisitAssignmentNode(*val)
 	default:
 		debug.PrintStack()
 		log.Fatalf("ToSqlVisitor#Visit unable to handle type %T", visitable)
@@ -175,6 +177,11 @@ func (v ToSqlVisitor) VisitTopNode(node TopNode) string {
 }
 
 func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
+	log.Fatal("NOT IMPLEMENTED")
+	return ""
+}
+
+func (v ToSqlVisitor) VisitAssignmentNode(node AssignmentNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
 }
