@@ -11,18 +11,18 @@ type SelectManager struct {
 	BaseVisitable
 }
 
-func NewSelectManager(e Engine, t *Table) *SelectManager {
-	if e == nil {
+func NewSelectManager(engine Engine, table *Table) *SelectManager {
+	if engine == nil {
 		log.Fatal("Please register an engine before proceding")
 	}
 	stmt := NewSelectStatementNode()
 	manager := SelectManager{
-		Engine: e,
+		Engine: engine,
 		Ast:    stmt,
 		Ctx:    stmt.Cores[len(stmt.Cores)-1],
 	}
 	// setup initial join source
-	manager.From(t)
+	manager.From(table)
 	return &manager
 }
 
