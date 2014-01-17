@@ -6,14 +6,19 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var users *Table
-var mgr *SelectManager
-
 var _ = Describe("AttributeNode", func() {
+	var users *Table
+	var mgr *SelectManager
+
 	BeforeEach(func() {
 		Register("postgresql", NewEngine())
 		users = NewTable("users")
 		mgr = users.Select(users.Attr("id"))
+	})
+
+	It("implements Predicator", func() {
+		// compile time test
+		var _ Predicator = AttributeNode{}
 	})
 
 	It("can use the NotEq predication", func() {
