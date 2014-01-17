@@ -184,8 +184,7 @@ func (v ToSqlVisitor) VisitOrderingNode(node OrderingNode) string {
 }
 
 func (v ToSqlVisitor) VisitUnqualifiedColumnNode(node UnqualifiedColumnNode) string {
-	log.Fatal("NOT IMPLEMENTED")
-	return ""
+	return v.QuoteColumnName(node.Name())
 }
 
 func (v ToSqlVisitor) VisitAssignmentNode(node AssignmentNode) string {
