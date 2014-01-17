@@ -1,5 +1,27 @@
 package rel
 
+type Predicator interface {
+	Eq(Visitable) *EqualityNode
+	EqAny(...Visitable) *GroupingNode
+	EqAll(...Visitable) *GroupingNode
+	Lt(Visitable) *LessThanNode
+	LtEq(Visitable) *LessThanOrEqualNode
+	LtAny(...Visitable) *GroupingNode
+	LtAll(...Visitable) *GroupingNode
+	Gt(Visitable) *GreaterThanNode
+	GtEq(Visitable) *GreaterThanOrEqualNode
+	GtAny(...Visitable) *GroupingNode
+	GtAll(...Visitable) *GroupingNode
+	In([]Visitable) Visitable
+	NotIn([]Visitable) Visitable
+	NotEq(Visitable) *NotEqualNode
+	Matches(SqlLiteralNode) *MatchesNode
+	DoesNotMatch(SqlLiteralNode) *DoesNotMatchNode
+	GroupAny(...Visitable) *GroupingNode
+	GroupAll(...Visitable) *GroupingNode
+	Visitable
+}
+
 func predicationEq(node Predicator, visitable Visitable) *EqualityNode {
 	return &EqualityNode{Left: node, Right: visitable}
 }
@@ -88,14 +110,6 @@ func predicationGtAll(node Predicator, visitable ...Visitable) *GroupingNode {
 
 func predicationGtEq(node Predicator, v Visitable) *GreaterThanOrEqualNode {
 	return &GreaterThanOrEqualNode{Left: node, Right: v}
-}
-
-func predicationDesc(node Predicator) *DescendingNode {
-	return &DescendingNode{Expr: node}
-}
-
-func predicationAsc(node Predicator) *AscendingNode {
-	return &AscendingNode{Expr: node}
 }
 
 func predicationCount(node Predicator) *CountNode {

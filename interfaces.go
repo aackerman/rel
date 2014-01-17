@@ -13,28 +13,6 @@ type Visitable interface {
 	NewGroupingNode() GroupingNode
 }
 
-type Predicator interface {
-	Eq(Visitable) *EqualityNode
-	EqAny(...Visitable) *GroupingNode
-	EqAll(...Visitable) *GroupingNode
-	Lt(Visitable) *LessThanNode
-	LtEq(Visitable) *LessThanOrEqualNode
-	LtAny(...Visitable) *GroupingNode
-	LtAll(...Visitable) *GroupingNode
-	Gt(Visitable) *GreaterThanNode
-	GtEq(Visitable) *GreaterThanOrEqualNode
-	GtAny(...Visitable) *GroupingNode
-	GtAll(...Visitable) *GroupingNode
-	In([]Visitable) Visitable
-	NotIn([]Visitable) Visitable
-	NotEq(Visitable) *NotEqualNode
-	Matches(SqlLiteralNode) *MatchesNode
-	DoesNotMatch(SqlLiteralNode) *DoesNotMatchNode
-	GroupAny(...Visitable) *GroupingNode
-	GroupAll(...Visitable) *GroupingNode
-	Visitable
-}
-
 type Visitor interface {
 	Accept(Visitable) string
 	Visit(Visitable) string

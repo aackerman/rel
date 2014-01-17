@@ -5,6 +5,14 @@ type GroupingNode struct {
 	BaseVisitable
 }
 
+func (node GroupingNode) Desc() *DescendingNode {
+	return orderingDesc(node)
+}
+
+func (node GroupingNode) Asc() *AscendingNode {
+	return orderingAsc(node)
+}
+
 func (node GroupingNode) Eq(visitable Visitable) *EqualityNode {
 	return predicationEq(node, visitable)
 }
@@ -63,14 +71,6 @@ func (node GroupingNode) GtEqAny(visitables ...Visitable) *GroupingNode {
 
 func (node GroupingNode) GtEqAll(visitables ...Visitable) *GroupingNode {
 	return predicationGtEqAll(node, visitables...)
-}
-
-func (node GroupingNode) Desc() *DescendingNode {
-	return predicationDesc(node)
-}
-
-func (node GroupingNode) Asc() *AscendingNode {
-	return predicationAsc(node)
 }
 
 func (node GroupingNode) Count() *CountNode {

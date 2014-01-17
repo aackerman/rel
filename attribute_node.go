@@ -13,6 +13,14 @@ func NewAttributeNode(v Visitable, name string) AttributeNode {
 	}
 }
 
+func (node AttributeNode) Desc() *DescendingNode {
+	return orderingDesc(node)
+}
+
+func (node AttributeNode) Asc() *AscendingNode {
+	return orderingAsc(node)
+}
+
 func (node AttributeNode) Eq(visitable Visitable) *EqualityNode {
 	return predicationEq(node, visitable)
 }
@@ -71,14 +79,6 @@ func (node AttributeNode) GtEqAny(visitables ...Visitable) *GroupingNode {
 
 func (node AttributeNode) GtEqAll(visitables ...Visitable) *GroupingNode {
 	return predicationGtEqAll(node, visitables...)
-}
-
-func (node AttributeNode) Desc() *DescendingNode {
-	return predicationDesc(node)
-}
-
-func (node AttributeNode) Asc() *AscendingNode {
-	return predicationAsc(node)
 }
 
 func (node AttributeNode) Count() *CountNode {

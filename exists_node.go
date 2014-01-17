@@ -8,6 +8,14 @@ func NewExistsNode(v Visitable) *ExistsNode {
 	}
 }
 
+func (node ExistsNode) Desc() *DescendingNode {
+	return orderingDesc(node)
+}
+
+func (node ExistsNode) Asc() *AscendingNode {
+	return orderingAsc(node)
+}
+
 func (node ExistsNode) Eq(visitable Visitable) *EqualityNode {
 	return predicationEq(node, visitable)
 }
@@ -66,14 +74,6 @@ func (node ExistsNode) GtEqAny(visitables ...Visitable) *GroupingNode {
 
 func (node ExistsNode) GtEqAll(visitables ...Visitable) *GroupingNode {
 	return predicationGtEqAll(node, visitables...)
-}
-
-func (node ExistsNode) Desc() *DescendingNode {
-	return predicationDesc(node)
-}
-
-func (node ExistsNode) Asc() *AscendingNode {
-	return predicationAsc(node)
 }
 
 func (node ExistsNode) Count() *CountNode {

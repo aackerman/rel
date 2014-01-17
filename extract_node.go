@@ -12,6 +12,14 @@ func (node *ExtractNode) As(n SqlLiteralNode) *ExtractNode {
 	return node
 }
 
+func (node *ExtractNode) Desc() *DescendingNode {
+	return orderingDesc(node)
+}
+
+func (node *ExtractNode) Asc() *AscendingNode {
+	return orderingAsc(node)
+}
+
 func (node *ExtractNode) Eq(visitable Visitable) *EqualityNode {
 	return predicationEq(node, visitable)
 }
@@ -70,14 +78,6 @@ func (node *ExtractNode) GtEqAny(visitables ...Visitable) *GroupingNode {
 
 func (node *ExtractNode) GtEqAll(visitables ...Visitable) *GroupingNode {
 	return predicationGtEqAll(node, visitables...)
-}
-
-func (node *ExtractNode) Desc() *DescendingNode {
-	return predicationDesc(node)
-}
-
-func (node *ExtractNode) Asc() *AscendingNode {
-	return predicationAsc(node)
 }
 
 func (node *ExtractNode) Count() *CountNode {

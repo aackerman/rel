@@ -7,6 +7,14 @@ type InfixOperationNode struct {
 	BaseVisitable
 }
 
+func (node InfixOperationNode) Desc() *DescendingNode {
+	return orderingDesc(node)
+}
+
+func (node InfixOperationNode) Asc() *AscendingNode {
+	return orderingAsc(node)
+}
+
 func (node InfixOperationNode) Eq(visitable Visitable) *EqualityNode {
 	return predicationEq(node, visitable)
 }
@@ -65,14 +73,6 @@ func (node InfixOperationNode) GtEqAny(visitables ...Visitable) *GroupingNode {
 
 func (node InfixOperationNode) GtEqAll(visitables ...Visitable) *GroupingNode {
 	return predicationGtEqAll(node, visitables...)
-}
-
-func (node InfixOperationNode) Desc() *DescendingNode {
-	return predicationDesc(node)
-}
-
-func (node InfixOperationNode) Asc() *AscendingNode {
-	return predicationAsc(node)
 }
 
 func (node InfixOperationNode) Count() *CountNode {
