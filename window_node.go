@@ -6,6 +6,14 @@ type WindowNode struct {
 	BaseVisitable
 }
 
+func (node *WindowNode) Order(v Visitable) *WindowNode {
+	if node.Orders == nil {
+		node.Orders = &[]Visitable{}
+	}
+	*node.Orders = append(*node.Orders, v)
+	return node
+}
+
 type NamedWindowNode struct {
 	Name    SqlLiteralNode
 	Orders  *[]Visitable
