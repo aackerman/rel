@@ -7,11 +7,11 @@ import (
 type CountNode FunctionNode
 
 func (node *CountNode) Desc() *DescendingNode {
-	return &DescendingNode{Expr: node}
+	return orderingDesc(node)
 }
 
 func (node *CountNode) Asc() *AscendingNode {
-	return &AscendingNode{Expr: node}
+	return orderingAsc(node)
 }
 
 func (node *CountNode) As(literal SqlLiteralNode) *AsNode {
