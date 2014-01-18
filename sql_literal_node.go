@@ -1,7 +1,9 @@
 package rel
 
 import (
-	"fmt"
+	"log"
+	"runtime/debug"
+	"strconv"
 )
 
 type SqlLiteralNode struct {
@@ -10,7 +12,17 @@ type SqlLiteralNode struct {
 }
 
 func Sql(raw interface{}) SqlLiteralNode {
-	return SqlLiteralNode{Raw: fmt.Sprintf("%s", raw)}
+	var val string
+	switch raw.(type) {
+	case string:
+		val = raw.(string)
+	case int:
+		val = strconv.Itoa(raw.(int))
+	default:
+		debug.PrintStack()
+		log.Fatalf("Cannot create SqlLiteralNode from input type %T", raw)
+	}
+	return SqlLiteralNode{Raw: val}
 }
 
 func Star() SqlLiteralNode {
@@ -164,4 +176,3 @@ func (node SqlLiteralNode) GroupAny(visitables ...Visitable) *GroupingNode {
 func (node SqlLiteralNode) GroupAll(visitables ...Visitable) *GroupingNode {
 	return predicationGroupAll(node, visitables...)
 }
-)

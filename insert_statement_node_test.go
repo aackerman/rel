@@ -7,6 +7,10 @@ import (
 )
 
 var _ = Describe("InsertStatementNode", func() {
+	BeforeEach(func() {
+		Register("postgresql", NewEngine())
+	})
+
 	It("is equal to other insert statements", func() {
 		users1 := NewTable("users")
 		users2 := NewTable("users")
