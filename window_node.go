@@ -21,11 +21,12 @@ type NamedWindowNode struct {
 	BaseVisitable
 }
 
-func (node *NamedWindowNode) Order(v Visitable) {
+func (node *NamedWindowNode) Order(v Visitable) *NamedWindowNode {
 	if node.Orders == nil {
 		node.Orders = &[]Visitable{}
 	}
 	*node.Orders = append(*node.Orders, v)
+	return node
 }
 
 func (node *NamedWindowNode) Rows(v Visitable) Visitable {
