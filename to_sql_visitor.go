@@ -2,8 +2,10 @@ package rel
 
 import (
 	"bytes"
+	"fmt"
 	"log"
 	"runtime/debug"
+	"strconv"
 	"strings"
 )
 
@@ -188,8 +190,11 @@ func (v ToSqlVisitor) VisitUnqualifiedColumnNode(node UnqualifiedColumnNode) str
 }
 
 func (v ToSqlVisitor) VisitAssignmentNode(node AssignmentNode) string {
-	log.Fatal("NOT IMPLEMENTED")
-	return ""
+	var buf bytes.Buffer
+	buf.WriteString(v.Visit(node.Left))
+	buf.WriteString(" = ")
+	buf.WriteString(v.Quote(node.Right))
+	return buf.String()
 }
 
 func (v ToSqlVisitor) VisitOverNode(node OverNode) string {
@@ -977,6 +982,23 @@ func (v ToSqlVisitor) QuoteTableName(visitable Visitable) string {
 		return rel.Raw
 	default:
 		return ""
+	}
+}
+
+func (v ToSqlVisitor) Quote(thing interface{}) string {
+	switch t := thing.(type) {
+	case bool:
+		if t {
+			return "'t'"
+		} else {
+			return "'f'"
+		}
+	case int:
+		return strconv.Itoa(t)
+	case nil:
+		return "NULL"
+	default:
+		return fmt.Sprintf("'%s'", t)
 	}
 }
 
