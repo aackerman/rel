@@ -83,13 +83,8 @@ func (mgr *SelectManager) InnerJoin(visitable Visitable) *SelectManager {
 	return mgr
 }
 
-// FIXME: Not Implmented yet
-func (mgr *SelectManager) OuterJoin(right Visitable) *SelectManager {
-	return mgr
-}
-
-// FIXME: Not Implmented yet
-func (mgr *SelectManager) StringJoin(right Visitable) *SelectManager {
+func (mgr *SelectManager) OuterJoin(visitable Visitable) *SelectManager {
+	mgr.Ctx.Source.Right = append(mgr.Ctx.Source.Right, &OuterJoinNode{Left: visitable})
 	return mgr
 }
 

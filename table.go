@@ -71,10 +71,6 @@ func (t *Table) OuterJoin(right Visitable) *SelectManager {
 	return t.From(t).OuterJoin(right)
 }
 
-func (t *Table) StringJoin(right Visitable) *SelectManager {
-	return t.From(t).StringJoin(right)
-}
-
 func (t *Table) From(n *Table) *SelectManager {
 	return t.SelectManager(n)
 }
