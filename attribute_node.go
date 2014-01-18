@@ -45,8 +45,8 @@ func (node AttributeNode) LtAll(visitables ...Visitable) *GroupingNode {
 	return predicationLtAll(node, visitables...)
 }
 
-func (node AttributeNode) LtEq(v Visitable) *LessThanOrEqualNode {
-	return &LessThanOrEqualNode{Left: node, Right: v}
+func (node AttributeNode) LtEq(visitable Visitable) *LessThanOrEqualNode {
+	return predicationLtEq(node, visitable)
 }
 
 func (node AttributeNode) LtEqAny(visitables ...Visitable) *GroupingNode {

@@ -65,8 +65,8 @@ func (node SqlLiteralNode) LtAll(visitables ...Visitable) *GroupingNode {
 	return predicationLtAll(node, visitables...)
 }
 
-func (node SqlLiteralNode) LtEq(v Visitable) *LessThanOrEqualNode {
-	return &LessThanOrEqualNode{Left: node, Right: v}
+func (node SqlLiteralNode) LtEq(visitable Visitable) *LessThanOrEqualNode {
+	return predicationLtEq(node, visitable)
 }
 
 func (node SqlLiteralNode) LtEqAny(visitables ...Visitable) *GroupingNode {
