@@ -14,11 +14,12 @@ func (node *CountNode) Asc() *AscendingNode {
 	return &AscendingNode{Expr: node}
 }
 
-func (node *CountNode) As(v Visitable) *AsNode {
-	return &AsNode{
-		Left:  node,
-		Right: v,
-	}
+func (node *CountNode) As(literal SqlLiteralNode) *AsNode {
+	return aliasPredicationAs(node, literal)
+}
+
+func (node *CountNode) Over(visitable Visitable) *OverNode {
+	return windowPredicationOver(node, visitable)
 }
 
 func (node CountNode) Eq(other CountNode) bool {
