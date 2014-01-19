@@ -21,6 +21,6 @@ import (
 func main() {
   relation := rel.NewTable("users")
   manager := relation.Select(Sql("*"))
-  fmt.Println(manager.ToSql())
+  fmt.Println(manager.ToSql()) // SELECT * FROM "users"
 }
 ```
