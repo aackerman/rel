@@ -137,7 +137,7 @@ func (mgr *SelectManager) Where(n Visitable) *SelectManager {
 func (mgr *SelectManager) Group(columns ...Visitable) *SelectManager {
 	if len(columns) > 0 {
 		if mgr.Ctx.Groups == nil {
-			mgr.Ctx.Groups = &[]GroupNode{}
+			mgr.Ctx.Groups = &[]*GroupNode{}
 		}
 		for _, column := range columns {
 			*mgr.Ctx.Groups = append(*mgr.Ctx.Groups, NewGroupNode(column))

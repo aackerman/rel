@@ -49,24 +49,20 @@ func (v ToSqlVisitor) Visit(visitable Visitable) string {
 		return v.VisitHavingNode(val)
 	case AttributeNode:
 		return v.VisitAttributeNode(val)
-	case GroupNode:
-		return v.VisitGroupNode(val)
-	case ExistsNode:
-		return v.VisitExistsNode(val)
+	case *GroupNode:
+		return v.VisitGroupNode(*val)
 	case *ExistsNode:
 		return v.VisitExistsNode(*val)
 	case *AsNode:
 		return v.VisitAsNode(*val)
-	case Table:
-		return v.VisitTable(val)
 	case *LessThanNode:
 		return v.VisitLessThanNode(*val)
 	case *UnionNode:
 		return v.VisitUnionNode(*val)
 	case *UnionAllNode:
 		return v.VisitUnionAllNode(*val)
-	case SelectManager:
-		return v.VisitSelectManager(val)
+	case *SelectManager:
+		return v.VisitSelectManager(*val)
 	case *GreaterThanNode:
 		return v.VisitGreaterThanNode(*val)
 	case *IntersectNode:

@@ -31,8 +31,8 @@ func NewBinNode(n Visitable) BinNode {
 	return BinNode{Expr: n}
 }
 
-func NewGroupNode(n Visitable) GroupNode {
-	return GroupNode{Expr: n}
+func NewGroupNode(n Visitable) *GroupNode {
+	return &GroupNode{Expr: n}
 }
 
 func NewHavingNode(n Visitable) *HavingNode {

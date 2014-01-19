@@ -6,7 +6,7 @@ type SelectCoreNode struct {
 	Projections  *[]Visitable
 	SetQuanifier Visitable
 	Wheres       *[]Visitable
-	Groups       *[]GroupNode
+	Groups       *[]*GroupNode
 	Having       *HavingNode
 	Windows      *[]Visitable
 	BaseVisitable
