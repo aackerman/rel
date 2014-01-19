@@ -453,28 +453,11 @@ func (v ToSqlVisitor) VisitNotEqualNode(node NotEqualNode) string {
 	return buf.String()
 }
 
-// FIXME: find a better way to handle insert values
-func (v ToSqlVisitor) VisitInsertValue(i interface{}) string {
-	ret := ""
-	switch val := i.(type) {
-	case bool:
-		if val {
-			ret = "'t'"
-		} else {
-			ret = "'f'"
-		}
-	case SqlLiteralNode:
-		ret = val.Raw
-	}
-
-	return ret
-}
-
 func (v ToSqlVisitor) VisitValuesNode(node ValuesNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("VALUES (")
 	for i, value := range node.Values {
-		buf.WriteString(v.VisitInsertValue(value))
+		buf.WriteString(v.Quote(value))
 		// Join on ", "
 		if i != len(node.Values)-1 {
 			buf.WriteString(", ")
@@ -997,6 +980,8 @@ func (v ToSqlVisitor) Quote(thing interface{}) string {
 		return strconv.Itoa(t)
 	case nil:
 		return "NULL"
+	case SqlLiteralNode:
+		return t.Raw
 	default:
 		return fmt.Sprintf("'%s'", t)
 	}
