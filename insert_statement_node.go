@@ -6,7 +6,7 @@ import (
 
 type InsertStatementNode struct {
 	Relation *Table
-	Columns  *[]AttributeNode
+	Columns  *[]*AttributeNode
 	Values   *ValuesNode
 	BaseVisitable
 }

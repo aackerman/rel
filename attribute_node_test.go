@@ -18,12 +18,12 @@ var _ = Describe("AttributeNode", func() {
 
 	It("implements Predicator", func() {
 		// compile time test
-		var _ Predicator = AttributeNode{}
+		var _ Predicator = &AttributeNode{}
 	})
 
 	It("implements Orderer", func() {
 		// compile time test
-		var _ Orderer = AttributeNode{}
+		var _ Orderer = &AttributeNode{}
 	})
 
 	It("can use the NotEq predication", func() {

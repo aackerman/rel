@@ -45,10 +45,10 @@ func (v ToSqlVisitor) Visit(visitable Visitable) string {
 		return v.VisitJoinSourceNode(val)
 	case *EqualityNode:
 		return v.VisitEqualityNode(*val)
-	case HavingNode:
-		return v.VisitHavingNode(val)
-	case AttributeNode:
-		return v.VisitAttributeNode(val)
+	case *HavingNode:
+		return v.VisitHavingNode(*val)
+	case *AttributeNode:
+		return v.VisitAttributeNode(*val)
 	case *GroupNode:
 		return v.VisitGroupNode(*val)
 	case *ExistsNode:

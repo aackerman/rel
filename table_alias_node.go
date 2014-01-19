@@ -7,6 +7,6 @@ type TableAliasNode struct {
 	BinaryNode
 }
 
-func (t *TableAliasNode) Attr(name string) AttributeNode {
+func (t *TableAliasNode) Attr(name string) *AttributeNode {
 	return NewAttributeNode(t, name)
 }

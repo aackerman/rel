@@ -110,6 +110,6 @@ func (t *Table) Alias() *TableAliasNode {
 	return alias
 }
 
-func (t *Table) Attr(name string) AttributeNode {
+func (t *Table) Attr(name string) *AttributeNode {
 	return NewAttributeNode(t, name)
 }

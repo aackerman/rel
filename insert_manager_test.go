@@ -15,7 +15,7 @@ var _ = Describe("InsertManager", func() {
 		mgr := NewInsertManager(DefaultEngine)
 		values := make([]interface{}, 0)
 		values = append(values, Star())
-		columns := []AttributeNode{AttributeNode{}}
+		columns := []*AttributeNode{&AttributeNode{}}
 		mgr.SetValues(mgr.CreateValues(values, columns))
 		sql := mgr.ToSql()
 		expected := "INSERT INTO NULL VALUES (*)"
