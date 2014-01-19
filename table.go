@@ -24,11 +24,11 @@ func NewTable(name string) *Table {
 }
 
 func (t *Table) Project(a ...Visitable) *SelectManager {
-	return t.From(t).Project(a...)
+	return t.Select(a...)
 }
 
 func (t *Table) Select(a ...Visitable) *SelectManager {
-	return t.Project(a...)
+	return t.From(t).Select(a...)
 }
 
 func (t *Table) Take(i int) *SelectManager {

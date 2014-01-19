@@ -1,36 +1,26 @@
 # Rel
 
-A SQL AST manager for Go. It:
+A SQL AST manager for Go.
 
-* Simplifies the generation of complex SQL queries
+Simplifies the generation of complex SQL queries
 
-It is intended to be a framework, meaning this library could fulfill the query generation for a great ORM.
+This library could fulfill the query generation for a great ORM.
 
-Rel allows you to programatically create dynamic SQL with a clear and simple interface.
-
-## Interfaces
-
-* `Visitable`
-* `Visitor`
-* `Engine`
-* `TreeManager`
-
-## Important Classes
-
-* `Table`
-* `SelectManager`
-* `InsertManager`
-* `UpdateManager`
-* `DeleteManager`
-* `MultiStatementManager`
+Allows you to programatically create dynamic SQL with a nice interface
 
 ## Usage
 
 ```go
-t := Table{
-  Name: "users",
-  Engine: DefaultEngine
+package main
+
+import (
+  "fmt"
+  "rel"
+)
+
+func main() {
+  relation := rel.NewTable("users")
+  manager := relation.Select(Sql("*"))
+  fmt.Println(manager.ToSql())
 }
-sm := t.Project("*")
-fmt.Println(sm.ToSql()) // SELECT * FROM "users"
 ```

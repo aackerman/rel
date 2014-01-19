@@ -31,12 +31,16 @@ func (mgr *SelectManager) ToSql() string {
 }
 
 func (mgr *SelectManager) Project(projections ...Visitable) *SelectManager {
-	for _, projection := range projections {
+	return mgr.Select(projections...)
+}
+
+func (mgr *SelectManager) Select(selections ...Visitable) *SelectManager {
+	for _, selection := range selections {
 		if mgr.Ctx.Projections == nil {
 			mgr.Ctx.Projections = &[]Visitable{}
 		}
 
-		*mgr.Ctx.Projections = append(*mgr.Ctx.Projections, projection)
+		*mgr.Ctx.Projections = append(*mgr.Ctx.Projections, selection)
 	}
 	return mgr
 }
