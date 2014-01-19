@@ -88,6 +88,7 @@ func (mgr *SelectManager) OuterJoin(visitable Visitable) *SelectManager {
 	return mgr
 }
 
+// FIXME: Allow for other types of locks
 func (mgr *SelectManager) Lock() *SelectManager {
 	mgr.LockForUpdate()
 	return mgr

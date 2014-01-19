@@ -10,7 +10,7 @@ type Table struct {
 	Name       string
 	Engine     Engine
 	TableAlias string
-	Aliases    *[]TableAliasNode
+	Aliases    *[]*TableAliasNode
 	BaseVisitable
 }
 
@@ -87,12 +87,12 @@ func (t *Table) SetTableAlias(name string) {
 	t.TableAlias = name
 }
 
-func (t *Table) Alias() TableAliasNode {
+func (t *Table) Alias() *TableAliasNode {
 	var buf bytes.Buffer
 
 	// create the slice for aliases if it doesn't already exist
 	if t.Aliases == nil {
-		aliases := make([]TableAliasNode, 0)
+		aliases := make([]*TableAliasNode, 0)
 		t.Aliases = &aliases
 	}
 
@@ -103,7 +103,7 @@ func (t *Table) Alias() TableAliasNode {
 	buf.WriteString(strconv.Itoa(n + 2))
 
 	// create the alias
-	alias := TableAliasNode{Relation: t, Name: Sql(buf.String()), Quoted: true}
+	alias := &TableAliasNode{Relation: t, Name: Sql(buf.String()), Quoted: true}
 
 	// append the new alias to the list of current aliases
 	*t.Aliases = append(*t.Aliases, alias)

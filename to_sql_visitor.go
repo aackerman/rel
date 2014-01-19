@@ -73,10 +73,6 @@ func (v ToSqlVisitor) Visit(visitable Visitable) string {
 		return v.VisitIntersectNode(val)
 	case ExceptNode:
 		return v.VisitExceptNode(val)
-	case TableAliasNode:
-		return v.VisitTableAliasNode(val)
-	case InnerJoinNode:
-		return v.VisitInnerJoinNode(val)
 	case *OnNode:
 		return v.VisitOnNode(*val)
 	case *AscendingNode:
