@@ -17,7 +17,7 @@ func NewMultiStatementManager(e Engine) *MultiStatementManager {
 }
 
 func (mgr *MultiStatementManager) Intersect(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
-	mgr.Ast = IntersectNode{
+	mgr.Ast = &IntersectNode{
 		Left:  stmt1,
 		Right: stmt2,
 	}
@@ -25,7 +25,7 @@ func (mgr *MultiStatementManager) Intersect(stmt1 Visitable, stmt2 Visitable) *M
 }
 
 func (mgr *MultiStatementManager) Union(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
-	mgr.Ast = UnionNode{
+	mgr.Ast = &UnionNode{
 		Left:  stmt1,
 		Right: stmt2,
 	}
@@ -33,7 +33,7 @@ func (mgr *MultiStatementManager) Union(stmt1 Visitable, stmt2 Visitable) *Multi
 }
 
 func (mgr *MultiStatementManager) UnionAll(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
-	mgr.Ast = UnionAllNode{
+	mgr.Ast = &UnionAllNode{
 		Left:  stmt1,
 		Right: stmt2,
 	}
@@ -41,7 +41,7 @@ func (mgr *MultiStatementManager) UnionAll(stmt1 Visitable, stmt2 Visitable) *Mu
 }
 
 func (mgr *MultiStatementManager) Except(stmt1 Visitable, stmt2 Visitable) *MultiStatementManager {
-	mgr.Ast = ExceptNode{
+	mgr.Ast = &ExceptNode{
 		Left:  stmt1,
 		Right: stmt2,
 	}
