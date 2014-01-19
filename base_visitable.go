@@ -4,46 +4,46 @@ package rel
 // All other nodes should have an embedded BaseVisitable
 type BaseVisitable struct{}
 
-func (a BaseVisitable) NewTrueNode() TrueNode {
+func (v BaseVisitable) NewTrueNode() TrueNode {
 	return TrueNode{}
 }
 
-func (a BaseVisitable) NewFalseNode() FalseNode {
+func (v BaseVisitable) NewFalseNode() FalseNode {
 	return FalseNode{}
 }
 
-func (a BaseVisitable) NewTableAliasNode(t *Table, name SqlLiteralNode) *TableAliasNode {
+func (v BaseVisitable) NewTableAliasNode(t *Table, name SqlLiteralNode) *TableAliasNode {
 	return &TableAliasNode{Relation: t, Name: name}
 }
 
-func (a BaseVisitable) NewStringJoinNode() StringJoinNode {
+func (v BaseVisitable) NewStringJoinNode() StringJoinNode {
 	return StringJoinNode{}
 }
 
-func (a BaseVisitable) NewInnerJoinNode() InnerJoinNode {
+func (v BaseVisitable) NewInnerJoinNode() InnerJoinNode {
 	return InnerJoinNode{}
 }
 
-func (a BaseVisitable) NewOuterJoinNode() OuterJoinNode {
+func (v BaseVisitable) NewOuterJoinNode() OuterJoinNode {
 	return OuterJoinNode{}
 }
 
-func (a BaseVisitable) NewAndNode(n ...Visitable) *AndNode {
+func (v BaseVisitable) NewAndNode(n ...Visitable) *AndNode {
 	return &AndNode{Children: &n}
 }
 
-func (a BaseVisitable) NewOnNode() OnNode {
-	return OnNode{}
+func (v BaseVisitable) NewOnNode(visitable Visitable) *OnNode {
+	return &OnNode{Expr: visitable}
 }
 
-func (a BaseVisitable) NewNotNode() NotNode {
+func (v BaseVisitable) NewNotNode() NotNode {
 	return NotNode{}
 }
 
-func (a BaseVisitable) NewGroupingNode() GroupingNode {
+func (v BaseVisitable) NewGroupingNode() GroupingNode {
 	return GroupingNode{}
 }
 
-func (a BaseVisitable) NewNamedFunctionNode() NamedFunctionNode {
+func (v BaseVisitable) NewNamedFunctionNode() NamedFunctionNode {
 	return NamedFunctionNode{}
 }

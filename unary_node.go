@@ -51,10 +51,6 @@ func NewOffsetNode(n Visitable) *OffsetNode {
 	return &OffsetNode{Expr: n}
 }
 
-func NewOnNode(n Visitable) OnNode {
-	return OnNode{Expr: n}
-}
-
 func NewOrderingNode(n Visitable) OrderingNode {
 	return OrderingNode{Expr: n}
 }

@@ -63,9 +63,9 @@ func (mgr *SelectManager) On(visitables ...Visitable) *SelectManager {
 		last := right[len(right)-1]
 		switch val := last.(type) {
 		case *InnerJoinNode:
-			val.Right = NewOnNode(mgr.collapse(visitables...))
+			val.Right = mgr.NewOnNode(mgr.collapse(visitables...))
 		case *OuterJoinNode:
-			val.Right = NewOnNode(mgr.collapse(visitables...))
+			val.Right = mgr.NewOnNode(mgr.collapse(visitables...))
 		default:
 			log.Fatalf("Unable to call On with input type %T", val)
 		}
