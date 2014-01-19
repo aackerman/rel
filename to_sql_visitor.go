@@ -1072,12 +1072,9 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 	}
 
 	// add FROM statement to the buffer
-	// FIXME: this should not require a type switch
 	if node.Source != nil && node.Source.Left != nil {
-		if t, ok := node.Source.Left.(Table); ok && t.Name != "" {
-			buf.WriteString(" FROM ")
-			buf.WriteString(v.Visit(*node.Source))
-		} else if t, ok := node.Source.Left.(*Table); ok && t.Name != "" {
+		// assert the source is a *Table and check the length of the name
+		if t, ok := node.Source.Left.(*Table); ok && t.Name != "" {
 			buf.WriteString(" FROM ")
 			buf.WriteString(v.Visit(*node.Source))
 		}
