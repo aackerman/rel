@@ -111,7 +111,7 @@ func (v ToSqlVisitor) Visit(visitable Visitable) string {
 		if val == nil {
 			return v.VisitNil()
 		}
-		return v.VisitTable(*val)
+		return v.VisitTable(val)
 	case *MultiStatementManager:
 		return v.VisitMultiStatementManager(*val)
 	case *InsertStatementNode:
@@ -920,7 +920,7 @@ func (v ToSqlVisitor) VisitEqualityNode(node EqualityNode) string {
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitTable(table Table) string {
+func (v ToSqlVisitor) VisitTable(table *Table) string {
 	var buf bytes.Buffer
 	if table.TableAlias != "" {
 		buf.WriteString(v.QuoteTableName(table))
@@ -937,8 +937,6 @@ func (v ToSqlVisitor) VisitTable(table Table) string {
 // FIXME: far too complex
 func (v ToSqlVisitor) QuoteTableName(visitable Visitable) string {
 	switch rel := visitable.(type) {
-	case Table:
-		return v.Conn.QuoteTableName(rel.Name)
 	case *Table:
 		return v.Conn.QuoteTableName(rel.Name)
 	case TableAliasNode:
