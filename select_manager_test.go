@@ -146,7 +146,15 @@ var _ = Describe("SelectManager", func() {
 	It("has an lock method", func() {
 		table := NewTable("users")
 		mgr := table.From(table)
-		sql := mgr.Lock().ToSql()
+		sql := mgr.Lock(Sql("FOR SHARE")).ToSql()
+		expected := "SELECT FROM \"users\" FOR SHARE"
+		Expect(sql).To(Equal(expected))
+	})
+
+	It("has an lockforupdate method", func() {
+		table := NewTable("users")
+		mgr := table.From(table)
+		sql := mgr.LockForUpdate().ToSql()
 		expected := "SELECT FROM \"users\" FOR UPDATE"
 		Expect(sql).To(Equal(expected))
 	})
