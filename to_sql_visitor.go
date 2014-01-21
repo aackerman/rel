@@ -36,7 +36,7 @@ func (v ToSqlVisitor) Visit(visitable Visitable) string {
 	case *SelectStatementNode:
 		return v.VisitSelectStatementNode(val)
 	case *InNode:
-		return v.VisitInNode(*val)
+		return v.VisitInNode(val)
 	case SqlLiteralNode:
 		return v.VisitSqlLiteralNode(val)
 	case *SqlLiteralNode:
@@ -263,7 +263,7 @@ func (v ToSqlVisitor) VisitNotInNode(node NotInNode) string {
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitInNode(node InNode) string {
+func (v ToSqlVisitor) VisitInNode(node *InNode) string {
 	if len(node.Right) == 0 {
 		return "1=0"
 	}
