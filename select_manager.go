@@ -6,7 +6,7 @@ import (
 
 type SelectManager struct {
 	Engine Engine
-	Ast    SelectStatementNode
+	Ast    *SelectStatementNode
 	Ctx    *SelectCoreNode
 	BaseVisitable
 }

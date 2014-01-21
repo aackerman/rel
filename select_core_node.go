@@ -12,8 +12,8 @@ type SelectCoreNode struct {
 	BaseVisitable
 }
 
-func NewSelectCoreNode() SelectCoreNode {
-	return SelectCoreNode{
+func NewSelectCoreNode() *SelectCoreNode {
+	return &SelectCoreNode{
 		Source: &JoinSource{
 			Right: []Visitable{},
 		},

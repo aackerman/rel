@@ -33,8 +33,8 @@ func (v ToSqlVisitor) Visit(visitable Visitable) string {
 	switch val := visitable.(type) {
 	case nil:
 		return v.VisitNil()
-	case SelectStatementNode:
-		return v.VisitSelectStatementNode(val)
+	case *SelectStatementNode:
+		return v.VisitSelectStatementNode(*val)
 	case *InNode:
 		return v.VisitInNode(*val)
 	case SqlLiteralNode:
