@@ -34,7 +34,7 @@ func (v ToSqlVisitor) Visit(visitable Visitable) string {
 	case nil:
 		return v.VisitNil()
 	case *SelectStatementNode:
-		return v.VisitSelectStatementNode(*val)
+		return v.VisitSelectStatementNode(val)
 	case *InNode:
 		return v.VisitInNode(*val)
 	case SqlLiteralNode:
@@ -1115,7 +1115,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitSelectStatementNode(node SelectStatementNode) string {
+func (v ToSqlVisitor) VisitSelectStatementNode(node *SelectStatementNode) string {
 	var buf bytes.Buffer
 
 	// add WITH clause to the buffer

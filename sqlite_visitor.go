@@ -13,7 +13,7 @@ func (v SQLiteVisitor) Visit(a Visitable) string {
 	case *LockNode:
 		return v.VisitLockNode(*val)
 	case *SelectStatementNode:
-		return v.VisitSelectStatementNode(*val)
+		return v.VisitSelectStatementNode(val)
 	default:
 		return v.ToSqlVisitor.Visit(a)
 	}
@@ -25,7 +25,7 @@ func (v SQLiteVisitor) VisitLockNode(node LockNode) string {
 	return ""
 }
 
-func (v SQLiteVisitor) VisitSelectStatementNode(node SelectStatementNode) string {
+func (v SQLiteVisitor) VisitSelectStatementNode(node *SelectStatementNode) string {
 	if node.Offset != nil && node.Limit == nil {
 		node.Limit = &LimitNode{Expr: Sql("-1")}
 	}
