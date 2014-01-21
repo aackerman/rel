@@ -44,7 +44,7 @@ func (v ToSqlVisitor) Visit(visitable Visitable) string {
 	case JoinSource:
 		return v.VisitJoinSourceNode(val)
 	case *EqualityNode:
-		return v.VisitEqualityNode(*val)
+		return v.VisitEqualityNode(val)
 	case *HavingNode:
 		return v.VisitHavingNode(*val)
 	case *AttributeNode:
@@ -907,7 +907,7 @@ func (v ToSqlVisitor) VisitAttributeNode(node AttributeNode) string {
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitEqualityNode(node EqualityNode) string {
+func (v ToSqlVisitor) VisitEqualityNode(node *EqualityNode) string {
 	var buf bytes.Buffer
 	if node.Right == nil {
 		buf.WriteString(v.Visit(node.Left))
