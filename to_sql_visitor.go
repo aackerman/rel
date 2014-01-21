@@ -46,7 +46,7 @@ func (v ToSqlVisitor) Visit(visitable Visitable) string {
 	case *EqualityNode:
 		return v.VisitEqualityNode(val)
 	case *HavingNode:
-		return v.VisitHavingNode(*val)
+		return v.VisitHavingNode(val)
 	case *AttributeNode:
 		return v.VisitAttributeNode(*val)
 	case *GroupNode:
@@ -873,7 +873,7 @@ func (v ToSqlVisitor) VisitGroupNode(node GroupNode) string {
 	return v.Visit(node.Expr)
 }
 
-func (v ToSqlVisitor) VisitHavingNode(node HavingNode) string {
+func (v ToSqlVisitor) VisitHavingNode(node *HavingNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("HAVING ")
 	buf.WriteString(v.Visit(node.Expr))
@@ -1097,7 +1097,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node SelectCoreNode) string {
 	// add HAVING statement to the buffer
 	if node.Having != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitHavingNode(*node.Having))
+		buf.WriteString(v.VisitHavingNode(node.Having))
 	}
 
 	// add WINDOW statements to the buffer
