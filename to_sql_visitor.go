@@ -48,7 +48,7 @@ func (v ToSqlVisitor) Visit(visitable Visitable) string {
 	case *HavingNode:
 		return v.VisitHavingNode(val)
 	case *AttributeNode:
-		return v.VisitAttributeNode(*val)
+		return v.VisitAttributeNode(val)
 	case *GroupNode:
 		return v.VisitGroupNode(*val)
 	case *ExistsNode:
@@ -899,7 +899,7 @@ func (v ToSqlVisitor) VisitExistsNode(node ExistsNode) string {
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitAttributeNode(node AttributeNode) string {
+func (v ToSqlVisitor) VisitAttributeNode(node *AttributeNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.QuoteTableName(node.Relation))
 	buf.WriteString(".")
