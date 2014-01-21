@@ -223,7 +223,7 @@ func (v ToSqlVisitor) VisitExtractNode(node *ExtractNode) string {
 	for i, expression := range node.Expressions {
 		buf.WriteString(v.Visit(expression))
 		if i != len(node.Expressions)-1 {
-			buf.WriteString(", ")
+			buf.WriteString(COMMA)
 		}
 	}
 	buf.WriteString(")")
@@ -256,7 +256,7 @@ func (v ToSqlVisitor) VisitNotInNode(node *NotInNode) string {
 		buf.WriteString(v.Visit(expr))
 		// Join on ", "
 		if i != len(node.Right)-1 {
-			buf.WriteString(", ")
+			buf.WriteString(COMMA)
 		}
 	}
 	buf.WriteString(")")
@@ -274,7 +274,7 @@ func (v ToSqlVisitor) VisitInNode(node *InNode) string {
 		buf.WriteString(v.Visit(expr))
 		// Join on ", "
 		if i != len(node.Right)-1 {
-			buf.WriteString(", ")
+			buf.WriteString(COMMA)
 		}
 	}
 	buf.WriteString(")")
@@ -308,7 +308,7 @@ func (v ToSqlVisitor) VisitNamedFunctionNode(node *NamedFunctionNode) string {
 		buf.WriteString(v.Visit(expr))
 		// Join on ", "
 		if i != len(node.Expressions)-1 {
-			buf.WriteString(", ")
+			buf.WriteString(COMMA)
 		}
 	}
 	buf.WriteString(")")
@@ -330,7 +330,7 @@ func (v ToSqlVisitor) VisitSumNode(node *SumNode) string {
 		buf.WriteString(v.Visit(expr))
 		// Join on ", "
 		if i != len(node.Expressions)-1 {
-			buf.WriteString(", ")
+			buf.WriteString(COMMA)
 		}
 	}
 	buf.WriteString(")")
@@ -352,7 +352,7 @@ func (v ToSqlVisitor) VisitAvgNode(node *AvgNode) string {
 		buf.WriteString(v.Visit(expr))
 		// Join on ", "
 		if i != len(node.Expressions)-1 {
-			buf.WriteString(", ")
+			buf.WriteString(COMMA)
 		}
 	}
 	buf.WriteString(")")
@@ -374,7 +374,7 @@ func (v ToSqlVisitor) VisitMinNode(node *MinNode) string {
 		buf.WriteString(v.Visit(expr))
 		// Join on ", "
 		if i != len(node.Expressions)-1 {
-			buf.WriteString(", ")
+			buf.WriteString(COMMA)
 		}
 	}
 	buf.WriteString(")")
@@ -396,7 +396,7 @@ func (v ToSqlVisitor) VisitMaxNode(node *MaxNode) string {
 		buf.WriteString(v.Visit(expr))
 		// Join on ", "
 		if i != len(node.Expressions)-1 {
-			buf.WriteString(", ")
+			buf.WriteString(COMMA)
 		}
 	}
 	buf.WriteString(")")
@@ -452,7 +452,7 @@ func (v ToSqlVisitor) VisitValuesNode(node *ValuesNode) string {
 		buf.WriteString(v.Quote(value))
 		// Join on ", "
 		if i != len(node.Values)-1 {
-			buf.WriteString(", ")
+			buf.WriteString(COMMA)
 		}
 	}
 	buf.WriteString(")")
@@ -522,7 +522,7 @@ func (v ToSqlVisitor) VisitUpdateStatementNode(node UpdateStatementNode) string 
 			buf.WriteString(v.Visit(value))
 			// Join on ", "
 			if i != len(*node.Values)-1 {
-				buf.WriteString(", ")
+				buf.WriteString(COMMA)
 			}
 		}
 	}
@@ -552,7 +552,7 @@ func (v ToSqlVisitor) VisitInsertStatementNode(node *InsertStatementNode) string
 			buf.WriteString(v.QuoteColumnName(column.Name))
 			// Join on ", "
 			if i != len(*node.Columns)-1 {
-				buf.WriteString(", ")
+				buf.WriteString(COMMA)
 			}
 		}
 		buf.WriteString(")")
@@ -659,7 +659,7 @@ func (v ToSqlVisitor) VisitNamedWindowNode(node *NamedWindowNode) string {
 			buf.WriteString(v.Visit(order))
 			// Join on ", "
 			if i != len(*node.Orders)-1 {
-				buf.WriteString(", ")
+				buf.WriteString(COMMA)
 			}
 		}
 	}
@@ -687,7 +687,7 @@ func (v ToSqlVisitor) VisitWindowNode(node *WindowNode) string {
 			buf.WriteString(v.Visit(order))
 			// Join on ", "
 			if i != len(*node.Orders)-1 {
-				buf.WriteString(", ")
+				buf.WriteString(COMMA)
 			}
 		}
 	}
@@ -758,7 +758,7 @@ func (v ToSqlVisitor) VisitCountNode(node *CountNode) string {
 		buf.WriteString(v.Visit(expr))
 		// Join on ", "
 		if i != len(node.Expressions)-1 {
-			buf.WriteString(", ")
+			buf.WriteString(COMMA)
 		}
 	}
 	buf.WriteString(")")
@@ -887,7 +887,7 @@ func (v ToSqlVisitor) VisitExistsNode(node *ExistsNode) string {
 		buf.WriteString(v.Visit(expr))
 		// Join on ", "
 		if i != len(node.Expressions)-1 {
-			buf.WriteString(", ")
+			buf.WriteString(COMMA)
 		}
 	}
 	buf.WriteString(")")
