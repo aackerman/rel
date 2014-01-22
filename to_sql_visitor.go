@@ -2,7 +2,6 @@ package rel
 
 import (
 	"bytes"
-	"fmt"
 	"log"
 	"runtime/debug"
 	"strings"
@@ -922,15 +921,21 @@ func (v ToSqlVisitor) VisitEqualityNode(node *EqualityNode) string {
 func (v ToSqlVisitor) VisitTable(table *Table) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.QuoteTableName(table))
-	if table.TableAlias != nil {
+	if table.TableAlias != "" {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.QuoteTableName(table.TableAlias))
+		alias := &TableAliasNode{Relation: table, Name: Sql(table.TableAlias), Quoted: true}
+		buf.WriteString(v.QuoteTableName(alias))
 	}
 	return buf.String()
 }
 
-func (v ToSqlVisitor) QuoteTableName(stringer fmt.Stringer) string {
-	return v.Conn.QuoteTableName(stringer.String())
+func (v ToSqlVisitor) QuoteTableName(visitable Visitable) string {
+	if alias, ok := visitable.(*TableAliasNode); ok {
+		if !alias.Quoted {
+			return alias.Name.Raw
+		}
+	}
+	return v.Conn.QuoteTableName(visitable.String())
 }
 
 func (v ToSqlVisitor) Quote(thing interface{}) string {

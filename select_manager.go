@@ -53,10 +53,10 @@ func (mgr *SelectManager) From(table *Table) *SelectManager {
 	return mgr
 }
 
-func (mgr *SelectManager) As(literal SqlLiteralNode) *TableAliasNode {
+func (mgr *SelectManager) As(node SqlLiteralNode) *TableAliasNode {
 	return &TableAliasNode{
 		Relation: &GroupingNode{Expr: []Visitable{mgr.Ast}},
-		Name:     literal,
+		Name:     node,
 	}
 }
 
