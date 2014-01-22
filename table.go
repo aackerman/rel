@@ -9,7 +9,7 @@ import (
 type Table struct {
 	Name       string
 	Engine     Engine
-	TableAlias string
+	TableAlias *TableAliasNode
 	Aliases    *[]*TableAliasNode
 	BaseVisitable
 }
@@ -88,7 +88,7 @@ func (t *Table) InsertManager() *InsertManager {
 }
 
 func (t *Table) SetTableAlias(name string) {
-	t.TableAlias = name
+	t.TableAlias = &TableAliasNode{Relation: t, Name: Sql(name)}
 }
 
 func (t *Table) Alias() *TableAliasNode {
@@ -107,7 +107,7 @@ func (t *Table) Alias() *TableAliasNode {
 	buf.WriteString(strconv.Itoa(n + 2))
 
 	// create the alias
-	alias := &TableAliasNode{Relation: t, Name: Sql(buf.String()), Quoted: true}
+	alias := &TableAliasNode{Relation: t, Name: Sql(buf.String())}
 
 	// append the new alias to the list of current aliases
 	*t.Aliases = append(*t.Aliases, alias)

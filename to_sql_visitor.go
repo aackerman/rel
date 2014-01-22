@@ -921,12 +921,10 @@ func (v ToSqlVisitor) VisitEqualityNode(node *EqualityNode) string {
 
 func (v ToSqlVisitor) VisitTable(table *Table) string {
 	var buf bytes.Buffer
-	if table.TableAlias != "" {
+	if table.TableAlias != nil {
 		buf.WriteString(v.QuoteTableName(table))
 		buf.WriteString(SPACE)
-		// FIXME: table.TableAlias should be a ptr to a TableAliasNode not a string
-		alias := &TableAliasNode{Relation: table, Name: Sql(table.TableAlias), Quoted: true}
-		buf.WriteString(v.QuoteTableName(alias))
+		buf.WriteString(v.QuoteTableName(table.TableAlias))
 	} else {
 		buf.WriteString(v.QuoteTableName(table))
 	}
