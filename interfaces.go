@@ -11,6 +11,7 @@ type Visitable interface {
 	NewOnNode(Visitable) *OnNode
 	NewNotNode() NotNode
 	NewGroupingNode() GroupingNode
+	String() string
 }
 
 type Visitor interface {
@@ -22,24 +23,16 @@ type TreeManager interface {
 	ToSql() string
 }
 
-type Connection struct{}
-
-func (c *Connection) QuoteTableName(name string) string {
-	return "\"" + name + "\""
-}
-
-func (c *Connection) QuoteColumnName(name string) string {
-	return "\"" + name + "\""
-}
-
 type Engine interface {
 	Visitor() Visitor
-	Connection() *Connection
-	QuoteTableName(string) string
-	QuoteColumnName(string) string
-	TableExists(string) bool
 }
 
-func Register(name string, engine Engine) {
+type Connector interface {
+	QuoteTableName(string) string
+	QuoteColumnName(string) string
+	Quote(interface{}) string
+}
+
+func Register(engine Engine) {
 	DefaultEngine = engine
 }

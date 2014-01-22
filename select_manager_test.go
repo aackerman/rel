@@ -9,7 +9,7 @@ import (
 
 var _ = Describe("SelectManager", func() {
 	BeforeEach(func() {
-		Register("postgresql", NewEngine())
+		Register(NewTestEngine())
 	})
 
 	It("has a skip method", func() {

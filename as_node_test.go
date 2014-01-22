@@ -8,7 +8,7 @@ import (
 
 var _ = Describe("AsNode", func() {
 	BeforeEach(func() {
-		Register("postgresql", NewEngine())
+		Register(NewTestEngine())
 	})
 
 	It("can be equal to other AsNode's", func() {

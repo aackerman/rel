@@ -4,6 +4,10 @@ package rel
 // All other nodes should have an embedded BaseVisitable
 type BaseVisitable struct{}
 
+func (v BaseVisitable) String() string {
+	return ""
+}
+
 func (v BaseVisitable) NewTrueNode() TrueNode {
 	return TrueNode{}
 }

@@ -5,12 +5,11 @@ import (
 	"fmt"
 	"log"
 	"runtime/debug"
-	"strconv"
 	"strings"
 )
 
 type ToSqlVisitor struct {
-	Conn *Connection
+	Conn Connector
 }
 
 const (
@@ -926,7 +925,7 @@ func (v ToSqlVisitor) VisitTable(table *Table) string {
 		buf.WriteString(v.QuoteTableName(table))
 		buf.WriteString(SPACE)
 		// FIXME: table.TableAlias should be a ptr to a TableAliasNode not a string
-		alias := TableAliasNode{Relation: table, Name: Sql(table.TableAlias), Quoted: true}
+		alias := &TableAliasNode{Relation: table, Name: Sql(table.TableAlias), Quoted: true}
 		buf.WriteString(v.QuoteTableName(alias))
 	} else {
 		buf.WriteString(v.QuoteTableName(table))
@@ -934,47 +933,12 @@ func (v ToSqlVisitor) VisitTable(table *Table) string {
 	return buf.String()
 }
 
-// FIXME: far too complex
-func (v ToSqlVisitor) QuoteTableName(visitable Visitable) string {
-	switch rel := visitable.(type) {
-	case *Table:
-		return v.Conn.QuoteTableName(rel.Name)
-	case TableAliasNode:
-		if rel.Quoted == true {
-			return v.Conn.QuoteTableName(rel.Name.Raw)
-		} else {
-			return rel.Name.Raw
-		}
-	case *TableAliasNode:
-		if rel.Quoted == true {
-			return v.Conn.QuoteTableName(rel.Name.Raw)
-		} else {
-			return rel.Name.Raw
-		}
-	case SqlLiteralNode:
-		return rel.Raw
-	default:
-		return ""
-	}
+func (v ToSqlVisitor) QuoteTableName(stringer fmt.Stringer) string {
+	return v.Conn.QuoteTableName(stringer.String())
 }
 
 func (v ToSqlVisitor) Quote(thing interface{}) string {
-	switch t := thing.(type) {
-	case bool:
-		if t {
-			return "'t'"
-		} else {
-			return "'f'"
-		}
-	case int:
-		return strconv.Itoa(t)
-	case nil:
-		return "NULL"
-	case SqlLiteralNode:
-		return t.Raw
-	default:
-		return fmt.Sprintf("'%s'", t)
-	}
+	return v.Conn.Quote(thing)
 }
 
 func (v ToSqlVisitor) QuoteColumnName(literal SqlLiteralNode) string {

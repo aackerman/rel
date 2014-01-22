@@ -8,7 +8,7 @@ import (
 
 var _ = Describe("ExtractNode", func() {
 	BeforeEach(func() {
-		Register("postgresql", NewEngine())
+		Register(NewTestEngine())
 	})
 
 	It("implements Orderer", func() {

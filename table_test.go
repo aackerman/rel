@@ -8,7 +8,7 @@ import (
 
 var _ = Describe("Table", func() {
 	BeforeEach(func() {
-		Register("postgresql", NewEngine())
+		Register(NewTestEngine())
 	})
 
 	It("has a name", func() {

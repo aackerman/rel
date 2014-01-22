@@ -8,7 +8,7 @@ import (
 
 var _ = Describe("CountNode", func() {
 	BeforeEach(func() {
-		Register("postgresql", NewEngine())
+		Register(NewTestEngine())
 	})
 
 	It("can be equal to other CountNode's", func() {

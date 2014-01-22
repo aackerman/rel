@@ -10,3 +10,7 @@ type TableAliasNode struct {
 func (t *TableAliasNode) Attr(name string) *AttributeNode {
 	return NewAttributeNode(t, name)
 }
+
+func (t *TableAliasNode) String() string {
+	return t.Name.Raw
+}

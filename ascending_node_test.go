@@ -8,7 +8,7 @@ import (
 
 var _ = Describe("AscendingNode", func() {
 	BeforeEach(func() {
-		Register("postgresql", NewEngine())
+		Register(NewTestEngine())
 	})
 
 	It("can be equal to another AscendingNode", func() {

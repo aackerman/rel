@@ -8,7 +8,7 @@ import (
 
 var _ = Describe("AscendingNode", func() {
 	BeforeEach(func() {
-		Register("postgresql", NewEngine())
+		Register(NewTestEngine())
 	})
 
 	It("should alias the expression", func() {

@@ -23,6 +23,10 @@ func NewTable(name string) *Table {
 	return &Table{Name: name, Engine: DefaultEngine}
 }
 
+func (t *Table) String() string {
+	return t.Name
+}
+
 func (t *Table) Project(a ...Visitable) *SelectManager {
 	return t.Select(a...)
 }

@@ -8,7 +8,7 @@ import (
 
 var _ = Describe("InsertStatementNode", func() {
 	BeforeEach(func() {
-		Register("postgresql", NewEngine())
+		Register(NewTestEngine())
 	})
 
 	It("is equal to other insert statements", func() {

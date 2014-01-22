@@ -2,58 +2,54 @@ package rel_test
 
 import (
 	. "."
+	"fmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-
+	"strconv"
 	"testing"
 )
 
-type BaseEngine struct {
-	pool        ConnectionPool
-	visitor     Visitor
-	tables      []string
-	primaryKeys []string
-	columns     []string
+type BaseNewTestEngine struct {
+	visitor Visitor
 }
 
-type ConnectionPool struct {
-	conn *Connection
-}
-
-func (e BaseEngine) Connection() *Connection {
-	return e.pool.Connection()
-}
-
-func (e BaseEngine) Visitor() Visitor {
+func (e BaseNewTestEngine) Visitor() Visitor {
 	return e.visitor
 }
 
-func NewEngine() *BaseEngine {
-	e := new(BaseEngine)
-	e.pool = ConnectionPool{conn: new(Connection)}
-	e.visitor = ToSqlVisitor{Conn: e.pool.Connection()}
-	return e
-}
-
-func (e BaseEngine) QuoteTableName(name string) string {
-	return "\"" + name + "\""
-}
-
-func (e BaseEngine) QuoteColumnName(name string) string {
-	return "\"" + name + "\""
-}
-
-func (e BaseEngine) TableExists(tableName string) bool {
-	for _, name := range e.tables {
-		if tableName == name {
-			return true
-		}
+func NewTestEngine() *BaseNewTestEngine {
+	return &BaseNewTestEngine{
+		visitor: ToSqlVisitor{Conn: BaseTestConnector{}},
 	}
-	return false
 }
 
-func (p *ConnectionPool) Connection() *Connection {
-	return p.conn
+type BaseTestConnector struct{}
+
+func (c BaseTestConnector) Quote(thing interface{}) string {
+	switch t := thing.(type) {
+	case bool:
+		if t {
+			return "'t'"
+		} else {
+			return "'f'"
+		}
+	case int:
+		return strconv.Itoa(t)
+	case nil:
+		return "NULL"
+	case SqlLiteralNode:
+		return t.Raw
+	default:
+		return fmt.Sprintf("'%s'", t)
+	}
+}
+
+func (c BaseTestConnector) QuoteTableName(name string) string {
+	return "\"" + name + "\""
+}
+
+func (c BaseTestConnector) QuoteColumnName(name string) string {
+	return "\"" + name + "\""
 }
 
 func TestRel(t *testing.T) {

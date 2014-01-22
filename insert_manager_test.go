@@ -8,7 +8,7 @@ import (
 
 var _ = Describe("InsertManager", func() {
 	BeforeEach(func() {
-		Register("postgresql", NewEngine())
+		Register(NewTestEngine())
 	})
 
 	It("can create values", func() {
