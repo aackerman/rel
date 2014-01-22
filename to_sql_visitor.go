@@ -923,8 +923,11 @@ func (v ToSqlVisitor) VisitTable(table *Table) string {
 	buf.WriteString(v.QuoteTableName(table))
 	if table.TableAlias != "" {
 		buf.WriteString(SPACE)
-		alias := &TableAliasNode{Relation: table, Name: Sql(table.TableAlias), Quoted: true}
-		buf.WriteString(v.QuoteTableName(alias))
+		buf.WriteString(v.QuoteTableName(&TableAliasNode{
+			Relation: table,
+			Name:     Sql(table.TableAlias),
+			Quoted:   true,
+		}))
 	}
 	return buf.String()
 }
