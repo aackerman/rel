@@ -30,17 +30,17 @@ func (mgr *SelectManager) ToSql() string {
 	return mgr.Engine.Visitor().Accept(mgr.Ast)
 }
 
-func (mgr *SelectManager) Project(projections ...Visitable) *SelectManager {
-	return mgr.Select(projections...)
+func (mgr *SelectManager) Project(selections ...Visitable) *SelectManager {
+	return mgr.Select(selections...)
 }
 
 func (mgr *SelectManager) Select(selections ...Visitable) *SelectManager {
 	for _, selection := range selections {
-		if mgr.Ctx.Projections == nil {
-			mgr.Ctx.Projections = &[]Visitable{}
+		if mgr.Ctx.Selections == nil {
+			mgr.Ctx.Selections = &[]Visitable{}
 		}
 
-		*mgr.Ctx.Projections = append(*mgr.Ctx.Projections, selection)
+		*mgr.Ctx.Selections = append(*mgr.Ctx.Selections, selection)
 	}
 	return mgr
 }

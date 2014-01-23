@@ -3,7 +3,7 @@ package rel
 type SelectCoreNode struct {
 	Source       *JoinSource
 	Top          *TopNode
-	Projections  *[]Visitable
+	Selections   *[]Visitable
 	SetQuanifier Visitable
 	Wheres       *[]Visitable
 	Groups       *[]*GroupNode

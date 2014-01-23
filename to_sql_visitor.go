@@ -498,11 +498,10 @@ func (v ToSqlVisitor) VisitUpdateStatementNode(node UpdateStatementNode) string 
 		core.SetFrom(node.Relation)
 		core.Wheres = &wheres
 
-		if core.Projections == nil {
-			slice := make([]Visitable, 0)
-			core.Projections = &slice
+		if core.Selections == nil {
+			core.Selections = &[]Visitable{}
 		}
-		*core.Projections = append(*core.Projections, node.Key)
+		*core.Selections = append(*core.Selections, node.Key)
 		stmt.Limit = node.Limit
 		stmt.Orders = node.Orders
 
@@ -1012,13 +1011,13 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node *SelectCoreNode) string {
 	}
 
 	// add select projections
-	if node.Projections != nil && len(*node.Projections) > 0 {
+	if node.Selections != nil && len(*node.Selections) > 0 {
 		buf.WriteString(SPACE)
-		for i, projection := range *node.Projections {
-			if projection != nil {
-				buf.WriteString(v.Visit(projection))
+		for i, selection := range *node.Selections {
+			if selection != nil {
+				buf.WriteString(v.Visit(selection))
 				// Join on ", "
-				if i != len(*node.Projections)-1 {
+				if i != len(*node.Selections)-1 {
 					buf.WriteString(COMMA)
 				}
 			}
