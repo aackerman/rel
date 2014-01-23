@@ -63,8 +63,8 @@ func NewLockNode(n Visitable) *LockNode {
 	return &LockNode{Expr: n}
 }
 
-func NewDistinctOnNode(n Visitable) DistinctOnNode {
-	return DistinctOnNode{Expr: n}
+func NewDistinctOnNode(n Visitable) *DistinctOnNode {
+	return &DistinctOnNode{Expr: n}
 }
 
 func NewWithNode(n Visitable) WithNode {

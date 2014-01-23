@@ -180,12 +180,12 @@ func (mgr *SelectManager) Having(visitables ...Visitable) *SelectManager {
 }
 
 func (mgr *SelectManager) Distinct() *SelectManager {
-	mgr.Ctx.SetQuanifier = &DistinctNode{}
+	mgr.Ctx.SetQuantifier = &DistinctNode{}
 	return mgr
 }
 
 func (mgr *SelectManager) NotDistinct() *SelectManager {
-	mgr.Ctx.SetQuanifier = nil
+	mgr.Ctx.SetQuantifier = nil
 	return mgr
 }
 

@@ -1,14 +1,14 @@
 package rel
 
 type SelectCoreNode struct {
-	Source       *JoinSource
-	Top          *TopNode
-	Selections   *[]Visitable
-	SetQuanifier Visitable
-	Wheres       *[]Visitable
-	Groups       *[]*GroupNode
-	Having       *HavingNode
-	Windows      *[]Visitable
+	Source        *JoinSource
+	Top           *TopNode
+	Selections    *[]Visitable
+	SetQuantifier Visitable
+	Wheres        *[]Visitable
+	Groups        *[]*GroupNode
+	Having        *HavingNode
+	Windows       *[]Visitable
 	BaseVisitable
 }
 

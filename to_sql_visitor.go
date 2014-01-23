@@ -26,7 +26,6 @@ func (v ToSqlVisitor) Accept(visitable Visitable) string {
 	return v.Visit(visitable)
 }
 
-// FIXME: Only visit pointers to visitables
 func (v ToSqlVisitor) Visit(visitable Visitable) string {
 	switch val := visitable.(type) {
 	case nil:
@@ -1005,9 +1004,9 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node *SelectCoreNode) string {
 		buf.WriteString(v.VisitTopNode(*node.Top))
 	}
 
-	if node.SetQuanifier != nil {
+	if node.SetQuantifier != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.Visit(node.SetQuanifier))
+		buf.WriteString(v.Visit(node.SetQuantifier))
 	}
 
 	// add select projections
