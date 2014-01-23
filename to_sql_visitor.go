@@ -984,11 +984,7 @@ func (v ToSqlVisitor) VisitInnerJoinNode(node *InnerJoinNode) string {
 }
 
 func (v ToSqlVisitor) VisitSqlLiteralNode(node SqlLiteralNode) string {
-	if node.Raw != "" {
-		return node.Raw
-	} else {
-		return ""
-	}
+	return node.Raw
 }
 
 func (v ToSqlVisitor) VisitTableAliasNode(node *TableAliasNode) string {
