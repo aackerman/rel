@@ -4,18 +4,18 @@ type SQLiteVisitor struct {
 	ToSqlVisitor
 }
 
-func (v SQLiteVisitor) Accept(a Visitable) string {
-	return v.Visit(a)
+func (v SQLiteVisitor) Accept(visitable Visitable) string {
+	return v.Visit(visitable)
 }
 
-func (v SQLiteVisitor) Visit(a Visitable) string {
-	switch val := a.(type) {
+func (v SQLiteVisitor) Visit(visitable Visitable) string {
+	switch val := visitable.(type) {
 	case *LockNode:
 		return v.VisitLockNode(val)
 	case *SelectStatementNode:
 		return v.VisitSelectStatementNode(val)
 	default:
-		return v.ToSqlVisitor.Visit(a)
+		return v.ToSqlVisitor.Visit(visitable)
 	}
 }
 
