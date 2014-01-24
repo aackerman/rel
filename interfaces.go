@@ -16,72 +16,73 @@ type Visitable interface {
 
 type Visitor interface {
 	Accept(Visitable) string
+	QuoteColumnName() string
 	Visit(Visitable) string
-	VisitNil() string
-	VisitSelectStatementNode(*SelectStatementNode) string
-	VisitInNode(*InNode) string
-	VisitSqlLiteralNode(SqlLiteralNode) string
-	VisitJoinSourceNode(*JoinSource) string
-	VisitEqualityNode(*EqualityNode) string
-	VisitHavingNode(*HavingNode) string
-	VisitAttributeNode(*AttributeNode) string
-	VisitGroupNode(*GroupNode) string
-	VisitExistsNode(*ExistsNode) string
-	VisitAsNode(*AsNode) string
-	VisitLessThanNode(*LessThanNode) string
-	VisitUnionNode(*UnionNode) string
-	VisitUnionAllNode(*UnionAllNode) string
-	VisitSelectManager(*SelectManager) string
-	VisitGreaterThanNode(*GreaterThanNode) string
-	VisitIntersectNode(*IntersectNode) string
-	VisitExceptNode(*ExceptNode) string
-	VisitOnNode(*OnNode) string
-	VisitAscendingNode(*AscendingNode) string
-	VisitDescendingNode(*DescendingNode) string
-	VisitCountNode(*CountNode) string
 	VisitAndNode(*AndNode) string
-	VisitTableAliasNode(*TableAliasNode) string
-	VisitInnerJoinNode(*InnerJoinNode) string
-	VisitGroupingNode(*GroupingNode) string
-	VisitNamedWindowNode(*NamedWindowNode) string
-	VisitWindowNode(*WindowNode) string
-	VisitRowsNode(*RowsNode) string
-	VisitPrecedingNode(*PrecedingNode) string
-	VisitFollowingNode(*FollowingNode) string
-	VisitCurrentRowNode(*CurrentRowNode) string
+	VisitAscendingNode(*AscendingNode) string
+	VisitAsNode(*AsNode) string
+	VisitAssignmentNode(*AssignmentNode) string
+	VisitAttributeNode(*AttributeNode) string
+	VisitAvgNode(*AvgNode) string
 	VisitBetweenNode(*BetweenNode) string
-	VisitRangeNode(*RangeNode) string
+	VisitBinNode(*BinNode) string
+	VisitCountNode(*CountNode) string
+	VisitCurrentRowNode(*CurrentRowNode) string
+	VisitDescendingNode(*DescendingNode) string
 	VisitDistinctNode(*DistinctNode) string
+	VisitDoesNotMatchNode(*DoesNotMatchNode) string
+	VisitEqualityNode(*EqualityNode) string
+	VisitExceptNode(*ExceptNode) string
+	VisitExistsNode(*ExistsNode) string
+	VisitExtractNode(*ExtractNode) string
+	VisitFollowingNode(*FollowingNode) string
+	VisitGreaterThanNode(*GreaterThanNode) string
+	VisitGreaterThanOrEqualNode(*GreaterThanOrEqualNode) string
+	VisitGroupingNode(*GroupingNode) string
+	VisitGroupNode(*GroupNode) string
+	VisitHavingNode(*HavingNode) string
+	VisitInfixOperationNode(*InfixOperationNode) string
+	VisitInnerJoinNode(*InnerJoinNode) string
+	VisitInNode(*InNode) string
+	VisitInsertStatementNode(*InsertStatementNode) string
+	VisitIntersectNode(*IntersectNode) string
+	VisitJoinSourceNode(*JoinSource) string
+	VisitLessThanNode(*LessThanNode) string
+	VisitLessThanOrEqualNode(*LessThanOrEqualNode) string
+	VisitLimitNode(*LimitNode) string
+	VisitLockNode(*LockNode) string
+	VisitMatchesNode(*MatchesNode) string
+	VisitMaxNode(*MaxNode) string
+	VisitMinNode(*MinNode) string
+	VisitMultiStatementManager(*MultiStatementManager) string
+	VisitNamedFunctionNode(*NamedFunctionNode) string
+	VisitNamedWindowNode(*NamedWindowNode) string
+	VisitNil() string
+	VisitNotEqualNode(*NotEqualNode) string
+	VisitNotInNode(*NotInNode) string
+	VisitNotNode(*NotNode) string
+	VisitOffsetNode(*OffsetNode) string
+	VisitOnNode(*OnNode) string
+	VisitOrNode(*OrNode) string
+	VisitOverNode(*OverNode) string
+	VisitPrecedingNode(*PrecedingNode) string
+	VisitQuotedNode(*QuotedNode) string
+	VisitRangeNode(*RangeNode) string
+	VisitRowsNode(*RowsNode) string
+	VisitSelectCoreNode(*SelectCoreNode) string
+	VisitSelectManager(*SelectManager) string
+	VisitSelectStatementNode(*SelectStatementNode) string
+	VisitSqlLiteralNode(SqlLiteralNode) string
+	VisitSumNode(*SumNode) string
+	VisitTable(*Table) string
+	VisitTableAliasNode(*TableAliasNode) string
+	VisitUnionAllNode(*UnionAllNode) string
+	VisitUnionNode(*UnionNode) string
+	VisitUnqualifiedColumnNode(*UnqualifiedColumnNode) string
+	VisitValuesNode(*ValuesNode) string
+	VisitWindowNode(*WindowNode) string
 	VisitWithNode(*WithNode) string
 	VisitWithRecursiveNode(*WithRecursiveNode) string
-	VisitTable(*Table) string
-	VisitMultiStatementManager(*MultiStatementManager) string
-	VisitInsertStatementNode(*InsertStatementNode) string
-	VisitValuesNode(*ValuesNode) string
-	VisitSelectCoreNode(*SelectCoreNode) string
-	VisitNotEqualNode(*NotEqualNode) string
-	VisitNotNode(*NotNode) string
-	VisitGreaterThanOrEqualNode(*GreaterThanOrEqualNode) string
-	VisitLessThanOrEqualNode(*LessThanOrEqualNode) string
-	VisitOrNode(*OrNode) string
-	VisitAvgNode(*AvgNode) string
-	VisitNamedFunctionNode(*NamedFunctionNode) string
-	VisitSumNode(*SumNode) string
-	VisitMinNode(*MinNode) string
-	VisitMaxNode(*MaxNode) string
-	VisitMatchesNode(*MatchesNode) string
-	VisitDoesNotMatchNode(*DoesNotMatchNode) string
-	VisitNotInNode(*NotInNode) string
-	VisitBinNode(*BinNode) string
-	VisitExtractNode(*ExtractNode) string
-	VisitInfixOperationNode(*InfixOperationNode) string
-	VisitQuotedNode(*QuotedNode) string
-	VisitOverNode(*OverNode) string
-	VisitAssignmentNode(*AssignmentNode) string
-	VisitLimitNode(*LimitNode) string
-	VisitOffsetNode(*OffsetNode) string
-	VisitLockNode(*LockNode) string
-	VisitUnqualifiedColumnNode(*UnqualifiedColumnNode) string
 }
 
 type TreeManager interface {
