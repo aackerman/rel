@@ -78,6 +78,9 @@ type Visitor interface {
 	VisitQuotedNode(*QuotedNode) string
 	VisitOverNode(*OverNode) string
 	VisitAssignmentNode(*AssignmentNode) string
+	VisitLimitNode(*LimitNode) string
+	VisitOffsetNode(*OffsetNode) string
+	VisitLockNode(*LockNode) string
 	VisitUnqualifiedColumnNode(*UnqualifiedColumnNode) string
 }
 

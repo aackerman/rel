@@ -11,7 +11,7 @@ func (v SQLiteVisitor) Accept(a Visitable) string {
 func (v SQLiteVisitor) Visit(a Visitable) string {
 	switch val := a.(type) {
 	case *LockNode:
-		return v.VisitLockNode(*val)
+		return v.VisitLockNode(val)
 	case *SelectStatementNode:
 		return v.VisitSelectStatementNode(val)
 	default:
@@ -21,7 +21,7 @@ func (v SQLiteVisitor) Visit(a Visitable) string {
 
 // VisitLockNode is overwritten for the SQLiteVisitor
 // Locks are not supported in SQLite
-func (v SQLiteVisitor) VisitLockNode(node LockNode) string {
+func (v SQLiteVisitor) VisitLockNode(node *LockNode) string {
 	return ""
 }
 
