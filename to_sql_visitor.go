@@ -38,7 +38,7 @@ func (v ToSqlVisitor) Visit(visitable Visitable) string {
 		return v.VisitSqlLiteralNode(val)
 	case *SqlLiteralNode:
 		return v.VisitSqlLiteralNode(*val)
-	case JoinSource:
+	case *JoinSource:
 		return v.VisitJoinSourceNode(val)
 	case *EqualityNode:
 		return v.VisitEqualityNode(val)
@@ -947,7 +947,7 @@ func (v ToSqlVisitor) QuoteColumnName(literal SqlLiteralNode) string {
 	return v.Conn.QuoteColumnName(literal.Raw)
 }
 
-func (v ToSqlVisitor) VisitJoinSourceNode(node JoinSource) string {
+func (v ToSqlVisitor) VisitJoinSourceNode(node *JoinSource) string {
 	var buf bytes.Buffer
 	if node.Left != nil {
 		buf.WriteString(v.Visit(node.Left))
@@ -1028,7 +1028,7 @@ func (v ToSqlVisitor) VisitSelectCoreNode(node *SelectCoreNode) string {
 		// assert the source is a *Table and check the length of the name
 		if t, ok := node.Source.Left.(*Table); ok && t.Name != "" {
 			buf.WriteString(" FROM ")
-			buf.WriteString(v.Visit(*node.Source))
+			buf.WriteString(v.Visit(node.Source))
 		}
 	}
 
