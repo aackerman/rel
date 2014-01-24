@@ -712,18 +712,18 @@ func (v ToSqlVisitor) VisitGroupingNode(node *GroupingNode) string {
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitLimitNode(node LimitNode) string {
+func (v ToSqlVisitor) VisitLimitNode(node *LimitNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("LIMIT ")
 	buf.WriteString(v.Visit(node.Expr))
 	return buf.String()
 }
 
-func (v ToSqlVisitor) VisitLockNode(node LockNode) string {
+func (v ToSqlVisitor) VisitLockNode(node *LockNode) string {
 	return v.Visit(node.Expr)
 }
 
-func (v ToSqlVisitor) VisitOffsetNode(node OffsetNode) string {
+func (v ToSqlVisitor) VisitOffsetNode(node *OffsetNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("OFFSET ")
 	buf.WriteString(v.Visit(node.Expr))
@@ -1109,19 +1109,19 @@ func (v ToSqlVisitor) VisitSelectStatementNode(node *SelectStatementNode) string
 	// add LIMIT clause to the buffer
 	if node.Limit != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitLimitNode(*node.Limit))
+		buf.WriteString(v.VisitLimitNode(node.Limit))
 	}
 
 	// add OFFSET clause to the buffer
 	if node.Offset != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitOffsetNode(*node.Offset))
+		buf.WriteString(v.VisitOffsetNode(node.Offset))
 	}
 
 	// add LOCK clause to the buffer
 	if node.Lock != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitLockNode(*node.Lock))
+		buf.WriteString(v.VisitLockNode(node.Lock))
 	}
 
 	return strings.TrimSpace(buf.String())
