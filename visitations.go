@@ -6,21 +6,21 @@ import (
 	"strings"
 )
 
-func VisitTopNode(v Visitor, node TopNode) string {
+func visitationTopNode(v Visitor, node *TopNode) string {
 	log.Fatal("NOT IMPLEMENTED FOR THIS DB")
 	return ""
 }
 
-func VisitOrderingNode(v Visitor, node *OrderingNode) string {
+func visitationOrderingNode(v Visitor, node *OrderingNode) string {
 	log.Fatal("NOT IMPLEMENTED")
 	return ""
 }
 
-func VisitUnqualifiedColumnNode(v Visitor, node *UnqualifiedColumnNode) string {
+func visitationUnqualifiedColumnNode(v Visitor, node *UnqualifiedColumnNode) string {
 	return v.QuoteColumnName(node.Name())
 }
 
-func VisitAssignmentNode(v Visitor, node *AssignmentNode) string {
+func visitationAssignmentNode(v Visitor, node *AssignmentNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" = ")
@@ -28,7 +28,7 @@ func VisitAssignmentNode(v Visitor, node *AssignmentNode) string {
 	return buf.String()
 }
 
-func VisitOverNode(v Visitor, node *OverNode) string {
+func visitationOverNode(v Visitor, node *OverNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" OVER ")
@@ -40,11 +40,11 @@ func VisitOverNode(v Visitor, node *OverNode) string {
 	return buf.String()
 }
 
-func VisitQuotedNode(v Visitor, node *QuotedNode) string {
+func visitationQuotedNode(v Visitor, node *QuotedNode) string {
 	return strings.Join([]string{"'", node.Raw, "'"}, "")
 }
 
-func VisitInfixOperationNode(v Visitor, node *InfixOperationNode) string {
+func visitationInfixOperationNode(v Visitor, node *InfixOperationNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(SPACE)
@@ -54,7 +54,7 @@ func VisitInfixOperationNode(v Visitor, node *InfixOperationNode) string {
 	return buf.String()
 }
 
-func VisitExtractNode(v Visitor, node *ExtractNode) string {
+func visitationExtractNode(v Visitor, node *ExtractNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("EXTRACT(")
 	buf.WriteString(strings.ToUpper(node.Field.Raw))
@@ -73,18 +73,18 @@ func VisitExtractNode(v Visitor, node *ExtractNode) string {
 	return buf.String()
 }
 
-func VisitBinNode(v Visitor, node *BinNode) string {
+func visitationBinNode(v Visitor, node *BinNode) string {
 	return v.Visit(node.Expr)
 }
 
-func VisitNotNode(v Visitor, node *NotNode) string {
+func visitationNotNode(v Visitor, node *NotNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("NOT ")
 	buf.WriteString(v.Visit(node.Expr))
 	return buf.String()
 }
 
-func VisitNotInNode(v Visitor, node *NotInNode) string {
+func visitationNotInNode(v Visitor, node *NotInNode) string {
 	if len(node.Right) == 0 {
 		return "1=1"
 	}
@@ -102,7 +102,7 @@ func VisitNotInNode(v Visitor, node *NotInNode) string {
 	return buf.String()
 }
 
-func VisitInNode(v Visitor, node *InNode) string {
+func visitationInNode(v Visitor, node *InNode) string {
 	if len(node.Right) == 0 {
 		return "1=0"
 	}
@@ -120,7 +120,7 @@ func VisitInNode(v Visitor, node *InNode) string {
 	return buf.String()
 }
 
-func VisitDoesNotMatchNode(v Visitor, node *DoesNotMatchNode) string {
+func visitationDoesNotMatchNode(v Visitor, node *DoesNotMatchNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" NOT LIKE ")
@@ -128,7 +128,7 @@ func VisitDoesNotMatchNode(v Visitor, node *DoesNotMatchNode) string {
 	return buf.String()
 }
 
-func VisitMatchesNode(v Visitor, node *MatchesNode) string {
+func visitationMatchesNode(v Visitor, node *MatchesNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" LIKE ")
@@ -136,7 +136,7 @@ func VisitMatchesNode(v Visitor, node *MatchesNode) string {
 	return buf.String()
 }
 
-func VisitNamedFunctionNode(v Visitor, node *NamedFunctionNode) string {
+func visitationNamedFunctionNode(v Visitor, node *NamedFunctionNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(node.Name.Raw)
 	buf.WriteString("(")
@@ -159,7 +159,7 @@ func VisitNamedFunctionNode(v Visitor, node *NamedFunctionNode) string {
 	return buf.String()
 }
 
-func VisitSumNode(v Visitor, node *SumNode) string {
+func visitationSumNode(v Visitor, node *SumNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("SUM(")
 	if node.Distinct {
@@ -181,7 +181,7 @@ func VisitSumNode(v Visitor, node *SumNode) string {
 	return buf.String()
 }
 
-func VisitAvgNode(v Visitor, node *AvgNode) string {
+func visitationAvgNode(v Visitor, node *AvgNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("AVG(")
 	if node.Distinct {
@@ -203,7 +203,7 @@ func VisitAvgNode(v Visitor, node *AvgNode) string {
 	return buf.String()
 }
 
-func VisitMinNode(v Visitor, node *MinNode) string {
+func visitationMinNode(v Visitor, node *MinNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("MIN(")
 	if node.Distinct {
@@ -225,7 +225,7 @@ func VisitMinNode(v Visitor, node *MinNode) string {
 	return buf.String()
 }
 
-func VisitMaxNode(v Visitor, node *MaxNode) string {
+func visitationMaxNode(v Visitor, node *MaxNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("MAX(")
 	if node.Distinct {
@@ -247,7 +247,7 @@ func VisitMaxNode(v Visitor, node *MaxNode) string {
 	return buf.String()
 }
 
-func VisitOrNode(v Visitor, node *OrNode) string {
+func visitationOrNode(v Visitor, node *OrNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" OR ")
@@ -255,7 +255,7 @@ func VisitOrNode(v Visitor, node *OrNode) string {
 	return buf.String()
 }
 
-func VisitGreaterThanOrEqualNode(v Visitor, node *GreaterThanOrEqualNode) string {
+func visitationGreaterThanOrEqualNode(v Visitor, node *GreaterThanOrEqualNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" >= ")
@@ -263,7 +263,7 @@ func VisitGreaterThanOrEqualNode(v Visitor, node *GreaterThanOrEqualNode) string
 	return buf.String()
 }
 
-func VisitLessThanOrEqualNode(v Visitor, node *LessThanOrEqualNode) string {
+func visitationLessThanOrEqualNode(v Visitor, node *LessThanOrEqualNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" <= ")
@@ -271,7 +271,7 @@ func VisitLessThanOrEqualNode(v Visitor, node *LessThanOrEqualNode) string {
 	return buf.String()
 }
 
-func VisitNotEqualNode(v Visitor, node *NotEqualNode) string {
+func visitationNotEqualNode(v Visitor, node *NotEqualNode) string {
 	var buf bytes.Buffer
 	if node.Right == nil {
 		buf.WriteString(v.Visit(node.Left))
@@ -284,7 +284,7 @@ func VisitNotEqualNode(v Visitor, node *NotEqualNode) string {
 	return buf.String()
 }
 
-func VisitValuesNode(v Visitor, node *ValuesNode) string {
+func visitationValuesNode(v Visitor, node *ValuesNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("VALUES (")
 	for i, value := range node.Values {
@@ -298,15 +298,15 @@ func VisitValuesNode(v Visitor, node *ValuesNode) string {
 	return buf.String()
 }
 
-func VisitTrueNode(v Visitor, node TrueNode) string {
+func visitationTrueNode(v Visitor, node TrueNode) string {
 	return "TRUE"
 }
 
-func VisitFalseNode(v Visitor, node FalseNode) string {
+func visitationFalseNode(v Visitor, node FalseNode) string {
 	return "FALSE"
 }
 
-func VisitDeleteStatementNode(v Visitor, node DeleteStatementNode) string {
+func visitationDeleteStatementNode(v Visitor, node DeleteStatementNode) string {
 	var buf bytes.Buffer
 
 	buf.WriteString("DELETE FROM ")
@@ -326,7 +326,7 @@ func VisitDeleteStatementNode(v Visitor, node DeleteStatementNode) string {
 	return buf.String()
 }
 
-func VisitUpdateStatementNode(v Visitor, node UpdateStatementNode) string {
+func visitationUpdateStatementNode(v Visitor, node UpdateStatementNode) string {
 	var buf bytes.Buffer
 
 	var wheres []Visitable
@@ -379,7 +379,7 @@ func VisitUpdateStatementNode(v Visitor, node UpdateStatementNode) string {
 	return buf.String()
 }
 
-func VisitInsertStatementNode(v Visitor, node *InsertStatementNode) string {
+func visitationInsertStatementNode(v Visitor, node *InsertStatementNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("INSERT INTO ")
 	buf.WriteString(v.Visit(node.Relation))
@@ -404,34 +404,34 @@ func VisitInsertStatementNode(v Visitor, node *InsertStatementNode) string {
 	return buf.String()
 }
 
-func VisitNil() string {
+func visitationNil() string {
 	return "NULL"
 }
 
-func VisitWithNode(v Visitor, node *WithNode) string {
+func visitationWithNode(v Visitor, node *WithNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("WITH ")
 	buf.WriteString(v.Visit(node.Expr))
 	return buf.String()
 }
 
-func VisitWithRecursiveNode(v Visitor, node *WithRecursiveNode) string {
+func visitationWithRecursiveNode(v Visitor, node *WithRecursiveNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("WITH RECURSIVE ")
 	buf.WriteString(v.Visit(node.Expr))
 	return buf.String()
 }
 
-func VisitDistinctOnNode(v Visitor, node DistinctOnNode) string {
+func visitationDistinctOnNode(v Visitor, node DistinctOnNode) string {
 	log.Fatal("NOT IMPLEMENTED FOR THIS DB")
 	return ""
 }
 
-func VisitDistinctNode(v Visitor, node *DistinctNode) string {
+func visitationDistinctNode(v Visitor, node *DistinctNode) string {
 	return DISTINCT
 }
 
-func VisitRangeNode(v Visitor, node *RangeNode) string {
+func visitationRangeNode(v Visitor, node *RangeNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("RANGE")
 	if node.Expr != nil {
@@ -441,7 +441,7 @@ func VisitRangeNode(v Visitor, node *RangeNode) string {
 	return buf.String()
 }
 
-func VisitBetweenNode(v Visitor, node *BetweenNode) string {
+func visitationBetweenNode(v Visitor, node *BetweenNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" BETWEEN ")
@@ -449,11 +449,11 @@ func VisitBetweenNode(v Visitor, node *BetweenNode) string {
 	return buf.String()
 }
 
-func VisitCurrentRowNode(v Visitor, node *CurrentRowNode) string {
+func visitationCurrentRowNode(v Visitor, node *CurrentRowNode) string {
 	return "CURRENT ROW"
 }
 
-func VisitPrecedingNode(v Visitor, node *PrecedingNode) string {
+func visitationPrecedingNode(v Visitor, node *PrecedingNode) string {
 	var buf bytes.Buffer
 	if node.Expr != nil {
 		buf.WriteString(v.Visit(node.Expr))
@@ -464,7 +464,7 @@ func VisitPrecedingNode(v Visitor, node *PrecedingNode) string {
 	return buf.String()
 }
 
-func VisitFollowingNode(v Visitor, node *FollowingNode) string {
+func visitationFollowingNode(v Visitor, node *FollowingNode) string {
 	var buf bytes.Buffer
 	if node.Expr != nil {
 		buf.WriteString(v.Visit(node.Expr))
@@ -475,7 +475,7 @@ func VisitFollowingNode(v Visitor, node *FollowingNode) string {
 	return buf.String()
 }
 
-func VisitRowsNode(v Visitor, node *RowsNode) string {
+func visitationRowsNode(v Visitor, node *RowsNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("ROWS")
 	if node.Expr != nil {
@@ -485,7 +485,7 @@ func VisitRowsNode(v Visitor, node *RowsNode) string {
 	return buf.String()
 }
 
-func VisitNamedWindowNode(v Visitor, node *NamedWindowNode) string {
+func visitationNamedWindowNode(v Visitor, node *NamedWindowNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.QuoteColumnName(node.Name))
 	buf.WriteString(" AS (")
@@ -514,7 +514,7 @@ func VisitNamedWindowNode(v Visitor, node *NamedWindowNode) string {
 	return buf.String()
 }
 
-func VisitWindowNode(v Visitor, node *WindowNode) string {
+func visitationWindowNode(v Visitor, node *WindowNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("(")
 	visitOrders := (node.Orders != nil && len(*node.Orders) > 0)
@@ -542,7 +542,7 @@ func VisitWindowNode(v Visitor, node *WindowNode) string {
 	return buf.String()
 }
 
-func VisitGroupingNode(v Visitor, node *GroupingNode) string {
+func visitationGroupingNode(v Visitor, node *GroupingNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("(")
 	for _, expr := range node.Expr {
@@ -554,25 +554,25 @@ func VisitGroupingNode(v Visitor, node *GroupingNode) string {
 	return buf.String()
 }
 
-func VisitLimitNode(v Visitor, node *LimitNode) string {
+func visitationLimitNode(v Visitor, node *LimitNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("LIMIT ")
 	buf.WriteString(v.Visit(node.Expr))
 	return buf.String()
 }
 
-func VisitLockNode(v Visitor, node *LockNode) string {
+func visitationLockNode(v Visitor, node *LockNode) string {
 	return v.Visit(node.Expr)
 }
 
-func VisitOffsetNode(v Visitor, node *OffsetNode) string {
+func visitationOffsetNode(v Visitor, node *OffsetNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("OFFSET ")
 	buf.WriteString(v.Visit(node.Expr))
 	return buf.String()
 }
 
-func VisitAndNode(v Visitor, node *AndNode) string {
+func visitationAndNode(v Visitor, node *AndNode) string {
 	var buf bytes.Buffer
 	if node.Children != nil {
 		children := *node.Children
@@ -586,7 +586,7 @@ func VisitAndNode(v Visitor, node *AndNode) string {
 	return buf.String()
 }
 
-func VisitCountNode(v Visitor, node *CountNode) string {
+func visitationCountNode(v Visitor, node *CountNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("COUNT(")
 	if node.Distinct {
@@ -608,28 +608,28 @@ func VisitCountNode(v Visitor, node *CountNode) string {
 	return buf.String()
 }
 
-func VisitAscendingNode(v Visitor, node *AscendingNode) string {
+func visitationAscendingNode(v Visitor, node *AscendingNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Expr))
 	buf.WriteString(" ASC")
 	return buf.String()
 }
 
-func VisitDescendingNode(v Visitor, node *DescendingNode) string {
+func visitationDescendingNode(v Visitor, node *DescendingNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Expr))
 	buf.WriteString(" DESC")
 	return buf.String()
 }
 
-func VisitOnNode(v Visitor, node *OnNode) string {
+func visitationOnNode(v Visitor, node *OnNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("ON ")
 	buf.WriteString(v.Visit(node.Expr))
 	return buf.String()
 }
 
-func VisitExceptNode(v Visitor, node *ExceptNode) string {
+func visitationExceptNode(v Visitor, node *ExceptNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("( ")
 	buf.WriteString(v.Visit(node.Left))
@@ -639,7 +639,7 @@ func VisitExceptNode(v Visitor, node *ExceptNode) string {
 	return buf.String()
 }
 
-func VisitIntersectNode(v Visitor, node *IntersectNode) string {
+func visitationIntersectNode(v Visitor, node *IntersectNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("( ")
 	buf.WriteString(v.Visit(node.Left))
@@ -649,7 +649,7 @@ func VisitIntersectNode(v Visitor, node *IntersectNode) string {
 	return buf.String()
 }
 
-func VisitSelectManager(v Visitor, node *SelectManager) string {
+func visitationSelectManager(v Visitor, node *SelectManager) string {
 	var buf bytes.Buffer
 	buf.WriteString("(")
 	buf.WriteString(node.ToSql())
@@ -657,13 +657,13 @@ func VisitSelectManager(v Visitor, node *SelectManager) string {
 	return buf.String()
 }
 
-func VisitMultiStatementManager(v Visitor, node *MultiStatementManager) string {
+func visitationMultiStatementManager(v Visitor, node *MultiStatementManager) string {
 	var buf bytes.Buffer
 	buf.WriteString(node.ToSql())
 	return buf.String()
 }
 
-func VisitUnionNode(v Visitor, node *UnionNode) string {
+func visitationUnionNode(v Visitor, node *UnionNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("( ")
 	buf.WriteString(v.Visit(node.Left))
@@ -673,7 +673,7 @@ func VisitUnionNode(v Visitor, node *UnionNode) string {
 	return buf.String()
 }
 
-func VisitUnionAllNode(v Visitor, node *UnionAllNode) string {
+func visitationUnionAllNode(v Visitor, node *UnionAllNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("( ")
 	buf.WriteString(v.Visit(node.Left))
@@ -683,7 +683,7 @@ func VisitUnionAllNode(v Visitor, node *UnionAllNode) string {
 	return buf.String()
 }
 
-func VisitLessThanNode(v Visitor, node *LessThanNode) string {
+func visitationLessThanNode(v Visitor, node *LessThanNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" < ")
@@ -691,7 +691,7 @@ func VisitLessThanNode(v Visitor, node *LessThanNode) string {
 	return buf.String()
 }
 
-func VisitGreaterThanNode(v Visitor, node *GreaterThanNode) string {
+func visitationGreaterThanNode(v Visitor, node *GreaterThanNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" > ")
@@ -699,7 +699,7 @@ func VisitGreaterThanNode(v Visitor, node *GreaterThanNode) string {
 	return buf.String()
 }
 
-func VisitAsNode(v Visitor, node *AsNode) string {
+func visitationAsNode(v Visitor, node *AsNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" AS ")
@@ -707,18 +707,18 @@ func VisitAsNode(v Visitor, node *AsNode) string {
 	return buf.String()
 }
 
-func VisitGroupNode(v Visitor, node *GroupNode) string {
+func visitationGroupNode(v Visitor, node *GroupNode) string {
 	return v.Visit(node.Expr)
 }
 
-func VisitHavingNode(v Visitor, node *HavingNode) string {
+func visitationHavingNode(v Visitor, node *HavingNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("HAVING ")
 	buf.WriteString(v.Visit(node.Expr))
 	return buf.String()
 }
 
-func VisitExistsNode(v Visitor, node *ExistsNode) string {
+func visitationExistsNode(v Visitor, node *ExistsNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("EXISTS (")
 	for i, expr := range node.Expressions {
@@ -737,7 +737,7 @@ func VisitExistsNode(v Visitor, node *ExistsNode) string {
 	return buf.String()
 }
 
-func VisitAttributeNode(v Visitor, node *AttributeNode) string {
+func visitationAttributeNode(v Visitor, node *AttributeNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.QuoteTableName(node.Relation))
 	buf.WriteString(".")
@@ -745,7 +745,7 @@ func VisitAttributeNode(v Visitor, node *AttributeNode) string {
 	return buf.String()
 }
 
-func VisitEqualityNode(v Visitor, node *EqualityNode) string {
+func visitationEqualityNode(v Visitor, node *EqualityNode) string {
 	var buf bytes.Buffer
 	if node.Right == nil {
 		buf.WriteString(v.Visit(node.Left))
@@ -758,7 +758,7 @@ func VisitEqualityNode(v Visitor, node *EqualityNode) string {
 	return buf.String()
 }
 
-func VisitTable(v Visitor, table *Table) string {
+func visitationTable(v Visitor, table *Table) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.QuoteTableName(table))
 	if table.TableAlias != "" {
@@ -772,24 +772,7 @@ func VisitTable(v Visitor, table *Table) string {
 	return buf.String()
 }
 
-func QuoteTableName(v Visitor, visitable Visitable) string {
-	if alias, ok := visitable.(*TableAliasNode); ok {
-		if !alias.Quoted {
-			return alias.Name.Raw
-		}
-	}
-	return v.Conn.QuoteTableName(visitable.String())
-}
-
-func Quote(v Visitor, thing interface{}) string {
-	return v.Conn.Quote(thing)
-}
-
-func QuoteColumnName(v Visitor, literal SqlLiteralNode) string {
-	return v.Conn.QuoteColumnName(literal.Raw)
-}
-
-func VisitJoinSourceNode(v Visitor, node *JoinSource) string {
+func visitationJoinSourceNode(v Visitor, node *JoinSource) string {
 	var buf bytes.Buffer
 	if node.Left != nil {
 		buf.WriteString(v.Visit(node.Left))
@@ -803,7 +786,7 @@ func VisitJoinSourceNode(v Visitor, node *JoinSource) string {
 	return buf.String()
 }
 
-func VisitOuterJoinNode(v Visitor, node OuterJoinNode) string {
+func visitationOuterJoinNode(v Visitor, node OuterJoinNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("LEFT OUTER JOIN ")
 	buf.WriteString(v.Visit(node.Left))
@@ -812,7 +795,7 @@ func VisitOuterJoinNode(v Visitor, node OuterJoinNode) string {
 	return buf.String()
 }
 
-func VisitInnerJoinNode(v Visitor, node *InnerJoinNode) string {
+func visitationInnerJoinNode(v Visitor, node *InnerJoinNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(" INNER JOIN ")
 	buf.WriteString(v.Visit(node.Left))
@@ -823,11 +806,11 @@ func VisitInnerJoinNode(v Visitor, node *InnerJoinNode) string {
 	return buf.String()
 }
 
-func VisitSqlLiteralNode(v Visitor, node SqlLiteralNode) string {
+func visitationSqlLiteralNode(v Visitor, node SqlLiteralNode) string {
 	return node.Raw
 }
 
-func VisitTableAliasNode(v Visitor, node *TableAliasNode) string {
+func visitationTableAliasNode(v Visitor, node *TableAliasNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Relation))
 	buf.WriteString(" ")
@@ -835,7 +818,7 @@ func VisitTableAliasNode(v Visitor, node *TableAliasNode) string {
 	return buf.String()
 }
 
-func VisitSelectCoreNode(v Visitor, node *SelectCoreNode) string {
+func visitationSelectCoreNode(v Visitor, node *SelectCoreNode) string {
 	var buf bytes.Buffer
 
 	buf.WriteString("SELECT")
@@ -843,7 +826,7 @@ func VisitSelectCoreNode(v Visitor, node *SelectCoreNode) string {
 	// Add TOP statement to the buffer
 	if node.Top != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitTopNode(*node.Top))
+		buf.WriteString(v.VisitTopNode(node.Top))
 	}
 
 	if node.SetQuantifier != nil {
@@ -919,7 +902,7 @@ func VisitSelectCoreNode(v Visitor, node *SelectCoreNode) string {
 	return buf.String()
 }
 
-func VisitSelectStatementNode(v Visitor, node *SelectStatementNode) string {
+func visitationSelectStatementNode(v Visitor, node *SelectStatementNode) string {
 	var buf bytes.Buffer
 
 	// add WITH clause to the buffer

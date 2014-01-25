@@ -19,7 +19,7 @@ func (e BaseNewTestEngine) Visitor() Visitor {
 
 func NewTestEngine() *BaseNewTestEngine {
 	return &BaseNewTestEngine{
-		visitor: ToSqlVisitor{Conn: BaseTestConnector{}},
+		visitor: &ToSqlVisitor{Conn: BaseTestConnector{}},
 	}
 }
 

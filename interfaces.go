@@ -16,7 +16,9 @@ type Visitable interface {
 
 type Visitor interface {
 	Accept(Visitable) string
-	QuoteColumnName() string
+	QuoteColumnName(SqlLiteralNode) string
+	QuoteTableName(Visitable) string
+	Quote(interface{}) string
 	Visit(Visitable) string
 	VisitAndNode(*AndNode) string
 	VisitAscendingNode(*AscendingNode) string
@@ -76,6 +78,7 @@ type Visitor interface {
 	VisitSumNode(*SumNode) string
 	VisitTable(*Table) string
 	VisitTableAliasNode(*TableAliasNode) string
+	VisitTopNode(*TopNode) string
 	VisitUnionAllNode(*UnionAllNode) string
 	VisitUnionNode(*UnionNode) string
 	VisitUnqualifiedColumnNode(*UnqualifiedColumnNode) string
