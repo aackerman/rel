@@ -6,6 +6,17 @@ import (
 	"strings"
 )
 
+const (
+	WHERE    = " WHERE "
+	SPACE    = " "
+	COMMA    = ", "
+	GROUP_BY = " GROUP BY "
+	ORDER_BY = " ORDER BY "
+	WINDOW   = " WINDOW "
+	AND      = " AND "
+	DISTINCT = "DISTINCT"
+)
+
 func visitationTopNode(v Visitor, node *TopNode) string {
 	log.Fatal("NOT IMPLEMENTED FOR THIS DB")
 	return ""

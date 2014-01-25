@@ -9,17 +9,6 @@ type ToSqlVisitor struct {
 	Conn Connector
 }
 
-const (
-	WHERE    = " WHERE "
-	SPACE    = " "
-	COMMA    = ", "
-	GROUP_BY = " GROUP BY "
-	ORDER_BY = " ORDER BY "
-	WINDOW   = " WINDOW "
-	AND      = " AND "
-	DISTINCT = "DISTINCT"
-)
-
 func (v ToSqlVisitor) Accept(visitable Visitable) string {
 	return v.Visit(visitable)
 }
