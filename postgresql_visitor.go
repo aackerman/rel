@@ -16,146 +16,166 @@ func (v PostgreSQLVisitor) Accept(visitable Visitable) string {
 }
 
 func (v PostgreSQLVisitor) Visit(visitable Visitable) string {
-	switch val := visitable.(type) {
+	switch node := visitable.(type) {
 	case nil:
-		return v.VisitNil()
+		return visitationNil()
 	case *SelectStatementNode:
-		return v.VisitSelectStatementNode(val)
+		return visitationSelectStatementNode(v, node)
 	case *InNode:
-		return v.VisitInNode(val)
+		return visitationInNode(v, node)
 	case SqlLiteralNode:
-		return v.VisitSqlLiteralNode(val)
+		return visitationSqlLiteralNode(v, node)
 	case *SqlLiteralNode:
-		return v.VisitSqlLiteralNode(*val)
+		return visitationSqlLiteralNode(v, *node)
 	case *JoinSource:
-		return v.VisitJoinSourceNode(val)
+		return visitationJoinSourceNode(v, node)
 	case *EqualityNode:
-		return v.VisitEqualityNode(val)
+		return visitationEqualityNode(v, node)
 	case *HavingNode:
-		return v.VisitHavingNode(val)
+		return visitationHavingNode(v, node)
 	case *AttributeNode:
-		return v.VisitAttributeNode(val)
+		return visitationAttributeNode(v, node)
 	case *GroupNode:
-		return v.VisitGroupNode(val)
+		return visitationGroupNode(v, node)
 	case *ExistsNode:
-		return v.VisitExistsNode(val)
+		return visitationExistsNode(v, node)
 	case *AsNode:
-		return v.VisitAsNode(val)
+		return visitationAsNode(v, node)
 	case *LessThanNode:
-		return v.VisitLessThanNode(val)
+		return visitationLessThanNode(v, node)
 	case *UnionNode:
-		return v.VisitUnionNode(val)
+		return visitationUnionNode(v, node)
 	case *UnionAllNode:
-		return v.VisitUnionAllNode(val)
+		return visitationUnionAllNode(v, node)
 	case *SelectManager:
-		return v.VisitSelectManager(val)
+		return visitationSelectManager(v, node)
 	case *GreaterThanNode:
-		return v.VisitGreaterThanNode(val)
+		return visitationGreaterThanNode(v, node)
 	case *IntersectNode:
-		return v.VisitIntersectNode(val)
+		return visitationIntersectNode(v, node)
 	case *ExceptNode:
-		return v.VisitExceptNode(val)
+		return visitationExceptNode(v, node)
 	case *OnNode:
-		return v.VisitOnNode(val)
+		return visitationOnNode(v, node)
 	case *AscendingNode:
-		return v.VisitAscendingNode(val)
+		return visitationAscendingNode(v, node)
 	case *DescendingNode:
-		return v.VisitDescendingNode(val)
+		return visitationDescendingNode(v, node)
 	case *CountNode:
-		return v.VisitCountNode(val)
+		return visitationCountNode(v, node)
 	case *AndNode:
-		return v.VisitAndNode(val)
+		return visitationAndNode(v, node)
 	case *TableAliasNode:
-		return v.VisitTableAliasNode(val)
+		return visitationTableAliasNode(v, node)
 	case *InnerJoinNode:
-		return v.VisitInnerJoinNode(val)
+		return visitationInnerJoinNode(v, node)
 	case *GroupingNode:
-		return v.VisitGroupingNode(val)
+		return visitationGroupingNode(v, node)
 	case *NamedWindowNode:
-		return v.VisitNamedWindowNode(val)
+		return visitationNamedWindowNode(v, node)
 	case *WindowNode:
-		return v.VisitWindowNode(val)
+		return visitationWindowNode(v, node)
 	case *RowsNode:
-		return v.VisitRowsNode(val)
+		return visitationRowsNode(v, node)
+	case *LockNode:
+		return visitationLockNode(v, node)
 	case *PrecedingNode:
-		return v.VisitPrecedingNode(val)
+		return visitationPrecedingNode(v, node)
 	case *FollowingNode:
-		return v.VisitFollowingNode(val)
+		return visitationFollowingNode(v, node)
 	case *CurrentRowNode:
-		return v.VisitCurrentRowNode(val)
+		return visitationCurrentRowNode(v, node)
 	case *BetweenNode:
-		return v.VisitBetweenNode(val)
+		return visitationBetweenNode(v, node)
 	case *RangeNode:
-		return v.VisitRangeNode(val)
+		return visitationRangeNode(v, node)
 	case *DistinctNode:
-		return v.VisitDistinctNode(val)
+		return visitationDistinctNode(v, node)
 	case *WithNode:
-		return v.VisitWithNode(val)
+		return visitationWithNode(v, node)
 	case *WithRecursiveNode:
-		return v.VisitWithRecursiveNode(val)
+		return visitationWithRecursiveNode(v, node)
 	case *Table:
-		if val == nil {
-			return v.VisitNil()
+		if node == nil {
+			return visitationNil()
 		}
-		return v.VisitTable(val)
+		return visitationTable(v, node)
 	case *MultiStatementManager:
-		return v.VisitMultiStatementManager(val)
+		return visitationMultiStatementManager(v, node)
 	case *InsertStatementNode:
-		return v.VisitInsertStatementNode(val)
-	case *ValuesNode:
-		return v.VisitValuesNode(val)
+		return visitationInsertStatementNode(v, node)
 	case *SelectCoreNode:
-		return v.VisitSelectCoreNode(val)
+		return visitationSelectCoreNode(v, node)
 	case *NotEqualNode:
-		return v.VisitNotEqualNode(val)
+		return visitationNotEqualNode(v, node)
 	case *NotNode:
-		return v.VisitNotNode(val)
+		return visitationNotNode(v, node)
 	case *GreaterThanOrEqualNode:
-		return v.VisitGreaterThanOrEqualNode(val)
+		return visitationGreaterThanOrEqualNode(v, node)
 	case *LessThanOrEqualNode:
-		return v.VisitLessThanOrEqualNode(val)
+		return visitationLessThanOrEqualNode(v, node)
 	case *OrNode:
-		return v.VisitOrNode(val)
+		return visitationOrNode(v, node)
 	case *AvgNode:
-		return v.VisitAvgNode(val)
+		return visitationAvgNode(v, node)
 	case *NamedFunctionNode:
-		return v.VisitNamedFunctionNode(val)
+		return visitationNamedFunctionNode(v, node)
 	case *SumNode:
-		return v.VisitSumNode(val)
+		return visitationSumNode(v, node)
 	case *MinNode:
-		return v.VisitMinNode(val)
+		return visitationMinNode(v, node)
 	case *MaxNode:
-		return v.VisitMaxNode(val)
+		return visitationMaxNode(v, node)
 	case *MatchesNode:
-		return v.VisitMatchesNode(val)
+		return v.VisitMatchesNode(node)
 	case *DoesNotMatchNode:
-		return v.VisitDoesNotMatchNode(val)
+		return v.VisitDoesNotMatchNode(node)
 	case *NotInNode:
-		return v.VisitNotInNode(val)
+		return visitationNotInNode(v, node)
 	case *BinNode:
-		return v.VisitBinNode(val)
+		return visitationBinNode(v, node)
 	case *ExtractNode:
-		return v.VisitExtractNode(val)
+		return visitationExtractNode(v, node)
 	case *InfixOperationNode:
-		return v.VisitInfixOperationNode(val)
+		return visitationInfixOperationNode(v, node)
 	case *QuotedNode:
-		return v.VisitQuotedNode(val)
+		return visitationQuotedNode(v, node)
 	case *OverNode:
-		return v.VisitOverNode(val)
+		return visitationOverNode(v, node)
 	case *AssignmentNode:
-		return v.VisitAssignmentNode(val)
+		return visitationAssignmentNode(v, node)
 	case *UnqualifiedColumnNode:
-		return v.VisitUnqualifiedColumnNode(val)
+		return visitationUnqualifiedColumnNode(v, node)
 	case *DistinctOnNode:
-		return v.VisitDistinctOnNode(val)
+		return v.VisitDistinctOnNode(node)
+	case *OuterJoinNode:
+		return visitationOuterJoinNode(v, node)
+	case *OffsetNode:
+		return visitationOffsetNode(v, node)
+	case *LimitNode:
+		return visitationLimitNode(v, node)
+	case *UpdateStatementNode:
+		return visitationUpdateStatementNode(v, node)
+	case *DeleteStatementNode:
+		return visitationDeleteStatementNode(v, node)
+	case *FalseNode:
+		return visitationFalseNode(v, node)
+	case *TrueNode:
+		return visitationTrueNode(v, node)
+	case *ValuesNode:
+		return visitationValuesNode(v, node)
+	case *OrderingNode:
+		return visitationOrderingNode(v, node)
+	case *TopNode:
+		return visitationTopNode(v, node)
 	default:
 		debug.PrintStack()
-		log.Fatalf("PostgreSQLVisitor#Visit unable to handle type %T", visitable)
+		log.Fatalf("SQLiteVisitor#Visit unable to handle type %T", visitable)
 		return ""
 	}
 }
 
-func (v *PostgreSQLVisitor) QuoteTableName(visitable Visitable) string {
+func (v PostgreSQLVisitor) QuoteTableName(visitable Visitable) string {
 	if alias, ok := visitable.(*TableAliasNode); ok {
 		if !alias.Quoted {
 			return alias.Name.Raw
@@ -164,15 +184,15 @@ func (v *PostgreSQLVisitor) QuoteTableName(visitable Visitable) string {
 	return v.Conn.QuoteTableName(visitable.String())
 }
 
-func (v *PostgreSQLVisitor) Quote(thing interface{}) string {
+func (v PostgreSQLVisitor) Quote(thing interface{}) string {
 	return v.Conn.Quote(thing)
 }
 
-func (v *PostgreSQLVisitor) QuoteColumnName(literal SqlLiteralNode) string {
+func (v PostgreSQLVisitor) QuoteColumnName(literal SqlLiteralNode) string {
 	return v.Conn.QuoteColumnName(literal.Raw)
 }
 
-func (v *PostgreSQLVisitor) VisitMatchesNode(node *MatchesNode) string {
+func (v PostgreSQLVisitor) VisitMatchesNode(node *MatchesNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" ILIKE ")
@@ -180,7 +200,7 @@ func (v *PostgreSQLVisitor) VisitMatchesNode(node *MatchesNode) string {
 	return buf.String()
 }
 
-func (v *PostgreSQLVisitor) VisitDoesNotMatchNode(node *DoesNotMatchNode) string {
+func (v PostgreSQLVisitor) VisitDoesNotMatchNode(node *DoesNotMatchNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" NOT ILIKE ")
@@ -188,221 +208,10 @@ func (v *PostgreSQLVisitor) VisitDoesNotMatchNode(node *DoesNotMatchNode) string
 	return buf.String()
 }
 
-func (v *PostgreSQLVisitor) VisitDistinctOnNode(node *DistinctOnNode) string {
+func (v PostgreSQLVisitor) VisitDistinctOnNode(node *DistinctOnNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("DISTINCT ON ( ")
 	buf.WriteString(v.Visit(node.Expr))
 	buf.WriteString(" )")
 	return buf.String()
-}
-
-func (v *PostgreSQLVisitor) VisitTopNode(node *TopNode) string {
-	return visitationTopNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitOrderingNode(node *OrderingNode) string {
-	return visitationOrderingNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitUnqualifiedColumnNode(node *UnqualifiedColumnNode) string {
-	return visitationUnqualifiedColumnNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitAssignmentNode(node *AssignmentNode) string {
-	return visitationAssignmentNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitOverNode(node *OverNode) string {
-	return visitationOverNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitQuotedNode(node *QuotedNode) string {
-	return visitationQuotedNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitInfixOperationNode(node *InfixOperationNode) string {
-	return visitationInfixOperationNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitExtractNode(node *ExtractNode) string {
-	return visitationExtractNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitBinNode(node *BinNode) string {
-	return visitationBinNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitNotNode(node *NotNode) string {
-	return visitationNotNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitNotInNode(node *NotInNode) string {
-	return visitationNotInNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitInNode(node *InNode) string {
-	return visitationInNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitNamedFunctionNode(node *NamedFunctionNode) string {
-	return visitationNamedFunctionNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitSumNode(node *SumNode) string {
-	return visitationSumNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitAvgNode(node *AvgNode) string {
-	return visitationAvgNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitMinNode(node *MinNode) string {
-	return visitationMinNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitMaxNode(node *MaxNode) string {
-	return visitationMaxNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitOrNode(node *OrNode) string {
-	return visitationOrNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitGreaterThanOrEqualNode(node *GreaterThanOrEqualNode) string {
-	return visitationGreaterThanOrEqualNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitLessThanOrEqualNode(node *LessThanOrEqualNode) string {
-	return visitationLessThanOrEqualNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitNotEqualNode(node *NotEqualNode) string {
-	return visitationNotEqualNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitValuesNode(node *ValuesNode) string {
-	return visitationValuesNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitTrueNode(node TrueNode) string {
-	return visitationTrueNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitFalseNode(node FalseNode) string {
-	return visitationFalseNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitDeleteStatementNode(node DeleteStatementNode) string {
-	return visitationDeleteStatementNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitUpdateStatementNode(node UpdateStatementNode) string {
-	return visitationUpdateStatementNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitInsertStatementNode(node *InsertStatementNode) string {
-	return visitationInsertStatementNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitNil() string {
-	return visitationNil()
-}
-func (v *PostgreSQLVisitor) VisitWithNode(node *WithNode) string {
-	return visitationWithNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitWithRecursiveNode(node *WithRecursiveNode) string {
-	return visitationWithRecursiveNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitDistinctNode(node *DistinctNode) string {
-	return visitationDistinctNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitRangeNode(node *RangeNode) string {
-	return visitationRangeNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitBetweenNode(node *BetweenNode) string {
-	return visitationBetweenNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitCurrentRowNode(node *CurrentRowNode) string {
-	return visitationCurrentRowNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitPrecedingNode(node *PrecedingNode) string {
-	return visitationPrecedingNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitFollowingNode(node *FollowingNode) string {
-	return visitationFollowingNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitRowsNode(node *RowsNode) string {
-	return visitationRowsNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitNamedWindowNode(node *NamedWindowNode) string {
-	return visitationNamedWindowNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitWindowNode(node *WindowNode) string {
-	return visitationWindowNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitGroupingNode(node *GroupingNode) string {
-	return visitationGroupingNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitLimitNode(node *LimitNode) string {
-	return visitationLimitNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitLockNode(node *LockNode) string {
-	return visitationLockNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitOffsetNode(node *OffsetNode) string {
-	return visitationOffsetNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitAndNode(node *AndNode) string {
-	return visitationAndNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitCountNode(node *CountNode) string {
-	return visitationCountNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitAscendingNode(node *AscendingNode) string {
-	return visitationAscendingNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitDescendingNode(node *DescendingNode) string {
-	return visitationDescendingNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitOnNode(node *OnNode) string {
-	return visitationOnNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitExceptNode(node *ExceptNode) string {
-	return visitationExceptNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitIntersectNode(node *IntersectNode) string {
-	return visitationIntersectNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitSelectManager(node *SelectManager) string {
-	return visitationSelectManager(v, node)
-}
-func (v *PostgreSQLVisitor) VisitMultiStatementManager(node *MultiStatementManager) string {
-	return visitationMultiStatementManager(v, node)
-}
-func (v *PostgreSQLVisitor) VisitUnionNode(node *UnionNode) string {
-	return visitationUnionNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitUnionAllNode(node *UnionAllNode) string {
-	return visitationUnionAllNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitLessThanNode(node *LessThanNode) string {
-	return visitationLessThanNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitGreaterThanNode(node *GreaterThanNode) string {
-	return visitationGreaterThanNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitAsNode(node *AsNode) string {
-	return visitationAsNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitGroupNode(node *GroupNode) string {
-	return visitationGroupNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitHavingNode(node *HavingNode) string {
-	return visitationHavingNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitExistsNode(node *ExistsNode) string {
-	return visitationExistsNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitAttributeNode(node *AttributeNode) string {
-	return visitationAttributeNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitEqualityNode(node *EqualityNode) string {
-	return visitationEqualityNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitTable(table *Table) string {
-	return visitationTable(v, table)
-}
-func (v *PostgreSQLVisitor) VisitJoinSourceNode(node *JoinSource) string {
-	return visitationJoinSourceNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitOuterJoinNode(node OuterJoinNode) string {
-	return visitationOuterJoinNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitInnerJoinNode(node *InnerJoinNode) string {
-	return visitationInnerJoinNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitSqlLiteralNode(node SqlLiteralNode) string {
-	return visitationSqlLiteralNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitTableAliasNode(node *TableAliasNode) string {
-	return visitationTableAliasNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitSelectCoreNode(node *SelectCoreNode) string {
-	return visitationSelectCoreNode(v, node)
-}
-func (v *PostgreSQLVisitor) VisitSelectStatementNode(node *SelectStatementNode) string {
-	return visitationSelectStatementNode(v, node)
 }

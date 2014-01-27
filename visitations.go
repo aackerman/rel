@@ -309,15 +309,15 @@ func visitationValuesNode(v Visitor, node *ValuesNode) string {
 	return buf.String()
 }
 
-func visitationTrueNode(v Visitor, node TrueNode) string {
+func visitationTrueNode(v Visitor, node *TrueNode) string {
 	return "TRUE"
 }
 
-func visitationFalseNode(v Visitor, node FalseNode) string {
+func visitationFalseNode(v Visitor, node *FalseNode) string {
 	return "FALSE"
 }
 
-func visitationDeleteStatementNode(v Visitor, node DeleteStatementNode) string {
+func visitationDeleteStatementNode(v Visitor, node *DeleteStatementNode) string {
 	var buf bytes.Buffer
 
 	buf.WriteString("DELETE FROM ")
@@ -337,7 +337,7 @@ func visitationDeleteStatementNode(v Visitor, node DeleteStatementNode) string {
 	return buf.String()
 }
 
-func visitationUpdateStatementNode(v Visitor, node UpdateStatementNode) string {
+func visitationUpdateStatementNode(v Visitor, node *UpdateStatementNode) string {
 	var buf bytes.Buffer
 
 	var wheres []Visitable
@@ -433,7 +433,7 @@ func visitationWithRecursiveNode(v Visitor, node *WithRecursiveNode) string {
 	return buf.String()
 }
 
-func visitationDistinctOnNode(v Visitor, node DistinctOnNode) string {
+func visitationDistinctOnNode(v Visitor, node *DistinctOnNode) string {
 	log.Fatal("NOT IMPLEMENTED FOR THIS DB")
 	return ""
 }
@@ -797,7 +797,7 @@ func visitationJoinSourceNode(v Visitor, node *JoinSource) string {
 	return buf.String()
 }
 
-func visitationOuterJoinNode(v Visitor, node OuterJoinNode) string {
+func visitationOuterJoinNode(v Visitor, node *OuterJoinNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("LEFT OUTER JOIN ")
 	buf.WriteString(v.Visit(node.Left))
@@ -837,7 +837,7 @@ func visitationSelectCoreNode(v Visitor, node *SelectCoreNode) string {
 	// Add TOP statement to the buffer
 	if node.Top != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitTopNode(node.Top))
+		buf.WriteString(v.Visit(node.Top))
 	}
 
 	if node.SetQuantifier != nil {
@@ -895,7 +895,7 @@ func visitationSelectCoreNode(v Visitor, node *SelectCoreNode) string {
 	// add HAVING statement to the buffer
 	if node.Having != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitHavingNode(node.Having))
+		buf.WriteString(v.Visit(node.Having))
 	}
 
 	// add WINDOW statements to the buffer
@@ -945,19 +945,19 @@ func visitationSelectStatementNode(v Visitor, node *SelectStatementNode) string 
 	// add LIMIT clause to the buffer
 	if node.Limit != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitLimitNode(node.Limit))
+		buf.WriteString(v.Visit(node.Limit))
 	}
 
 	// add OFFSET clause to the buffer
 	if node.Offset != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitOffsetNode(node.Offset))
+		buf.WriteString(v.Visit(node.Offset))
 	}
 
 	// add LOCK clause to the buffer
 	if node.Lock != nil {
 		buf.WriteString(SPACE)
-		buf.WriteString(v.VisitLockNode(node.Lock))
+		buf.WriteString(v.Visit(node.Lock))
 	}
 
 	return strings.TrimSpace(buf.String())
