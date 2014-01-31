@@ -7,10 +7,6 @@ import (
 )
 
 var _ = Describe("AscendingNode", func() {
-	BeforeEach(func() {
-		Register(NewTestEngine())
-	})
-
 	It("should alias the expression", func() {
 		users := NewTable("users")
 		mgr := users.From(users)

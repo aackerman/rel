@@ -7,10 +7,6 @@ import (
 )
 
 var _ = Describe("Table", func() {
-	BeforeEach(func() {
-		Register(NewTestEngine())
-	})
-
 	It("has a name", func() {
 		table := NewTable("users")
 		Expect(table.Name).To(Equal("users"))

@@ -10,8 +10,7 @@ var _ = Describe("PostgreSQLVisitor", func() {
 	var visitor Visitor
 
 	BeforeEach(func() {
-		Register(NewTestEngine())
-		visitor = &PostgreSQLVisitor{Conn: BaseTestConnector{}}
+		visitor = &PostgreSQLVisitor{Conn: DefaultConnector{}}
 	})
 
 	It("should support distinct on", func() {

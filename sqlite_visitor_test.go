@@ -10,8 +10,7 @@ var _ = Describe("SQLiteVisitor", func() {
 	var visitor Visitor
 
 	BeforeEach(func() {
-		Register(NewTestEngine())
-		visitor = &SQLiteVisitor{Conn: BaseTestConnector{}}
+		visitor = &SQLiteVisitor{Conn: DefaultConnector{}}
 	})
 
 	It("defaults limit to -1", func() {

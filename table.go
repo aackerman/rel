@@ -14,13 +14,11 @@ type Table struct {
 	BaseVisitable
 }
 
-var DefaultEngine Engine
-
 func NewTable(name string) *Table {
-	if DefaultEngine == nil {
+	if RelEngine == nil {
 		log.Fatal("Please register an engine before proceding")
 	}
-	return &Table{Name: name, Engine: DefaultEngine}
+	return &Table{Name: name, Engine: RelEngine}
 }
 
 func (t *Table) String() string {
@@ -84,7 +82,7 @@ func (t *Table) SelectManager(n *Table) *SelectManager {
 }
 
 func (t *Table) InsertManager() *InsertManager {
-	return NewInsertManager(DefaultEngine)
+	return NewInsertManager(RelEngine)
 }
 
 func (t *Table) SetTableAlias(name string) {

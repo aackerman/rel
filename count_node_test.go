@@ -7,10 +7,6 @@ import (
 )
 
 var _ = Describe("CountNode", func() {
-	BeforeEach(func() {
-		Register(NewTestEngine())
-	})
-
 	It("can be equal to other CountNode's", func() {
 		count1 := CountNode{Expressions: []Visitable{Sql("foo")}}
 		count2 := CountNode{Expressions: []Visitable{Sql("foo")}}

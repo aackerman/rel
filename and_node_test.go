@@ -7,10 +7,6 @@ import (
 )
 
 var _ = Describe("AndNode", func() {
-	BeforeEach(func() {
-		Register(NewTestEngine())
-	})
-
 	It("can be equal to other AndNode's", func() {
 		and1 := AndNode{Children: &[]Visitable{Sql("foo"), Sql("bar")}}
 		and2 := AndNode{Children: &[]Visitable{Sql("foo"), Sql("bar")}}

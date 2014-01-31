@@ -37,5 +37,5 @@ type Connector interface {
 }
 
 func Register(engine Engine) {
-	DefaultEngine = engine
+	RelEngine = engine
 }

@@ -7,10 +7,6 @@ import (
 )
 
 var _ = Describe("DeleteStatementNode", func() {
-	BeforeEach(func() {
-		Register(NewTestEngine())
-	})
-
 	It("can be equal to other DeleteStatementNode's", func() {
 		ds1 := DeleteStatementNode{
 			Wheres: &[]Visitable{Sql("a"), Sql("b"), Sql("c")},

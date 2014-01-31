@@ -7,10 +7,6 @@ import (
 )
 
 var _ = Describe("AscendingNode", func() {
-	BeforeEach(func() {
-		Register(NewTestEngine())
-	})
-
 	It("can be equal to another AscendingNode", func() {
 		asc1 := AscendingNode{Expr: Sql("zomg")}
 		asc2 := AscendingNode{Expr: Sql("zomg")}

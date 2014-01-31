@@ -11,7 +11,6 @@ var _ = Describe("AttributeNode", func() {
 	var mgr *SelectManager
 
 	BeforeEach(func() {
-		Register(NewTestEngine())
 		users = NewTable("users")
 		mgr = users.Select(users.Attr("id"))
 	})

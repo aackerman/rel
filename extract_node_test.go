@@ -7,10 +7,6 @@ import (
 )
 
 var _ = Describe("ExtractNode", func() {
-	BeforeEach(func() {
-		Register(NewTestEngine())
-	})
-
 	It("implements Orderer", func() {
 		// compile time test
 		var _ Orderer = &ExtractNode{}

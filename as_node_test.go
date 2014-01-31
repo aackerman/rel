@@ -7,10 +7,6 @@ import (
 )
 
 var _ = Describe("AsNode", func() {
-	BeforeEach(func() {
-		Register(NewTestEngine())
-	})
-
 	It("can be equal to other AsNode's", func() {
 		as1 := AsNode{Left: Sql("foo"), Right: Sql("bar")}
 		as2 := AsNode{Left: Sql("foo"), Right: Sql("bar")}

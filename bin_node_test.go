@@ -7,10 +7,6 @@ import (
 )
 
 var _ = Describe("BinNode", func() {
-	BeforeEach(func() {
-		Register(NewTestEngine())
-	})
-
 	It("can be Equal to another BinNode", func() {
 		bin1 := BinNode{Expr: Sql("zomg")}
 		bin2 := BinNode{Expr: Sql("zomg")}
@@ -18,7 +14,7 @@ var _ = Describe("BinNode", func() {
 	})
 
 	It("is visited differently using the MysqlVisitor", func() {
-		viz := MysqlVisitor{ToSqlVisitor{Conn: BaseTestConnector{}}}
+		viz := MysqlVisitor{ToSqlVisitor{Conn: DefaultConnector{}}}
 		bin := &BinNode{Expr: Sql("zomg")}
 		sql := viz.Accept(bin)
 		Expect(sql).To(Equal("BINARY zomg"))

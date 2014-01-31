@@ -8,10 +8,6 @@ import (
 )
 
 var _ = Describe("SelectManager", func() {
-	BeforeEach(func() {
-		Register(NewTestEngine())
-	})
-
 	It("has a skip method", func() {
 		table := NewTable("users")
 		manager := table.From(table)
@@ -24,7 +20,7 @@ var _ = Describe("SelectManager", func() {
 		table := NewTable("users")
 		manager := table.From(table)
 		manager.Project(Sql("*"))
-		m2 := NewSelectManager(DefaultEngine, nil)
+		m2 := NewSelectManager(RelEngine, nil)
 		m2.Project(manager.Exists())
 		sql := m2.ToSql()
 		expected := fmt.Sprintf("SELECT EXISTS (%s)", manager.ToSql())
@@ -41,10 +37,10 @@ var _ = Describe("SelectManager", func() {
 
 	It("has a union method", func() {
 		table := NewTable("users")
-		m1 := NewSelectManager(DefaultEngine, table)
+		m1 := NewSelectManager(RelEngine, table)
 		m1.Project(Star())
 		m1.Where(table.Attr("age").Lt(Sql(18)))
-		m2 := NewSelectManager(DefaultEngine, table)
+		m2 := NewSelectManager(RelEngine, table)
 		m2.Project(Star())
 		m2.Where(table.Attr("age").Gt(Sql(99)))
 		mgr := m1.Union(m1.Ast, m2.Ast)
@@ -55,10 +51,10 @@ var _ = Describe("SelectManager", func() {
 
 	It("has a unionall method", func() {
 		table := NewTable("users")
-		m1 := NewSelectManager(DefaultEngine, table)
+		m1 := NewSelectManager(RelEngine, table)
 		m1.Project(Star())
 		m1.Where(table.Attr("age").Lt(Sql(18)))
-		m2 := NewSelectManager(DefaultEngine, table)
+		m2 := NewSelectManager(RelEngine, table)
 		m2.Project(Star())
 		m2.Where(table.Attr("age").Gt(Sql(99)))
 		mgr := m1.UnionAll(m1.Ast, m2.Ast)
@@ -69,10 +65,10 @@ var _ = Describe("SelectManager", func() {
 
 	It("has a intersect method", func() {
 		table := NewTable("users")
-		m1 := NewSelectManager(DefaultEngine, table)
+		m1 := NewSelectManager(RelEngine, table)
 		m1.Project(Star())
 		m1.Where(table.Attr("age").Lt(Sql(18)))
-		m2 := NewSelectManager(DefaultEngine, table)
+		m2 := NewSelectManager(RelEngine, table)
 		m2.Project(Star())
 		m2.Where(table.Attr("age").Gt(Sql(99)))
 		mgr := m1.Intersect(m1.Ast, m2.Ast)
@@ -83,10 +79,10 @@ var _ = Describe("SelectManager", func() {
 
 	It("has an except method", func() {
 		table := NewTable("users")
-		m1 := NewSelectManager(DefaultEngine, table)
+		m1 := NewSelectManager(RelEngine, table)
 		m1.Project(Star())
 		m1.Where(table.Attr("age").Lt(Sql(99)))
-		m2 := NewSelectManager(DefaultEngine, table)
+		m2 := NewSelectManager(RelEngine, table)
 		m2.Project(Star())
 		m2.Where(table.Attr("age").Lt(Sql(50)))
 		mgr := m1.Except(m1.Ast, m2.Ast)
@@ -346,17 +342,17 @@ var _ = Describe("SelectManager", func() {
 		replies := NewTable("replies")
 		repliesId := replies.Attr("id")
 
-		recursiveTerm := NewSelectManager(DefaultEngine, nil)
+		recursiveTerm := NewSelectManager(RelEngine, nil)
 		recursiveTerm.From(comments).Project(commentsId, commentsParentId).Where(commentsId.Eq(Sql(42)))
 
-		nonRecursiveTerm := NewSelectManager(DefaultEngine, nil)
+		nonRecursiveTerm := NewSelectManager(RelEngine, nil)
 		nonRecursiveTerm.From(comments).Project(commentsId, commentsParentId).Join(replies).On(commentsParentId.Eq(repliesId))
 
 		union := recursiveTerm.Union(recursiveTerm.Ast, nonRecursiveTerm.Ast)
 
 		asStmt := &AsNode{Left: replies, Right: union}
 
-		mgr := NewSelectManager(DefaultEngine, nil)
+		mgr := NewSelectManager(RelEngine, nil)
 		mgr.WithRecursive(asStmt).From(replies).Project(Star())
 
 		sql := mgr.ToSql()

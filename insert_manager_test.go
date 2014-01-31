@@ -7,12 +7,8 @@ import (
 )
 
 var _ = Describe("InsertManager", func() {
-	BeforeEach(func() {
-		Register(NewTestEngine())
-	})
-
 	It("can create values", func() {
-		mgr := NewInsertManager(DefaultEngine)
+		mgr := NewInsertManager(RelEngine)
 		values := make([]interface{}, 0)
 		values = append(values, Star())
 		columns := []*AttributeNode{&AttributeNode{}}
@@ -24,7 +20,7 @@ var _ = Describe("InsertManager", func() {
 
 	It("can insert values", func() {
 		users := NewTable("users")
-		mgr := NewInsertManager(DefaultEngine)
+		mgr := NewInsertManager(RelEngine)
 		mgr.Ast.Relation = users
 		mgr.Insert(users.Attr("bool"), false)
 		sql := mgr.ToSql()
