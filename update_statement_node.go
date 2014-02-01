@@ -9,3 +9,11 @@ type UpdateStatementNode struct {
 	Key      Visitable // SqlLiteralNode AttributeNode
 	BaseVisitable
 }
+
+func NewUpdateStatementNode() *UpdateStatementNode {
+	return &UpdateStatementNode{
+		Wheres: &[]Visitable{},
+		Values: &[]Visitable{},
+		Orders: &[]Visitable{},
+	}
+}

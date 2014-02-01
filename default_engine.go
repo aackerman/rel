@@ -33,6 +33,10 @@ func (c DefaultConnector) Quote(thing interface{}) string {
 		return "NULL"
 	case SqlLiteralNode:
 		return t.Raw
+	case *SqlLiteralNode:
+		return t.Raw
+	case *BindParamNode:
+		return t.Raw
 	default:
 		return fmt.Sprintf("'%s'", t)
 	}

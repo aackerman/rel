@@ -365,8 +365,8 @@ func visitationUpdateStatementNode(v Visitor, node *UpdateStatementNode) string 
 	buf.WriteString("UPDATE ")
 	buf.WriteString(v.Visit(node.Relation))
 
-	if node.Values != nil {
-		buf.WriteString("VALUES ")
+	if node.Values != nil && len(*node.Values) > 0 {
+		buf.WriteString(" SET ")
 		for i, value := range *node.Values {
 			buf.WriteString(v.Visit(value))
 			// Join on ", "
@@ -376,8 +376,8 @@ func visitationUpdateStatementNode(v Visitor, node *UpdateStatementNode) string 
 		}
 	}
 
-	if node.Wheres != nil {
-		buf.WriteString("WHERE ")
+	if node.Wheres != nil && len(*node.Wheres) > 0 {
+		buf.WriteString(WHERE)
 		for i, where := range *node.Wheres {
 			buf.WriteString(v.Visit(where))
 			// Join on " AND "
