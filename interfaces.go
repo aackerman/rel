@@ -1,15 +1,15 @@
 package rel
 
 type Visitable interface {
-	NewTrueNode() TrueNode
-	NewFalseNode() FalseNode
+	NewTrueNode() *TrueNode
+	NewFalseNode() *FalseNode
 	NewTableAliasNode(*Table, SqlLiteralNode) *TableAliasNode
-	NewInnerJoinNode() InnerJoinNode
-	NewOuterJoinNode() OuterJoinNode
+	NewInnerJoinNode() *InnerJoinNode
+	NewOuterJoinNode() *OuterJoinNode
 	NewAndNode(...Visitable) *AndNode
 	NewOnNode(Visitable) *OnNode
-	NewNotNode() NotNode
-	NewGroupingNode() GroupingNode
+	NewNotNode() *NotNode
+	NewGroupingNode() *GroupingNode
 	String() string
 }
 
