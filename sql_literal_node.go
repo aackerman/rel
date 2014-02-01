@@ -11,18 +11,46 @@ type SqlLiteralNode struct {
 	BaseVisitable
 }
 
-func Sql(raw interface{}) SqlLiteralNode {
-	var val string
-	switch raw.(type) {
+func Sql(thing interface{}) SqlLiteralNode {
+	var str string
+	switch vt := thing.(type) {
+	case []byte:
+		str = string(vt)
 	case string:
-		val = raw.(string)
+		str = vt
+	case bool:
+		if vt {
+			str = "true"
+		} else {
+			str = "false"
+		}
+	case nil:
+		str = ""
 	case int:
-		val = strconv.Itoa(raw.(int))
+		str = strconv.Itoa(vt)
+	case int8:
+		str = strconv.FormatInt(int64(vt), 10)
+	case int16:
+		str = strconv.FormatInt(int64(vt), 10)
+	case int32:
+		str = strconv.FormatInt(int64(vt), 10)
+	case int64:
+		str = strconv.FormatInt(vt, 10)
+	case uint:
+		str = strconv.FormatUint(uint64(vt), 10))
+	case uint8:
+		str = strconv.FormatUint(uint64(vt), 10)
+	case uint16:
+		str = strconv.FormatUint(uint64(vt), 10)
+	case uint32:
+		str = strconv.FormatUint(uint64(vt), 10)
+	case uint64:
+		str = strconv.FormatUint(vt, 10)
 	default:
 		debug.PrintStack()
-		log.Fatalf("Cannot create SqlLiteralNode from input type %T", raw)
+		log.Fatalf("Cannot create SqlLiteralNode from input type %T", vt)
 	}
-	return SqlLiteralNode{Raw: val}
+	return SqlLiteralNode{Raw: str}
 }
 
 func Star() SqlLiteralNode {
