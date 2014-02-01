@@ -37,7 +37,7 @@ func Sql(thing interface{}) SqlLiteralNode {
 	case int64:
 		str = strconv.FormatInt(vt, 10)
 	case uint:
-		str = strconv.FormatUint(uint64(vt), 10))
+		str = strconv.FormatUint(uint64(vt), 10)
 	case uint8:
 		str = strconv.FormatUint(uint64(vt), 10)
 	case uint16:
