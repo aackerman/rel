@@ -14,7 +14,7 @@ var _ = Describe("BinNode", func() {
 	})
 
 	It("is visited differently using the MysqlVisitor", func() {
-		viz := MysqlVisitor{ToSqlVisitor{Conn: DefaultConnector{}}}
+		viz := MysqlVisitor{Conn: DefaultConnector{}}
 		bin := &BinNode{Expr: Sql("zomg")}
 		sql := viz.Accept(bin)
 		Expect(sql).To(Equal("BINARY zomg"))
