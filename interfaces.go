@@ -4,7 +4,6 @@ type Visitable interface {
 	NewTrueNode() TrueNode
 	NewFalseNode() FalseNode
 	NewTableAliasNode(*Table, SqlLiteralNode) *TableAliasNode
-	NewStringJoinNode() StringJoinNode
 	NewInnerJoinNode() InnerJoinNode
 	NewOuterJoinNode() OuterJoinNode
 	NewAndNode(...Visitable) *AndNode

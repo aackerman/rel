@@ -20,10 +20,6 @@ func (v BaseVisitable) NewTableAliasNode(t *Table, name SqlLiteralNode) *TableAl
 	return &TableAliasNode{Relation: t, Name: name}
 }
 
-func (v BaseVisitable) NewStringJoinNode() StringJoinNode {
-	return StringJoinNode{}
-}
-
 func (v BaseVisitable) NewInnerJoinNode() InnerJoinNode {
 	return InnerJoinNode{}
 }
