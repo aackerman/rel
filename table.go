@@ -25,20 +25,20 @@ func (t *Table) String() string {
 	return t.Name
 }
 
-func (t *Table) Project(a ...Visitable) *SelectManager {
-	return t.Select(a...)
+func (t *Table) Project(visitables ...Visitable) *SelectManager {
+	return t.Select(visitables...)
 }
 
-func (t *Table) Select(a ...Visitable) *SelectManager {
-	return t.From(t).Select(a...)
+func (t *Table) Select(visitables ...Visitable) *SelectManager {
+	return t.From(t).Select(visitables...)
 }
 
 func (t *Table) Take(i int) *SelectManager {
 	return t.From(t).Take(i)
 }
 
-func (t *Table) Where(n Visitable) *SelectManager {
-	return t.From(t).Where(n)
+func (t *Table) Where(visitable Visitable) *SelectManager {
+	return t.From(t).Where(visitable)
 }
 
 func (t *Table) Skip(i int) *SelectManager {
@@ -49,36 +49,36 @@ func (t *Table) Offset(i int) *SelectManager {
 	return t.From(t).Offset(i)
 }
 
-func (t *Table) Having(a ...Visitable) *SelectManager {
-	return t.From(t).Having(a...)
+func (t *Table) Having(visitables ...Visitable) *SelectManager {
+	return t.From(t).Having(visitables...)
 }
 
-func (t *Table) Group(a ...Visitable) *SelectManager {
-	return t.From(t).Group(a...)
+func (t *Table) Group(visitables ...Visitable) *SelectManager {
+	return t.From(t).Group(visitables...)
 }
 
-func (t *Table) Order(exprs ...Visitable) *SelectManager {
-	return t.From(t).Order(exprs...)
+func (t *Table) Order(visitables ...Visitable) *SelectManager {
+	return t.From(t).Order(visitables...)
 }
 
-func (t *Table) Join(right Visitable) *SelectManager {
-	return t.From(t).InnerJoin(right)
+func (t *Table) Join(visitable Visitable) *SelectManager {
+	return t.From(t).InnerJoin(visitable)
 }
 
-func (t *Table) InnerJoin(right Visitable) *SelectManager {
-	return t.From(t).InnerJoin(right)
+func (t *Table) InnerJoin(visitable Visitable) *SelectManager {
+	return t.From(t).InnerJoin(visitable)
 }
 
-func (t *Table) OuterJoin(right Visitable) *SelectManager {
-	return t.From(t).OuterJoin(right)
+func (t *Table) OuterJoin(visitable Visitable) *SelectManager {
+	return t.From(t).OuterJoin(visitable)
 }
 
-func (t *Table) From(n *Table) *SelectManager {
-	return t.SelectManager(n)
+func (t *Table) From(relation *Table) *SelectManager {
+	return t.SelectManager(relation)
 }
 
-func (t *Table) SelectManager(n *Table) *SelectManager {
-	return NewSelectManager(t.Engine, n)
+func (t *Table) SelectManager(relation *Table) *SelectManager {
+	return NewSelectManager(t.Engine, relation)
 }
 
 func (t *Table) InsertManager() *InsertManager {
