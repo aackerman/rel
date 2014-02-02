@@ -24,8 +24,8 @@ func (mgr *UpdateManager) Take(limit int) *UpdateManager {
 	return mgr
 }
 
-func (mgr *UpdateManager) SetKey(visitable Visitable) *UpdateManager {
-	mgr.Ast.Key = visitable
+func (mgr *UpdateManager) SetKey(node *AttributeNode) *UpdateManager {
+	mgr.Ast.Key = node
 	return mgr
 }
 

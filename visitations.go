@@ -342,20 +342,31 @@ func visitationUpdateStatementNode(v Visitor, node *UpdateStatementNode) string 
 
 	var wheres []Visitable
 
-	if node.Orders == nil && node.Limit == nil {
+	if (node.Orders == nil || len(*node.Orders) == 0) && node.Limit == nil {
 		wheres = *node.Wheres
 	} else {
 		stmt := NewSelectStatementNode()
 		core := stmt.Cores[0]
-		core.SetFrom(node.Relation)
+
+		if node.Relation != nil {
+			core.SetFrom(node.Relation)
+		}
+
 		core.Wheres = node.Wheres
 
 		if core.Selections == nil {
 			core.Selections = &[]Visitable{}
 		}
+
 		*core.Selections = append(*core.Selections, node.Key)
-		stmt.Limit = node.Limit
-		stmt.Orders = node.Orders
+
+		if node.Limit != nil {
+			stmt.Limit = node.Limit
+		}
+
+		if node.Orders != nil && len(*node.Orders) > 0 {
+			stmt.Orders = node.Orders
+		}
 
 		wheres = append(wheres, &InNode{
 			Left:  node.Key,
