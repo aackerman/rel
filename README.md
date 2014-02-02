@@ -46,12 +46,12 @@ Breaking down the code here, `users` is a `Table` type. `Table#Having` allows a 
 
 The type of input for `AttributeNode#Eq` is somewhat predictable ahead of time. In some cases a user may want to use an `int`, `string`, or another `AttributeNode`. That means using an interface. When an input type is unpredictable, Rel uses the `Visitable` type for input as opposed to an empty interface, and offers the `Sql` method as a way to convert primitive types to a value that will satisfy the `Visitable` interface.
 
-## License
-
-[MIT](https://github.com/aackerman/rel/blob/master/LICENSE.md)
-
 ## Author
 
 | [![twitter/_aaronackerman_](http://gravatar.com/avatar/c73ff9c7e654647b2b339d9e08b52143?s=70)](http://twitter.com/_aaronackerman_ "Follow @_aaronackerman_ on Twitter") |
 |---|
 | [Aaron Ackerman](https://twitter.com/_aaronackerman_) |
+
+## License
+
+[MIT](https://github.com/aackerman/rel/blob/master/LICENSE.md)
