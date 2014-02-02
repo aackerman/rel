@@ -114,7 +114,7 @@ func visitationNotInNode(v Visitor, node *NotInNode) string {
 }
 
 func visitationInNode(v Visitor, node *InNode) string {
-	if len(node.Right) == 0 {
+	if len(node.Right) == 0 || node.Right == nil {
 		return "1=0"
 	}
 	var buf bytes.Buffer
@@ -348,7 +348,7 @@ func visitationUpdateStatementNode(v Visitor, node *UpdateStatementNode) string 
 		stmt := NewSelectStatementNode()
 		core := stmt.Cores[0]
 		core.SetFrom(node.Relation)
-		core.Wheres = &wheres
+		core.Wheres = node.Wheres
 
 		if core.Selections == nil {
 			core.Selections = &[]Visitable{}
@@ -376,12 +376,12 @@ func visitationUpdateStatementNode(v Visitor, node *UpdateStatementNode) string 
 		}
 	}
 
-	if node.Wheres != nil && len(*node.Wheres) > 0 {
+	if wheres != nil && len(wheres) > 0 {
 		buf.WriteString(WHERE)
-		for i, where := range *node.Wheres {
+		for i, where := range wheres {
 			buf.WriteString(v.Visit(where))
 			// Join on " AND "
-			if i != len(*node.Wheres)-1 {
+			if i != len(wheres)-1 {
 				buf.WriteString(AND)
 			}
 		}
