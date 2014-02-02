@@ -30,12 +30,12 @@ func (mgr *SelectManager) ToSql() string {
 	return mgr.Engine.Visitor().Accept(mgr.Ast)
 }
 
-func (mgr *SelectManager) Project(selections ...Visitable) *SelectManager {
-	return mgr.Select(selections...)
+func (mgr *SelectManager) Project(visitables ...Visitable) *SelectManager {
+	return mgr.Select(visitables...)
 }
 
-func (mgr *SelectManager) Select(selections ...Visitable) *SelectManager {
-	for _, selection := range selections {
+func (mgr *SelectManager) Select(visitables ...Visitable) *SelectManager {
+	for _, selection := range visitables {
 		if mgr.Ctx.Selections == nil {
 			mgr.Ctx.Selections = &[]Visitable{}
 		}
@@ -78,8 +78,8 @@ func (mgr *SelectManager) On(visitables ...Visitable) *SelectManager {
 	return mgr
 }
 
-func (mgr *SelectManager) Join(right Visitable) *SelectManager {
-	return mgr.InnerJoin(right)
+func (mgr *SelectManager) Join(visitable Visitable) *SelectManager {
+	return mgr.InnerJoin(visitable)
 }
 
 func (mgr *SelectManager) InnerJoin(visitable Visitable) *SelectManager {
@@ -92,8 +92,8 @@ func (mgr *SelectManager) OuterJoin(visitable Visitable) *SelectManager {
 	return mgr
 }
 
-func (mgr *SelectManager) Lock(literal SqlLiteralNode) *SelectManager {
-	mgr.Ast.Lock = NewLockNode(literal)
+func (mgr *SelectManager) Lock(node SqlLiteralNode) *SelectManager {
+	mgr.Ast.Lock = NewLockNode(node)
 	return mgr
 }
 
@@ -111,39 +111,39 @@ func (mgr *SelectManager) Exists() *ExistsNode {
 	return NewExistsNode(mgr.Ast)
 }
 
-func (mgr *SelectManager) Order(expressions ...Visitable) *SelectManager {
-	if len(expressions) > 0 {
+func (mgr *SelectManager) Order(visitables ...Visitable) *SelectManager {
+	if len(visitables) > 0 {
 		if mgr.Ast.Orders == nil {
 			mgr.Ast.Orders = &[]Visitable{}
 		}
-		for _, expression := range expressions {
-			*mgr.Ast.Orders = append(*mgr.Ast.Orders, expression)
+		for _, v := range visitables {
+			*mgr.Ast.Orders = append(*mgr.Ast.Orders, v)
 		}
 	}
 	return mgr
 }
 
-func (mgr *SelectManager) Where(n Visitable) *SelectManager {
+func (mgr *SelectManager) Where(visitable Visitable) *SelectManager {
 	if mgr.Ctx.Wheres == nil {
 		mgr.Ctx.Wheres = &[]Visitable{}
 	}
 
-	if expr, ok := n.(SelectManager); ok {
+	if expr, ok := visitable.(SelectManager); ok {
 		*mgr.Ctx.Wheres = append(*mgr.Ctx.Wheres, expr.Ast)
 	} else {
-		*mgr.Ctx.Wheres = append(*mgr.Ctx.Wheres, n)
+		*mgr.Ctx.Wheres = append(*mgr.Ctx.Wheres, visitable)
 	}
 
 	return mgr
 }
 
-func (mgr *SelectManager) Group(columns ...Visitable) *SelectManager {
-	if len(columns) > 0 {
+func (mgr *SelectManager) Group(visitables ...Visitable) *SelectManager {
+	if len(visitables) > 0 {
 		if mgr.Ctx.Groups == nil {
 			mgr.Ctx.Groups = &[]*GroupNode{}
 		}
-		for _, column := range columns {
-			*mgr.Ctx.Groups = append(*mgr.Ctx.Groups, NewGroupNode(column))
+		for _, v := range visitables {
+			*mgr.Ctx.Groups = append(*mgr.Ctx.Groups, NewGroupNode(v))
 		}
 	}
 	return mgr
@@ -189,13 +189,13 @@ func (mgr *SelectManager) NotDistinct() *SelectManager {
 	return mgr
 }
 
-func (mgr *SelectManager) With(node Visitable) *SelectManager {
-	mgr.Ast.With = &WithNode{Expr: node}
+func (mgr *SelectManager) With(visitable Visitable) *SelectManager {
+	mgr.Ast.With = &WithNode{Expr: visitable}
 	return mgr
 }
 
-func (mgr *SelectManager) WithRecursive(node Visitable) *SelectManager {
-	mgr.Ast.With = &WithRecursiveNode{Expr: node}
+func (mgr *SelectManager) WithRecursive(visitable Visitable) *SelectManager {
+	mgr.Ast.With = &WithRecursiveNode{Expr: visitable}
 	return mgr
 }
 
