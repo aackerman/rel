@@ -132,7 +132,7 @@ func (v MysqlVisitor) Visit(visitable Visitable) string {
 	case *NotInNode:
 		return visitationNotInNode(v, node)
 	case *BinNode:
-		return v.VisitBinNode(node)
+		return v.visitBinNode(node)
 	case *ExtractNode:
 		return visitationExtractNode(v, node)
 	case *InfixOperationNode:
@@ -191,7 +191,7 @@ func (v MysqlVisitor) QuoteColumnName(literal SqlLiteralNode) string {
 	return v.Conn.QuoteColumnName(literal.Raw)
 }
 
-func (v MysqlVisitor) VisitBinNode(node *BinNode) string {
+func (v MysqlVisitor) visitBinNode(node *BinNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("BINARY ")
 	buf.WriteString(v.Visit(node.Expr))
