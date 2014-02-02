@@ -127,9 +127,9 @@ func (v PostgreSQLVisitor) Visit(visitable Visitable) string {
 	case *MaxNode:
 		return visitationMaxNode(v, node)
 	case *MatchesNode:
-		return v.VisitMatchesNode(node)
+		return v.visitMatchesNode(node)
 	case *DoesNotMatchNode:
-		return v.VisitDoesNotMatchNode(node)
+		return v.visitDoesNotMatchNode(node)
 	case *NotInNode:
 		return visitationNotInNode(v, node)
 	case *BinNode:
@@ -147,7 +147,7 @@ func (v PostgreSQLVisitor) Visit(visitable Visitable) string {
 	case *UnqualifiedColumnNode:
 		return visitationUnqualifiedColumnNode(v, node)
 	case *DistinctOnNode:
-		return v.VisitDistinctOnNode(node)
+		return v.visitDistinctOnNode(node)
 	case *OuterJoinNode:
 		return visitationOuterJoinNode(v, node)
 	case *OffsetNode:
@@ -192,7 +192,7 @@ func (v PostgreSQLVisitor) QuoteColumnName(literal SqlLiteralNode) string {
 	return v.Conn.QuoteColumnName(literal.Raw)
 }
 
-func (v PostgreSQLVisitor) VisitMatchesNode(node *MatchesNode) string {
+func (v PostgreSQLVisitor) visitMatchesNode(node *MatchesNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" ILIKE ")
@@ -200,7 +200,7 @@ func (v PostgreSQLVisitor) VisitMatchesNode(node *MatchesNode) string {
 	return buf.String()
 }
 
-func (v PostgreSQLVisitor) VisitDoesNotMatchNode(node *DoesNotMatchNode) string {
+func (v PostgreSQLVisitor) visitDoesNotMatchNode(node *DoesNotMatchNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" NOT ILIKE ")
@@ -208,7 +208,7 @@ func (v PostgreSQLVisitor) VisitDoesNotMatchNode(node *DoesNotMatchNode) string 
 	return buf.String()
 }
 
-func (v PostgreSQLVisitor) VisitDistinctOnNode(node *DistinctOnNode) string {
+func (v PostgreSQLVisitor) visitDistinctOnNode(node *DistinctOnNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("DISTINCT ON ( ")
 	buf.WriteString(v.Visit(node.Expr))
