@@ -19,7 +19,7 @@ func (v SQLiteVisitor) Visit(visitable Visitable) string {
 	case nil:
 		return visitationNil()
 	case *SelectStatementNode:
-		return v.VisitSelectStatementNode(node)
+		return v.visitSelectStatementNode(node)
 	case *InNode:
 		return visitationInNode(v, node)
 	case SqlLiteralNode:
@@ -77,7 +77,7 @@ func (v SQLiteVisitor) Visit(visitable Visitable) string {
 	case *RowsNode:
 		return visitationRowsNode(v, node)
 	case *LockNode:
-		return v.VisitLockNode(node)
+		return v.visitLockNode(node)
 	case *PrecedingNode:
 		return visitationPrecedingNode(v, node)
 	case *FollowingNode:
@@ -193,11 +193,11 @@ func (v SQLiteVisitor) QuoteColumnName(literal SqlLiteralNode) string {
 
 // VisitLockNode is overwritten for the SQLiteVisitor
 // Locks are not supported in SQLite
-func (v *SQLiteVisitor) VisitLockNode(node *LockNode) string {
+func (v *SQLiteVisitor) visitLockNode(node *LockNode) string {
 	return ""
 }
 
-func (v *SQLiteVisitor) VisitSelectStatementNode(node *SelectStatementNode) string {
+func (v *SQLiteVisitor) visitSelectStatementNode(node *SelectStatementNode) string {
 	if node.Offset != nil && node.Limit == nil {
 		node.Limit = &LimitNode{Expr: Sql("-1")}
 	}
