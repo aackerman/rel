@@ -17,8 +17,6 @@ type Predicator interface {
 	NotEq(Visitable) *NotEqualNode
 	Matches(SqlLiteralNode) *MatchesNode
 	DoesNotMatch(SqlLiteralNode) *DoesNotMatchNode
-	GroupAny(...Visitable) *GroupingNode
-	GroupAll(...Visitable) *GroupingNode
 	Visitable
 }
 
@@ -30,14 +28,14 @@ func predicationEqAny(node Predicator, visitables ...Visitable) *GroupingNode {
 	for i, visitable := range visitables {
 		visitables[i] = node.Eq(visitable)
 	}
-	return node.GroupAny(visitables...)
+	return predicationGroupAny(node, visitables...)
 }
 
 func predicationEqAll(node Predicator, visitable ...Visitable) *GroupingNode {
 	for i, v := range visitable {
 		visitable[i] = node.Eq(v)
 	}
-	return node.GroupAll(visitable...)
+	return predicationGroupAll(node, visitable...)
 }
 
 func predicationLt(node Predicator, visitable Visitable) *LessThanNode {
@@ -48,28 +46,28 @@ func predicationLtAny(node Predicator, visitable ...Visitable) *GroupingNode {
 	for i, v := range visitable {
 		visitable[i] = node.Lt(v)
 	}
-	return node.GroupAny(visitable...)
+	return predicationGroupAny(node, visitable...)
 }
 
 func predicationLtEqAny(node Predicator, visitable ...Visitable) *GroupingNode {
 	for i, v := range visitable {
 		visitable[i] = node.LtEq(v)
 	}
-	return node.GroupAny(visitable...)
+	return predicationGroupAny(node, visitable...)
 }
 
 func predicationLtEqAll(node Predicator, visitable ...Visitable) *GroupingNode {
 	for i, v := range visitable {
 		visitable[i] = node.LtEq(v)
 	}
-	return node.GroupAll(visitable...)
+	return predicationGroupAll(node, visitable...)
 }
 
 func predicationLtAll(node Predicator, visitable ...Visitable) *GroupingNode {
 	for i, v := range visitable {
 		visitable[i] = node.Lt(v)
 	}
-	return node.GroupAll(visitable...)
+	return predicationGroupAll(node, visitable...)
 }
 
 func predicationLtEq(node Predicator, v Visitable) *LessThanOrEqualNode {
@@ -84,28 +82,28 @@ func predicationGtAny(node Predicator, visitable ...Visitable) *GroupingNode {
 	for i, v := range visitable {
 		visitable[i] = node.Gt(v)
 	}
-	return node.GroupAny(visitable...)
+	return predicationGroupAny(node, visitable...)
 }
 
 func predicationGtEqAny(node Predicator, visitable ...Visitable) *GroupingNode {
 	for i, v := range visitable {
 		visitable[i] = node.GtEq(v)
 	}
-	return node.GroupAny(visitable...)
+	return predicationGroupAny(node, visitable...)
 }
 
 func predicationGtEqAll(node Predicator, visitable ...Visitable) *GroupingNode {
 	for i, v := range visitable {
 		visitable[i] = node.GtEq(v)
 	}
-	return node.GroupAll(visitable...)
+	return predicationGroupAll(node, visitable...)
 }
 
 func predicationGtAll(node Predicator, visitable ...Visitable) *GroupingNode {
 	for i, v := range visitable {
 		visitable[i] = node.Gt(v)
 	}
-	return node.GroupAll(visitable...)
+	return predicationGroupAll(node, visitable...)
 }
 
 func predicationGtEq(node Predicator, v Visitable) *GreaterThanOrEqualNode {
@@ -151,7 +149,7 @@ func predicationNotInAny(node Predicator, visitableslices ...[]Visitable) Visita
 	for i, visitableslice := range visitableslices {
 		visitables[i] = node.NotIn(visitableslice)
 	}
-	return node.GroupAny(visitables...)
+	return predicationGroupAny(node, visitables...)
 }
 
 func predicationNotInAll(node Predicator, visitableslices ...[]Visitable) Visitable {
@@ -159,7 +157,7 @@ func predicationNotInAll(node Predicator, visitableslices ...[]Visitable) Visita
 	for i, visitableslice := range visitableslices {
 		visitables[i] = node.NotIn(visitableslice)
 	}
-	return node.GroupAll(visitables...)
+	return predicationGroupAll(node, visitables...)
 }
 
 func predicationInAny(node Predicator, visitableslices ...[]Visitable) Visitable {
@@ -167,7 +165,7 @@ func predicationInAny(node Predicator, visitableslices ...[]Visitable) Visitable
 	for i, visitableslice := range visitableslices {
 		visitables[i] = node.In(visitableslice)
 	}
-	return node.GroupAny(visitables...)
+	return predicationGroupAny(node, visitables...)
 }
 
 func predicationInAll(node Predicator, visitableslices ...[]Visitable) Visitable {
@@ -175,7 +173,7 @@ func predicationInAll(node Predicator, visitableslices ...[]Visitable) Visitable
 	for i, visitableslice := range visitableslices {
 		visitables[i] = node.In(visitableslice)
 	}
-	return node.GroupAll(visitables...)
+	return predicationGroupAll(node, visitables...)
 }
 
 func predicationNotEq(node Predicator, v Visitable) *NotEqualNode {
@@ -193,14 +191,14 @@ func predicationNotEqAny(node Predicator, visitable ...Visitable) *GroupingNode 
 	for i, v := range visitable {
 		visitable[i] = node.NotEq(v)
 	}
-	return node.GroupAny(visitable...)
+	return predicationGroupAny(node, visitable...)
 }
 
 func predicationNotEqAll(node Predicator, visitable ...Visitable) *GroupingNode {
 	for i, v := range visitable {
 		visitable[i] = node.NotEq(v)
 	}
-	return node.GroupAll(visitable...)
+	return predicationGroupAll(node, visitable...)
 }
 
 func predicationDoesNotMatch(node Predicator, literal SqlLiteralNode) *DoesNotMatchNode {
@@ -216,7 +214,7 @@ func predicationDoesNotMatchAny(node Predicator, literals ...SqlLiteralNode) *Gr
 	for i, literal := range literals {
 		visitables[i] = node.DoesNotMatch(literal)
 	}
-	return node.GroupAny(visitables...)
+	return predicationGroupAny(node, visitables...)
 }
 
 func predicationDoesNotMatchAll(node Predicator, literals ...SqlLiteralNode) *GroupingNode {
@@ -224,7 +222,7 @@ func predicationDoesNotMatchAll(node Predicator, literals ...SqlLiteralNode) *Gr
 	for i, literal := range literals {
 		visitables[i] = node.DoesNotMatch(literal)
 	}
-	return node.GroupAll(visitables...)
+	return predicationGroupAll(node, visitables...)
 }
 
 func predicationMatches(node Predicator, literal SqlLiteralNode) *MatchesNode {
@@ -240,7 +238,7 @@ func predicationMatchesAny(node Predicator, literals ...SqlLiteralNode) *Groupin
 	for i, literal := range literals {
 		visitables[i] = node.Matches(literal)
 	}
-	return node.GroupAny(visitables...)
+	return predicationGroupAny(node, visitables...)
 }
 
 func predicationMatchesAll(node Predicator, literals ...SqlLiteralNode) *GroupingNode {
@@ -248,7 +246,7 @@ func predicationMatchesAll(node Predicator, literals ...SqlLiteralNode) *Groupin
 	for i, literal := range literals {
 		visitables[i] = node.Matches(literal)
 	}
-	return node.GroupAll(visitables...)
+	return predicationGroupAll(node, visitables...)
 }
 
 func predicationGroupAny(node Predicator, visitable ...Visitable) *GroupingNode {

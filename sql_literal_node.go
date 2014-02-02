@@ -196,11 +196,3 @@ func (node SqlLiteralNode) MatchesAny(literals ...SqlLiteralNode) *GroupingNode 
 func (node SqlLiteralNode) MatchesAll(literals ...SqlLiteralNode) *GroupingNode {
 	return predicationMatchesAll(node, literals...)
 }
-
-func (node SqlLiteralNode) GroupAny(visitables ...Visitable) *GroupingNode {
-	return predicationGroupAny(node, visitables...)
-}
-
-func (node SqlLiteralNode) GroupAll(visitables ...Visitable) *GroupingNode {
-	return predicationGroupAll(node, visitables...)
-}
