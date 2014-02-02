@@ -23,54 +23,54 @@ type CurrentRowNode UnaryNode
 type PrecedingNode UnaryNode
 type FollowingNode UnaryNode
 
-func NewUnaryNode(n Visitable) UnaryNode {
-	return UnaryNode{Expr: n}
+func NewUnaryNode(visitable Visitable) *UnaryNode {
+	return &UnaryNode{Expr: visitable}
 }
 
-func NewBinNode(n Visitable) BinNode {
-	return BinNode{Expr: n}
+func NewBinNode(visitable Visitable) *BinNode {
+	return &BinNode{Expr: visitable}
 }
 
-func NewGroupNode(n Visitable) *GroupNode {
-	return &GroupNode{Expr: n}
+func NewGroupNode(visitable Visitable) *GroupNode {
+	return &GroupNode{Expr: visitable}
 }
 
-func NewHavingNode(n Visitable) *HavingNode {
-	return &HavingNode{Expr: n}
+func NewHavingNode(visitable Visitable) *HavingNode {
+	return &HavingNode{Expr: visitable}
 }
 
-func NewLimitNode(n Visitable) *LimitNode {
-	return &LimitNode{Expr: n}
+func NewLimitNode(visitable Visitable) *LimitNode {
+	return &LimitNode{Expr: visitable}
 }
 
-func NewNotNode(n Visitable) NotNode {
-	return NotNode{Expr: n}
+func NewNotNode(visitable Visitable) *NotNode {
+	return &NotNode{Expr: visitable}
 }
 
-func NewOffsetNode(n Visitable) *OffsetNode {
-	return &OffsetNode{Expr: n}
+func NewOffsetNode(visitable Visitable) *OffsetNode {
+	return &OffsetNode{Expr: visitable}
 }
 
-func NewOrderingNode(n Visitable) OrderingNode {
-	return OrderingNode{Expr: n}
+func NewOrderingNode(visitable Visitable) *OrderingNode {
+	return &OrderingNode{Expr: visitable}
 }
 
-func NewTopNode(n Visitable) TopNode {
-	return TopNode{Expr: n}
+func NewTopNode(visitable Visitable) *TopNode {
+	return &TopNode{Expr: visitable}
 }
 
-func NewLockNode(n Visitable) *LockNode {
-	return &LockNode{Expr: n}
+func NewLockNode(visitable Visitable) *LockNode {
+	return &LockNode{Expr: visitable}
 }
 
-func NewDistinctOnNode(n Visitable) *DistinctOnNode {
-	return &DistinctOnNode{Expr: n}
+func NewDistinctOnNode(visitable Visitable) *DistinctOnNode {
+	return &DistinctOnNode{Expr: visitable}
 }
 
-func NewWithNode(n Visitable) WithNode {
-	return WithNode{Expr: n}
+func NewWithNode(visitable Visitable) *WithNode {
+	return &WithNode{Expr: visitable}
 }
 
-func NewWithRecursiveNode(n Visitable) WithRecursiveNode {
-	return WithRecursiveNode{Expr: n}
+func NewWithRecursiveNode(visitable Visitable) *WithRecursiveNode {
+	return &WithRecursiveNode{Expr: visitable}
 }
