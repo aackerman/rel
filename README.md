@@ -45,3 +45,9 @@ users.Having(users.Attr("id").Eq(rel.Sql(10)))
 Breaking down the code here, `users` is a `Table` type. `Table#Having` allows a variadic number of values that satisfy the `Visitable` interface. `users.Attr("id")` returns a pointer to an `AttributeNode` and only accepts a `string`. SQL table fields/attributes can be expressed in terms of strings so an input satifying the `Visitable` interface isn't required because it's only ever necessary to use a string. `AttributeNode#Eq` allows a single `Visitable` type as an input. We use the `Sql` method to wrap an `int` value in a `SqlLiteralNode` to satisfy the `Visitable` interface requirement of `AttributeNode#Eq`.
 
 The type of input for `AttributeNode#Eq` is somewhat predictable ahead of time. In some cases a user may want to use an `int`, `string`, or another `AttributeNode`. That means using an interface. When an input type is unpredictable, Rel uses the `Visitable` type for input as opposed to an empty interface, and offers the `Sql` method as a way to convert primitive types to a value that will satisfy the `Visitable` interface.
+
+## Author
+
+| [![twitter/_aaronackerman_](http://gravatar.com/avatar/c73ff9c7e654647b2b339d9e08b52143?s=70)](http://twitter.com/_aaronackerman_ "Follow @_aaronackerman_ on Twitter") |
+|---|
+| [Aaron Ackerman](https://twitter.com/_aaronackerman_) |
