@@ -10,6 +10,12 @@ type DeleteStatementNode struct {
 	BaseVisitable
 }
 
+func NewDeleteStatementNode() *DeleteStatementNode {
+	return &DeleteStatementNode{
+		Wheres: &[]Visitable{},
+	}
+}
+
 func (node DeleteStatementNode) Eq(other DeleteStatementNode) bool {
 	return reflect.DeepEqual(node, other)
 }

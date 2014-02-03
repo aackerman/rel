@@ -10,7 +10,7 @@ var _ = Describe("UpdateManager", func() {
 	It("should not quote bind params", func() {
 		table := NewTable("users")
 		mgr := NewUpdateManager(RelEngine)
-		mgr.SetTable(table)
+		mgr.From(table)
 		mgr.Set(table.Attr("name"), NewBindParamNode("?"))
 		Expect(mgr.ToSql()).To(Equal("UPDATE \"users\" SET \"name\" = ?"))
 	})
@@ -18,7 +18,7 @@ var _ = Describe("UpdateManager", func() {
 	It("should handle limit properly", func() {
 		table := NewTable("users")
 		mgr := NewUpdateManager(RelEngine)
-		mgr.SetTable(table)
+		mgr.From(table)
 		mgr.SetKey(table.Attr("id"))
 		mgr.Take(10)
 		mgr.Set(table.Attr("name"), nil)
@@ -28,15 +28,15 @@ var _ = Describe("UpdateManager", func() {
 	It("updates with null", func() {
 		table := NewTable("users")
 		mgr := NewUpdateManager(RelEngine)
-		mgr.SetTable(table)
+		mgr.From(table)
 		mgr.Set(table.Attr("name"), nil)
 		Expect(mgr.ToSql()).To(Equal("UPDATE \"users\" SET \"name\" = NULL"))
 	})
 
-	Describe("SetTable", func() {
+	Describe("From", func() {
 		It("sets the relation", func() {
 			mgr := NewUpdateManager(RelEngine)
-			mgr.SetTable(NewTable("users"))
+			mgr.From(NewTable("users"))
 			Expect(mgr.ToSql()).To(Equal("UPDATE \"users\""))
 		})
 	})
@@ -45,7 +45,7 @@ var _ = Describe("UpdateManager", func() {
 		It("generates a where clause", func() {
 			table := NewTable("users")
 			mgr := NewUpdateManager(RelEngine)
-			mgr.SetTable(table)
+			mgr.From(table)
 			mgr.Where(table.Attr("id").Eq(Sql(1)))
 			Expect(mgr.ToSql()).To(Equal("UPDATE \"users\" WHERE \"users\".\"id\" = 1"))
 		})

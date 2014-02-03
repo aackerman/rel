@@ -34,7 +34,7 @@ func (mgr *UpdateManager) Order(expressions ...Visitable) *UpdateManager {
 	return mgr
 }
 
-func (mgr *UpdateManager) SetTable(relation *Table) *UpdateManager {
+func (mgr *UpdateManager) From(relation *Table) *UpdateManager {
 	mgr.Ast.Relation = relation
 	return mgr
 }

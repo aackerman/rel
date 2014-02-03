@@ -323,7 +323,7 @@ func visitationDeleteStatementNode(v Visitor, node *DeleteStatementNode) string 
 	buf.WriteString("DELETE FROM ")
 	buf.WriteString(v.Visit(node.Relation))
 
-	if node.Wheres != nil {
+	if node.Wheres != nil && len(*node.Wheres) > 0 {
 		buf.WriteString(WHERE)
 		for i, where := range *node.Wheres {
 			buf.WriteString(v.Visit(where))
