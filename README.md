@@ -30,7 +30,7 @@ users.Where(users.Attr("name").Eq(rel.Sql("amy")))
 
 ```go
 users := rel.NewTable("users")
-update := NewUpdateManager(RelEngine)
+update := rel.NewUpdateManager(RelEngine)
 update.Table(users).Set(users.Attr("name"), rel.Sql("amy"))
 fmt.Println(manager.ToSql()) // UPDATE "users" SET "name" = amy
 ```
@@ -38,9 +38,9 @@ fmt.Println(manager.ToSql()) // UPDATE "users" SET "name" = amy
 ## Deletes
 
 ```go
-users := NewTable("users")
-delete := NewDeleteManager(RelEngine)
-delete.From(users).Where(users.Attr("id").Eq(Sql(1)))
+users := rel.NewTable("users")
+delete := rel.NewDeleteManager(RelEngine)
+delete.From(users).Where(users.Attr("id").Eq(rel.Sql(1)))
 fmt.Println(delete.ToSql()) // DELETE FROM "users" WHERE "id" = 1
 ```
 
