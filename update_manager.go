@@ -34,9 +34,13 @@ func (mgr *UpdateManager) Order(expressions ...Visitable) *UpdateManager {
 	return mgr
 }
 
-func (mgr *UpdateManager) From(relation *Table) *UpdateManager {
+func (mgr *UpdateManager) Table(relation *Table) *UpdateManager {
 	mgr.Ast.Relation = relation
 	return mgr
+}
+
+func (mgr *UpdateManager) From(relation *Table) *UpdateManager {
+	return mgr.Table(relation)
 }
 
 func (mgr *UpdateManager) Where(visitable Visitable) *UpdateManager {
