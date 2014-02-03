@@ -47,7 +47,7 @@ func (mgr *UpdateManager) Where(visitable Visitable) *UpdateManager {
 	return mgr
 }
 
-func (mgr *UpdateManager) Set(field *AttributeNode, value *BindParamNode) *UpdateManager {
+func (mgr *UpdateManager) Set(field *AttributeNode, value Visitable) *UpdateManager {
 	if mgr.Ast.Values == nil {
 		mgr.Ast.Values = &[]Visitable{}
 	}

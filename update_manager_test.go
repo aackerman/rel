@@ -33,6 +33,14 @@ var _ = Describe("UpdateManager", func() {
 		Expect(mgr.ToSql()).To(Equal("UPDATE \"users\" SET \"name\" = NULL"))
 	})
 
+	It("updates with sql literal", func() {
+		table := NewTable("users")
+		mgr := NewUpdateManager(RelEngine)
+		mgr.From(table)
+		mgr.Set(table.Attr("name"), Sql("amy"))
+		Expect(mgr.ToSql()).To(Equal("UPDATE \"users\" SET \"name\" = amy"))
+	})
+
 	Describe("From", func() {
 		It("sets the relation", func() {
 			mgr := NewUpdateManager(RelEngine)

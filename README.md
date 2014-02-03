@@ -26,6 +26,26 @@ users.Where(users.Attr("name").Eq(rel.Sql("amy")))
 // SELECT * FROM "users" WHERE "users"."name" = "amy"
 ```
 
+## Updates
+
+```go
+users := rel.NewTable("users")
+manager := NewUpdateManager(RelEngine)
+manager.From(table)
+manager.Set(table.Attr("name"), rel.Sql("amy"))
+fmt.Println(manager.ToSql()) // UPDATE "users" SET "name" = amy
+```
+
+## Deletes
+
+```go
+table := NewTable("users")
+manager := NewDeleteManager(RelEngine)
+manager.From(table)
+manager.Where(table.Attr("id").Eq(Sql(1)))
+fmt.Println(manager.ToSql()) // DELETE FROM "users" WHERE "id" = 1
+```
+
 ## Method Interfaces
 
 Several methods in Rel only allow values that satisfy the `Visitable` interface. Rel methods will generally return `Visitable` values. In some cases methods will allow primitive types as method inputs when the type of input is predictable.
