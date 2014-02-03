@@ -1,5 +1,7 @@
 # Rel
 
+[![Build Status](https://travis-ci.org/aackerman/rel.png?branch=master)](https://travis-ci.org/aackerman/rel)
+
 A SQL AST manager for Go.
 
 ## Usage
