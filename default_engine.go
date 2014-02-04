@@ -31,10 +31,6 @@ func (c DefaultConnector) Quote(thing interface{}) string {
 		return strconv.Itoa(t)
 	case nil:
 		return "NULL"
-	case SqlLiteralNode:
-		return t.Raw
-	case *SqlLiteralNode:
-		return t.Raw
 	case *BindParamNode:
 		if t != nil {
 			return t.Raw

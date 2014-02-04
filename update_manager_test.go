@@ -38,7 +38,7 @@ var _ = Describe("UpdateManager", func() {
 		mgr := NewUpdateManager(RelEngine)
 		mgr.From(table)
 		mgr.Set(table.Attr("name"), Sql("amy"))
-		Expect(mgr.ToSql()).To(Equal("UPDATE \"users\" SET \"name\" = amy"))
+		Expect(mgr.ToSql()).To(Equal("UPDATE \"users\" SET \"name\" = 'amy'"))
 	})
 
 	Describe("From", func() {

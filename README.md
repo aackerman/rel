@@ -46,6 +46,15 @@ delete.From(users).Where(users.Attr("id").Eq(rel.Sql(1)))
 fmt.Println(delete.ToSql()) // DELETE FROM "users" WHERE "id" = 1
 ```
 
+## Inserts
+
+```go
+users := rel.NewTable("users")
+insert := rel.NewInsertManager(rel.RelEngine)
+insert.Into(users).Insert(users.Attr("email"), Sql("a@b.com"))
+fmt.Println(insert.ToSql()) // INSERT INTO "users" ("email") VALUES ('a@b.com')
+```
+
 ## Method Interfaces
 
 Several methods in Rel only allow values that satisfy the `Visitable` interface. Rel methods will generally return `Visitable` values. In some cases methods will allow primitive types as method inputs when the type of input is predictable.

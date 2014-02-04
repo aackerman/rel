@@ -11,6 +11,14 @@ type SqlLiteralNode struct {
 	BaseVisitable
 }
 
+func (node SqlLiteralNode) String() string {
+	if node.Raw == "" {
+		return "NULL"
+	} else {
+		return node.Raw
+	}
+}
+
 func Sql(thing interface{}) SqlLiteralNode {
 	var str string
 	switch vt := thing.(type) {
