@@ -28,13 +28,22 @@ users.Where(users.Attr("name").Eq(rel.Sql("amy")))
 // SELECT * FROM "users" WHERE "users"."name" = "amy"
 ```
 
+## Joins
+
+```go
+users := rel.NewTable("users")
+preferences := rel.NewTable("preferences")
+manager := users.Select(rel.Star()).Join(preferences).On(preferense.Attr("user_id").Eq(users.Attr("user_id")))
+fmt.Println(select.ToSql()) // SELECT * FROM "users" INNER JOIN "preferences" ON "preferences"."user_id" = "users"."user_id"
+```
+
 ## Updates
 
 ```go
 users := rel.NewTable("users")
 update := rel.NewUpdateManager(rel.RelEngine)
 update.Table(users).Set(users.Attr("name"), rel.Sql("amy"))
-fmt.Println(manager.ToSql()) // UPDATE "users" SET "name" = amy
+fmt.Println(update.ToSql()) // UPDATE "users" SET "name" = amy
 ```
 
 ## Deletes
