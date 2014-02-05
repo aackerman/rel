@@ -30,6 +30,10 @@ func (mgr *InsertManager) Into(table *Table) *InsertManager {
 }
 
 func (mgr *InsertManager) Insert(column *AttributeNode, value interface{}) *InsertManager {
+	return mgr.Values(column, value)
+}
+
+func (mgr *InsertManager) Values(column *AttributeNode, value interface{}) *InsertManager {
 	if mgr.Ast.Values == nil {
 		mgr.Ast.Values = &ValuesNode{
 			Values:  make([]interface{}, 0),

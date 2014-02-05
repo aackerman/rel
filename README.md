@@ -51,7 +51,7 @@ fmt.Println(delete.ToSql()) // DELETE FROM "users" WHERE "id" = 1
 ```go
 users := rel.NewTable("users")
 insert := rel.NewInsertManager(rel.RelEngine)
-insert.Into(users).Insert(users.Attr("email"), Sql("a@b.com"))
+insert.Into(users).Values(users.Attr("email"), Sql("a@b.com"))
 fmt.Println(insert.ToSql()) // INSERT INTO "users" ("email") VALUES ('a@b.com')
 ```
 
