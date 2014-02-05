@@ -64,6 +64,38 @@ insert.Into(users).Values(users.Attr("email"), Sql("a@b.com"))
 fmt.Println(insert.ToSql()) // INSERT INTO "users" ("email") VALUES ('a@b.com')
 ```
 
+## Orders
+
+```go
+users := rel.NewTable("users")
+manager := users.Select(rel.Star()).Order(users.Attr("first_name"))
+fmt.Println(manager.ToSql()) // SELECT * FROM "users" ORDER BY "users"."first_name"
+```
+
+### With Direction
+
+```go
+users := rel.NewTable("users")
+manager := users.Select(rel.Star()).Order(users.Attr("first_name").Desc())
+fmt.Println(manager.ToSql()) // SELECT * FROM "users" ORDER BY "users"."first_name" DESC
+```
+
+## Group By
+
+```go
+users := rel.NewTable("users")
+manager := users.Select(rel.Star()).GroupBy(users.Attr("first_name"))
+fmt.Println(manager.ToSql()) // SELECT * FROM "users" GROUP BY "users"."first_name"
+```
+
+## Counts
+
+```go
+users := rel.NewTable("users")
+manager := users.Select(rel.Count())
+fmt.Println(manager.ToSql()) // SELECT COUNT(1) FROM "users"
+```
+
 ## Method Interfaces
 
 Several methods in Rel only allow values that satisfy the `Visitable` interface. Rel methods will generally return `Visitable` values. In some cases methods will allow primitive types as method inputs when the type of input is predictable.

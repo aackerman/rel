@@ -315,7 +315,7 @@ var _ = Describe("SelectManager", func() {
 		Expect(sql).To(Equal(expected))
 	})
 
-	It("has a distinct method", func() {
+	It("has a Distinct method", func() {
 		users := NewTable("users")
 		mgr := users.From(users)
 		mgr.Distinct()
@@ -324,7 +324,7 @@ var _ = Describe("SelectManager", func() {
 		Expect(sql).To(Equal(expected))
 	})
 
-	It("has a notdistinct method", func() {
+	It("has a NotDistinct method", func() {
 		users := NewTable("users")
 		mgr := users.From(users)
 		mgr.Distinct()
@@ -334,7 +334,7 @@ var _ = Describe("SelectManager", func() {
 		Expect(sql).To(Equal(expected))
 	})
 
-	It("has a withrecursive method", func() {
+	It("has a WithRecursive method", func() {
 		comments := NewTable("comments")
 		commentsId := comments.Attr("id")
 		commentsParentId := comments.Attr("parent_id")

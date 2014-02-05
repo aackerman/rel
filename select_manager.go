@@ -137,6 +137,10 @@ func (mgr *SelectManager) Where(visitable Visitable) *SelectManager {
 	return mgr
 }
 
+func (mgr *SelectManager) GroupBy(visitables ...Visitable) *SelectManager {
+	return mgr.Group(visitables...)
+}
+
 func (mgr *SelectManager) Group(visitables ...Visitable) *SelectManager {
 	if len(visitables) > 0 {
 		if mgr.Ctx.Groups == nil {

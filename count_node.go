@@ -6,6 +6,10 @@ import (
 
 type CountNode FunctionNode
 
+func Count() *CountNode {
+	return &CountNode{Expressions: []Visitable{Sql(1)}}
+}
+
 func (node *CountNode) Desc() *DescendingNode {
 	return orderingDesc(node)
 }
