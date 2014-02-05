@@ -33,7 +33,7 @@ users.Where(users.Attr("name").Eq(rel.Sql("amy")))
 ```go
 users := rel.NewTable("users")
 preferences := rel.NewTable("preferences")
-manager := users.Select(rel.Star()).Join(preferences).On(preferense.Attr("user_id").Eq(users.Attr("user_id")))
+manager := users.Select(rel.Star()).Join(preferences).On(preferences.Attr("user_id").Eq(users.Attr("user_id")))
 fmt.Println(manager.ToSql()) // SELECT * FROM "users" INNER JOIN "preferences" ON "preferences"."user_id" = "users"."user_id"
 ```
 
