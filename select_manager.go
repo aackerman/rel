@@ -13,7 +13,7 @@ type SelectManager struct {
 
 func NewSelectManager(engine Engine, table *Table) *SelectManager {
 	if engine == nil {
-		log.Fatal("Please register an engine before proceding")
+		log.Fatal("Please RegisterDatabase or RegisterEngine before proceding")
 	}
 	stmt := NewSelectStatementNode()
 	manager := SelectManager{

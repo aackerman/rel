@@ -96,6 +96,28 @@ manager := users.Select(rel.Count())
 fmt.Println(manager.ToSql()) // SELECT COUNT(1) FROM "users"
 ```
 
+## Database Specific Sql
+
+Nearly every RDBMS has it's own quirks and non-standard features. For the most general cases we use the `ToSqlVisitor` to handle compiling the AST to a SQL statement. It's likely that consumers will want to be more specific, for example using PostgreSQL or MySQL.
+
+```go
+package main
+
+import (
+  "fmt"
+  "rel"
+)
+
+func main() {
+  rel.RegisterDatabase("postgresql")
+  users := rel.NewTable("users")
+  manager := users.Select(rel.Sql("*"))
+  fmt.Println(manager.ToSql()) // SELECT * FROM "users"
+}
+```
+
+`rel.RegisterDatabase` is a shorthand to allow easy use of built in functionality for PostgreSQL.
+
 ## Method Interfaces
 
 Several methods in Rel only allow values that satisfy the `Visitable` interface. Rel methods will generally return `Visitable` values. In some cases methods will allow primitive types as method inputs when the type of input is predictable.

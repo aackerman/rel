@@ -35,6 +35,17 @@ type Connector interface {
 	Quote(interface{}) string
 }
 
-func Register(engine Engine) {
+func RegisterEngine(engine Engine) {
 	RelEngine = engine
+}
+
+func RegisterDatabase(db string) {
+	switch db {
+	case "postgresql":
+		RelEngine = DefaultEngine{&PostgreSQLVisitor{Conn: DefaultConnector{}}}
+	case "sqlite":
+		RelEngine = DefaultEngine{&SQLiteVisitor{Conn: DefaultConnector{}}}
+	case "mysql":
+		RelEngine = DefaultEngine{&MysqlVisitor{Conn: DefaultConnector{}}}
+	}
 }
