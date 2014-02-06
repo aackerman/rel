@@ -21,7 +21,7 @@ func Max(attr *AttributeNode) *MaxNode {
 }
 
 func Min(attr *AttributeNode) *MinNode {
-	return &SumNode{Expressions: []Visitable{attr}}
+	return &MinNode{Expressions: []Visitable{attr}}
 }
 
 func Avg(attr *AttributeNode) *AvgNode {
