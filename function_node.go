@@ -12,6 +12,22 @@ type MaxNode FunctionNode
 type MinNode FunctionNode
 type AvgNode FunctionNode
 
+func Sum(attr *AttributeNode) *SumNode {
+	return &SumNode{Expressions: []Visitable{attr}}
+}
+
+func Max(attr *AttributeNode) *MaxNode {
+	return &MaxNode{Expressions: []Visitable{attr}}
+}
+
+func Min(attr *AttributeNode) *MinNode {
+	return &SumNode{Expressions: []Visitable{attr}}
+}
+
+func Avg(attr *AttributeNode) *AvgNode {
+	return &AvgNode{Expressions: []Visitable{attr}}
+}
+
 func (node *FunctionNode) Over(visitable Visitable) *OverNode {
 	return windowPredicationOver(node, visitable)
 }
