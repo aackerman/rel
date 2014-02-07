@@ -116,7 +116,7 @@ func main() {
 }
 ```
 
-`rel.RegisterDatabase` is a shorthand to allow easy use of built in functionality for PostgreSQL.
+`rel.RegisterDatabase` is a shorthand to allow easy use of built in functionality for PostgreSQL, MySQL, or SQLite. All lowercase values as input to `rel.RegisterDatabase`.
 
 ## Method Interfaces
 
