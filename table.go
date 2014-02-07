@@ -2,7 +2,6 @@ package rel
 
 import (
 	"bytes"
-	"log"
 	"strconv"
 )
 
@@ -15,9 +14,6 @@ type Table struct {
 }
 
 func NewTable(name string) *Table {
-	if RelEngine == nil {
-		log.Fatal("Please RegisterDatabase or RegisterEngine before proceding")
-	}
 	return &Table{Name: name, Engine: RelEngine}
 }
 
