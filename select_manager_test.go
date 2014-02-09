@@ -12,7 +12,7 @@ var _ = Describe("SelectManager", func() {
 		table := NewTable("users")
 		manager := table.From(table)
 		sql := manager.Skip(10).ToSql()
-		expected := "SELECT FROM \"users\" OFFSET 10"
+		expected := `SELECT FROM "users" OFFSET 10`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -23,7 +23,7 @@ var _ = Describe("SelectManager", func() {
 		m2 := NewSelectManager(RelEngine, nil)
 		m2.Project(manager.Exists())
 		sql := m2.ToSql()
-		expected := fmt.Sprintf("SELECT EXISTS (%s)", manager.ToSql())
+		expected := fmt.Sprintf(`SELECT EXISTS (%s)`, manager.ToSql())
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -31,7 +31,7 @@ var _ = Describe("SelectManager", func() {
 		table := NewTable("users")
 		manager := table.From(table)
 		sql := manager.Offset(10).ToSql()
-		expected := "SELECT FROM \"users\" OFFSET 10"
+		expected := `SELECT FROM "users" OFFSET 10`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -45,7 +45,7 @@ var _ = Describe("SelectManager", func() {
 		m2.Where(table.Attr("age").Gt(Sql(99)))
 		mgr := m1.Union(m1.Ast, m2.Ast)
 		sql := mgr.ToSql()
-		expected := "( SELECT * FROM \"users\" WHERE \"users\".\"age\" < 18 UNION SELECT * FROM \"users\" WHERE \"users\".\"age\" > 99 )"
+		expected := `( SELECT * FROM "users" WHERE "users"."age" < 18 UNION SELECT * FROM "users" WHERE "users"."age" > 99 )`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -59,7 +59,7 @@ var _ = Describe("SelectManager", func() {
 		m2.Where(table.Attr("age").Gt(Sql(99)))
 		mgr := m1.UnionAll(m1.Ast, m2.Ast)
 		sql := mgr.ToSql()
-		expected := "( SELECT * FROM \"users\" WHERE \"users\".\"age\" < 18 UNION ALL SELECT * FROM \"users\" WHERE \"users\".\"age\" > 99 )"
+		expected := `( SELECT * FROM "users" WHERE "users"."age" < 18 UNION ALL SELECT * FROM "users" WHERE "users"."age" > 99 )`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -73,7 +73,7 @@ var _ = Describe("SelectManager", func() {
 		m2.Where(table.Attr("age").Gt(Sql(99)))
 		mgr := m1.Intersect(m1.Ast, m2.Ast)
 		sql := mgr.ToSql()
-		expected := "( SELECT * FROM \"users\" WHERE \"users\".\"age\" < 18 INTERSECT SELECT * FROM \"users\" WHERE \"users\".\"age\" > 99 )"
+		expected := `( SELECT * FROM "users" WHERE "users"."age" < 18 INTERSECT SELECT * FROM "users" WHERE "users"."age" > 99 )`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -87,7 +87,7 @@ var _ = Describe("SelectManager", func() {
 		m2.Where(table.Attr("age").Lt(Sql(50)))
 		mgr := m1.Except(m1.Ast, m2.Ast)
 		sql := mgr.ToSql()
-		expected := "( SELECT * FROM \"users\" WHERE \"users\".\"age\" < 99 EXCEPT SELECT * FROM \"users\" WHERE \"users\".\"age\" < 50 )"
+		expected := `( SELECT * FROM "users" WHERE "users"."age" < 99 EXCEPT SELECT * FROM "users" WHERE "users"."age" < 50 )`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -97,7 +97,7 @@ var _ = Describe("SelectManager", func() {
 		predicate := left.Attr("id").Eq(right.Attr("id"))
 		mgr := left.Select(Star()).Join(right).On(predicate)
 		sql := mgr.ToSql()
-		expected := "SELECT * FROM \"users\" INNER JOIN \"users\" \"users_2\" ON \"users\".\"id\" = \"users_2\".\"id\""
+		expected := `SELECT * FROM "users" INNER JOIN "users" "users_2" ON "users"."id" = "users_2"."id"`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -106,7 +106,7 @@ var _ = Describe("SelectManager", func() {
 		mgr := table.Select(Star())
 		mgr.Order(table.Attr("id"))
 		sql := mgr.ToSql()
-		expected := "SELECT * FROM \"users\" ORDER BY \"users\".\"id\""
+		expected := `SELECT * FROM "users" ORDER BY "users"."id"`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -115,7 +115,7 @@ var _ = Describe("SelectManager", func() {
 		mgr := table.Select(Star())
 		mgr.Order(table.Attr("id").Desc())
 		sql := mgr.ToSql()
-		expected := "SELECT * FROM \"users\" ORDER BY \"users\".\"id\" DESC"
+		expected := `SELECT * FROM "users" ORDER BY "users"."id" DESC`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -126,7 +126,7 @@ var _ = Describe("SelectManager", func() {
 		mgr := left.From(left)
 		mgr.Join(right).On(predicate, predicate)
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" INNER JOIN \"users\" \"users_2\" ON \"users\".\"id\" = \"users_2\".\"id\" AND \"users\".\"id\" = \"users_2\".\"id\""
+		expected := `SELECT FROM "users" INNER JOIN "users" "users_2" ON "users"."id" = "users_2"."id" AND "users"."id" = "users_2"."id"`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -135,7 +135,7 @@ var _ = Describe("SelectManager", func() {
 		mgr := table.Select(Star())
 		mgr.Order(table.Attr("id").Count().Desc())
 		sql := mgr.ToSql()
-		expected := "SELECT * FROM \"users\" ORDER BY COUNT(\"users\".\"id\") DESC"
+		expected := `SELECT * FROM "users" ORDER BY COUNT("users"."id") DESC`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -143,7 +143,7 @@ var _ = Describe("SelectManager", func() {
 		table := NewTable("users")
 		mgr := table.From(table)
 		sql := mgr.Lock(Sql("FOR SHARE")).ToSql()
-		expected := "SELECT FROM \"users\" FOR SHARE"
+		expected := `SELECT FROM "users" FOR SHARE`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -151,7 +151,7 @@ var _ = Describe("SelectManager", func() {
 		table := NewTable("users")
 		mgr := table.From(table)
 		sql := mgr.LockForUpdate().ToSql()
-		expected := "SELECT FROM \"users\" FOR UPDATE"
+		expected := `SELECT FROM "users" FOR UPDATE`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -159,7 +159,7 @@ var _ = Describe("SelectManager", func() {
 		users := NewTable("users")
 		mgr := users.Group(users.Attr("id"))
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" GROUP BY \"users\".\"id\""
+		expected := `SELECT FROM "users" GROUP BY "users"."id"`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -168,7 +168,7 @@ var _ = Describe("SelectManager", func() {
 		mgr := users.From(users)
 		mgr.Window(Sql("a_window"))
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS ()"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS ()`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -177,7 +177,7 @@ var _ = Describe("SelectManager", func() {
 		mgr := users.From(users)
 		mgr.Window(Sql("a_window")).Order(users.Attr("foo").Asc())
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (ORDER BY \"users\".\"foo\" ASC)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (ORDER BY "users"."foo" ASC)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -186,7 +186,7 @@ var _ = Describe("SelectManager", func() {
 		mgr := users.From(users)
 		mgr.Window(Sql("a_window")).Rows(&PrecedingNode{})
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (ROWS UNBOUNDED PRECEDING)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (ROWS UNBOUNDED PRECEDING)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -195,7 +195,7 @@ var _ = Describe("SelectManager", func() {
 		mgr := users.From(users)
 		mgr.Window(Sql("a_window")).Rows(&PrecedingNode{Expr: Sql(5)})
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (ROWS 5 PRECEDING)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (ROWS 5 PRECEDING)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -204,7 +204,7 @@ var _ = Describe("SelectManager", func() {
 		mgr := users.From(users)
 		mgr.Window(Sql("a_window")).Rows(&FollowingNode{})
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (ROWS UNBOUNDED FOLLOWING)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (ROWS UNBOUNDED FOLLOWING)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -213,7 +213,7 @@ var _ = Describe("SelectManager", func() {
 		mgr := users.From(users)
 		mgr.Window(Sql("a_window")).Rows(&FollowingNode{Expr: Sql(5)})
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (ROWS 5 FOLLOWING)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (ROWS 5 FOLLOWING)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -222,7 +222,7 @@ var _ = Describe("SelectManager", func() {
 		mgr := users.From(users)
 		mgr.Window(Sql("a_window")).Rows(&CurrentRowNode{})
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (ROWS CURRENT ROW)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (ROWS CURRENT ROW)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -235,7 +235,7 @@ var _ = Describe("SelectManager", func() {
 			Right: mgr.NewAndNode(&PrecedingNode{}, &CurrentRowNode{}),
 		})
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -245,7 +245,7 @@ var _ = Describe("SelectManager", func() {
 		window := mgr.Window(Sql("a_window"))
 		window.Range(&PrecedingNode{})
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (RANGE UNBOUNDED PRECEDING)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (RANGE UNBOUNDED PRECEDING)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -255,7 +255,7 @@ var _ = Describe("SelectManager", func() {
 		window := mgr.Window(Sql("a_window"))
 		window.Range(&PrecedingNode{Expr: Sql(5)})
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (RANGE 5 PRECEDING)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (RANGE 5 PRECEDING)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -265,7 +265,7 @@ var _ = Describe("SelectManager", func() {
 		window := mgr.Window(Sql("a_window"))
 		window.Range(&FollowingNode{})
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (RANGE UNBOUNDED FOLLOWING)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (RANGE UNBOUNDED FOLLOWING)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -275,7 +275,7 @@ var _ = Describe("SelectManager", func() {
 		window := mgr.Window(Sql("a_window"))
 		window.Range(&FollowingNode{Expr: Sql(5)})
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (RANGE 5 FOLLOWING)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (RANGE 5 FOLLOWING)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -285,7 +285,7 @@ var _ = Describe("SelectManager", func() {
 		window := mgr.Window(Sql("a_window"))
 		window.Range(&CurrentRowNode{})
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (RANGE CURRENT ROW)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (RANGE CURRENT ROW)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -298,7 +298,7 @@ var _ = Describe("SelectManager", func() {
 			Right: mgr.NewAndNode(&PrecedingNode{}, &CurrentRowNode{}),
 		})
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" WINDOW \"a_window\" AS (RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)"
+		expected := `SELECT FROM "users" WINDOW "a_window" AS (RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -311,7 +311,7 @@ var _ = Describe("SelectManager", func() {
 		).As(Sql("counts"))
 		mgr := users.Join(counts).On(counts.Attr("user_id").Eq(Sql(10)))
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\" INNER JOIN (SELECT \"comments\".\"user_id\" AS user_id, COUNT(\"comments\".\"user_id\") AS count FROM \"comments\" GROUP BY \"comments\".\"user_id\") counts ON counts.\"user_id\" = 10"
+		expected := `SELECT FROM "users" INNER JOIN (SELECT "comments"."user_id" AS user_id, COUNT("comments"."user_id") AS count FROM "comments" GROUP BY "comments"."user_id") counts ON counts."user_id" = 10`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -320,7 +320,7 @@ var _ = Describe("SelectManager", func() {
 		mgr := users.From(users)
 		mgr.Distinct()
 		sql := mgr.ToSql()
-		expected := "SELECT DISTINCT FROM \"users\""
+		expected := `SELECT DISTINCT FROM "users"`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -330,7 +330,7 @@ var _ = Describe("SelectManager", func() {
 		mgr.Distinct()
 		mgr.NotDistinct()
 		sql := mgr.ToSql()
-		expected := "SELECT FROM \"users\""
+		expected := `SELECT FROM "users"`
 		Expect(sql).To(Equal(expected))
 	})
 
@@ -356,7 +356,7 @@ var _ = Describe("SelectManager", func() {
 		mgr.WithRecursive(asStmt).From(replies).Project(Star())
 
 		sql := mgr.ToSql()
-		expected := "WITH RECURSIVE \"replies\" AS ( SELECT \"comments\".\"id\", \"comments\".\"parent_id\" FROM \"comments\" WHERE \"comments\".\"id\" = 42 UNION SELECT \"comments\".\"id\", \"comments\".\"parent_id\" FROM \"comments\" INNER JOIN \"replies\" ON \"comments\".\"parent_id\" = \"replies\".\"id\" ) SELECT * FROM \"replies\""
+		expected := `WITH RECURSIVE "replies" AS ( SELECT "comments"."id", "comments"."parent_id" FROM "comments" WHERE "comments"."id" = 42 UNION SELECT "comments"."id", "comments"."parent_id" FROM "comments" INNER JOIN "replies" ON "comments"."parent_id" = "replies"."id" ) SELECT * FROM "replies"`
 		Expect(sql).To(Equal(expected))
 	})
 })

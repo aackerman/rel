@@ -17,7 +17,7 @@ var _ = Describe("CountNode", func() {
 		table := NewTable("users")
 		mgr := table.Select(table.Attr("id").Count().As(Sql("foo")))
 		sql := mgr.ToSql()
-		expected := "SELECT COUNT(\"users\".\"id\") AS foo FROM \"users\""
+		expected := `SELECT COUNT("users"."id") AS foo FROM "users"`
 		Expect(sql).To(Equal(expected))
 	})
 })

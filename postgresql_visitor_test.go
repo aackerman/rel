@@ -16,13 +16,13 @@ var _ = Describe("PostgreSQLVisitor", func() {
 	It("should support distinct on", func() {
 		core := NewSelectCoreNode()
 		core.SetQuantifier = NewDistinctOnNode(Sql("aaron"))
-		Expect(visitor.Accept(core)).To(Equal("SELECT DISTINCT ON ( aaron )"))
+		Expect(visitor.Accept(core)).To(Equal(`SELECT DISTINCT ON ( aaron )`))
 	})
 
 	It("should support distinct", func() {
 		core := NewSelectCoreNode()
 		core.SetQuantifier = &DistinctNode{}
-		Expect(visitor.Accept(core)).To(Equal("SELECT DISTINCT"))
+		Expect(visitor.Accept(core)).To(Equal(`SELECT DISTINCT`))
 	})
 
 })

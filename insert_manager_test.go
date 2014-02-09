@@ -13,7 +13,7 @@ var _ = Describe("InsertManager", func() {
 		mgr.Into(users)
 		mgr.Insert(users.Attr("email"), Sql("a@b.com"))
 		sql := mgr.ToSql()
-		expected := "INSERT INTO \"users\" (\"email\") VALUES ('a@b.com')"
+		expected := `INSERT INTO "users" ("email") VALUES ('a@b.com')`
 		Expect(sql).To(Equal(expected))
 	})
 })

@@ -17,7 +17,7 @@ var _ = Describe("SQLiteVisitor", func() {
 		stmt := NewSelectStatementNode()
 		stmt.Offset = NewOffsetNode(Sql(1))
 		sql := visitor.Accept(stmt)
-		Expect(sql).To(Equal("SELECT LIMIT -1 OFFSET 1"))
+		Expect(sql).To(Equal(`SELECT LIMIT -1 OFFSET 1`))
 	})
 
 	It("does not support locking", func() {
