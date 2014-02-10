@@ -10,10 +10,10 @@ func (node DescendingNode) Eq(other DescendingNode) bool {
 	return reflect.DeepEqual(node, other)
 }
 
-func (node DescendingNode) Direction() string {
+func (node *DescendingNode) Direction() string {
 	return "DESC"
 }
 
-func (node DescendingNode) Reverse() *AscendingNode {
+func (node *DescendingNode) Reverse() *AscendingNode {
 	return &AscendingNode{Expr: node.Expr}
 }
