@@ -98,7 +98,7 @@ fmt.Println(manager.ToSql()) // SELECT COUNT(1) FROM "users"
 
 ## Database Specific SQL
 
-Nearly every RDBMS has it's own quirks and non-standard features. For the most general cases we use the `ToSqlVisitor` to handle compiling the AST to a SQL statement. It's likely that consumers will want to be more specific, for example using PostgreSQL or MySQL.
+Nearly every RDBMS has it's own quirks and non-standard features. For the most general cases we use the `ToSqlVisitor` to handle compiling the AST to a SQL statement. It's likely that consumers will want to be more specific, for example using PostgreSQL, MySQL, or SQLite.
 
 ```go
 package main
