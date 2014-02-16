@@ -12,16 +12,7 @@ type SelectManager struct {
 }
 
 func Select(visitables ...Visitable) *SelectManager {
-	mgr := NewSelectManager(RelEngine, &Table{})
-
-	for _, selection := range visitables {
-		if mgr.Ctx.Selections == nil {
-			mgr.Ctx.Selections = &[]Visitable{}
-		}
-		*mgr.Ctx.Selections = append(*mgr.Ctx.Selections, selection)
-	}
-
-	return mgr
+	return NewSelectManager(RelEngine, &Table{}).Select(visitables...)
 }
 
 func NewSelectManager(engine Engine, table *Table) *SelectManager {

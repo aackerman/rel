@@ -11,11 +11,11 @@ type PostgreSQLVisitor struct {
 	Conn Connector
 }
 
-func (v PostgreSQLVisitor) Accept(visitable Visitable) string {
+func (v *PostgreSQLVisitor) Accept(visitable Visitable) string {
 	return v.Visit(visitable)
 }
 
-func (v PostgreSQLVisitor) Visit(visitable Visitable) string {
+func (v *PostgreSQLVisitor) Visit(visitable Visitable) string {
 	switch node := visitable.(type) {
 	case nil:
 		return visitationNil()

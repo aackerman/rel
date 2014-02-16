@@ -9,10 +9,10 @@ type ToSqlVisitor struct {
 	Conn Connector
 }
 
-func (v ToSqlVisitor) Accept(visitable Visitable) string {
+func (v *ToSqlVisitor) Accept(visitable Visitable) string {
 	return v.Visit(visitable)
 }
-func (v ToSqlVisitor) Visit(visitable Visitable) string {
+func (v *ToSqlVisitor) Visit(visitable Visitable) string {
 	switch node := visitable.(type) {
 	case nil:
 		return visitationNil()
