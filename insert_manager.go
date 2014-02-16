@@ -10,6 +10,10 @@ type InsertManager struct {
 	BaseVisitable
 }
 
+func Insert(column *AttributeNode, value interface{}) *InsertManager {
+	return NewInsertManager(RelEngine).Values(column, value)
+}
+
 func NewInsertManager(engine Engine) *InsertManager {
 	if engine == nil {
 		log.Fatal("Cannot accept a nil Engine")
