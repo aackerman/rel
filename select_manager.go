@@ -144,7 +144,7 @@ func (mgr *SelectManager) GroupBy(visitables ...Visitable) *SelectManager {
 func (mgr *SelectManager) Group(visitables ...Visitable) *SelectManager {
 	if len(visitables) > 0 {
 		if mgr.Ctx.Groups == nil {
-			mgr.Ctx.Groups = &[]*GroupNode{}
+			mgr.Ctx.Groups = &[]Visitable{}
 		}
 		for _, v := range visitables {
 			*mgr.Ctx.Groups = append(*mgr.Ctx.Groups, NewGroupNode(v))

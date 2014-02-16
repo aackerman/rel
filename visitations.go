@@ -70,12 +70,7 @@ func visitationExtractNode(v Visitor, node *ExtractNode) string {
 	buf.WriteString("EXTRACT(")
 	buf.WriteString(strings.ToUpper(node.Field.Raw))
 	buf.WriteString(" FROM ")
-	for i, expression := range node.Expressions {
-		buf.WriteString(v.Visit(expression))
-		if i != len(node.Expressions)-1 {
-			buf.WriteString(COMMA)
-		}
-	}
+	buf.WriteString(iterateVisitAndJoinOnComma(v, node.Expressions))
 	buf.WriteString(")")
 	if node.Alias != nil {
 		buf.WriteString(" AS ")
@@ -102,13 +97,7 @@ func visitationNotInNode(v Visitor, node *NotInNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" NOT IN (")
-	for i, expr := range node.Right {
-		buf.WriteString(v.Visit(expr))
-		// Join on ", "
-		if i != len(node.Right)-1 {
-			buf.WriteString(COMMA)
-		}
-	}
+	buf.WriteString(iterateVisitAndJoinOnComma(v, node.Right))
 	buf.WriteString(")")
 	return buf.String()
 }
@@ -120,13 +109,7 @@ func visitationInNode(v Visitor, node *InNode) string {
 	var buf bytes.Buffer
 	buf.WriteString(v.Visit(node.Left))
 	buf.WriteString(" IN (")
-	for i, expr := range node.Right {
-		buf.WriteString(v.Visit(expr))
-		// Join on ", "
-		if i != len(node.Right)-1 {
-			buf.WriteString(COMMA)
-		}
-	}
+	buf.WriteString(iterateVisitAndJoinOnComma(v, node.Right))
 	buf.WriteString(")")
 	return buf.String()
 }
@@ -154,13 +137,7 @@ func visitationNamedFunctionNode(v Visitor, node *NamedFunctionNode) string {
 	if node.Distinct {
 		buf.WriteString("DISINCT ")
 	}
-	for i, expr := range node.Expressions {
-		buf.WriteString(v.Visit(expr))
-		// Join on ", "
-		if i != len(node.Expressions)-1 {
-			buf.WriteString(COMMA)
-		}
-	}
+	buf.WriteString(iterateVisitAndJoinOnComma(v, node.Expressions))
 	buf.WriteString(")")
 
 	if node.Alias != nil {
@@ -176,13 +153,7 @@ func visitationSumNode(v Visitor, node *SumNode) string {
 	if node.Distinct {
 		buf.WriteString("DISINCT ")
 	}
-	for i, expr := range node.Expressions {
-		buf.WriteString(v.Visit(expr))
-		// Join on ", "
-		if i != len(node.Expressions)-1 {
-			buf.WriteString(COMMA)
-		}
-	}
+	buf.WriteString(iterateVisitAndJoinOnComma(v, node.Expressions))
 	buf.WriteString(")")
 
 	if node.Alias != nil {
@@ -198,13 +169,7 @@ func visitationAvgNode(v Visitor, node *AvgNode) string {
 	if node.Distinct {
 		buf.WriteString("DISINCT ")
 	}
-	for i, expr := range node.Expressions {
-		buf.WriteString(v.Visit(expr))
-		// Join on ", "
-		if i != len(node.Expressions)-1 {
-			buf.WriteString(COMMA)
-		}
-	}
+	buf.WriteString(iterateVisitAndJoinOnComma(v, node.Expressions))
 	buf.WriteString(")")
 
 	if node.Alias != nil {
@@ -220,13 +185,7 @@ func visitationMinNode(v Visitor, node *MinNode) string {
 	if node.Distinct {
 		buf.WriteString("DISINCT ")
 	}
-	for i, expr := range node.Expressions {
-		buf.WriteString(v.Visit(expr))
-		// Join on ", "
-		if i != len(node.Expressions)-1 {
-			buf.WriteString(COMMA)
-		}
-	}
+	buf.WriteString(iterateVisitAndJoinOnComma(v, node.Expressions))
 	buf.WriteString(")")
 
 	if node.Alias != nil {
@@ -242,13 +201,7 @@ func visitationMaxNode(v Visitor, node *MaxNode) string {
 	if node.Distinct {
 		buf.WriteString("DISINCT ")
 	}
-	for i, expr := range node.Expressions {
-		buf.WriteString(v.Visit(expr))
-		// Join on ", "
-		if i != len(node.Expressions)-1 {
-			buf.WriteString(COMMA)
-		}
-	}
+	buf.WriteString(iterateVisitAndJoinOnComma(v, node.Expressions))
 	buf.WriteString(")")
 
 	if node.Alias != nil {
@@ -298,13 +251,11 @@ func visitationNotEqualNode(v Visitor, node *NotEqualNode) string {
 func visitationValuesNode(v Visitor, node *ValuesNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("VALUES (")
-	for i, value := range node.Values {
-		buf.WriteString(v.Quote(value))
-		// Join on ", "
-		if i != len(node.Values)-1 {
-			buf.WriteString(COMMA)
-		}
+	rangevals := []string{}
+	for _, value := range node.Values {
+		rangevals = append(rangevals, v.Quote(value))
 	}
+	buf.WriteString(strings.Join(rangevals, COMMA))
 	buf.WriteString(")")
 	return buf.String()
 }
@@ -325,13 +276,11 @@ func visitationDeleteStatementNode(v Visitor, node *DeleteStatementNode) string 
 
 	if node.Wheres != nil && len(*node.Wheres) > 0 {
 		buf.WriteString(WHERE)
-		for i, where := range *node.Wheres {
-			buf.WriteString(v.Visit(where))
-			// Join on " AND "
-			if i != len(*node.Wheres)-1 {
-				buf.WriteString(AND)
-			}
+		rangevals := []string{}
+		for _, where := range *node.Wheres {
+			rangevals = append(rangevals, v.Visit(where))
 		}
+		buf.WriteString(strings.Join(rangevals, AND))
 	}
 
 	return buf.String()
@@ -378,24 +327,12 @@ func visitationUpdateStatementNode(v Visitor, node *UpdateStatementNode) string 
 
 	if node.Values != nil && len(*node.Values) > 0 {
 		buf.WriteString(" SET ")
-		for i, value := range *node.Values {
-			buf.WriteString(v.Visit(value))
-			// Join on ", "
-			if i != len(*node.Values)-1 {
-				buf.WriteString(COMMA)
-			}
-		}
+		buf.WriteString(iterateVisitAndJoinOnComma(v, *node.Values))
 	}
 
 	if wheres != nil && len(wheres) > 0 {
 		buf.WriteString(WHERE)
-		for i, where := range wheres {
-			buf.WriteString(v.Visit(where))
-			// Join on " AND "
-			if i != len(wheres)-1 {
-				buf.WriteString(AND)
-			}
-		}
+		buf.WriteString(iterateVisitAndJoinOn(v, wheres, AND))
 	}
 
 	return buf.String()
@@ -408,13 +345,11 @@ func visitationInsertStatementNode(v Visitor, node *InsertStatementNode) string 
 
 	if node.Columns != nil && len(*node.Columns) > 0 {
 		buf.WriteString(" (")
-		for i, column := range *node.Columns {
-			buf.WriteString(v.QuoteColumnName(column.Name))
-			// Join on ", "
-			if i != len(*node.Columns)-1 {
-				buf.WriteString(COMMA)
-			}
+		rangevals := []string{}
+		for _, column := range *node.Columns {
+			rangevals = append(rangevals, v.QuoteColumnName(column.Name))
 		}
+		buf.WriteString(strings.Join(rangevals, COMMA))
 		buf.WriteString(")")
 	}
 
@@ -515,13 +450,7 @@ func visitationNamedWindowNode(v Visitor, node *NamedWindowNode) string {
 	visitFraming := (node.Framing != nil)
 	if visitOrders {
 		buf.WriteString("ORDER BY ")
-		for i, order := range *node.Orders {
-			buf.WriteString(v.Visit(order))
-			// Join on ", "
-			if i != len(*node.Orders)-1 {
-				buf.WriteString(COMMA)
-			}
-		}
+		buf.WriteString(iterateVisitAndJoinOnComma(v, *node.Orders))
 	}
 
 	if visitOrders && visitFraming {
@@ -543,13 +472,7 @@ func visitationWindowNode(v Visitor, node *WindowNode) string {
 	visitFraming := (node.Framing != nil)
 	if visitOrders {
 		buf.WriteString("ORDER BY ")
-		for i, order := range *node.Orders {
-			buf.WriteString(v.Visit(order))
-			// Join on ", "
-			if i != len(*node.Orders)-1 {
-				buf.WriteString(COMMA)
-			}
-		}
+		buf.WriteString(iterateVisitAndJoinOnComma(v, *node.Orders))
 	}
 
 	if visitOrders && visitFraming {
@@ -567,11 +490,7 @@ func visitationWindowNode(v Visitor, node *WindowNode) string {
 func visitationGroupingNode(v Visitor, node *GroupingNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("(")
-	for _, expr := range node.Expr {
-		if expr != nil {
-			buf.WriteString(v.Visit(expr))
-		}
-	}
+	buf.WriteString(iterateVisitAndJoinOnComma(v, node.Expr))
 	buf.WriteString(")")
 	return buf.String()
 }
@@ -597,13 +516,7 @@ func visitationOffsetNode(v Visitor, node *OffsetNode) string {
 func visitationAndNode(v Visitor, node *AndNode) string {
 	var buf bytes.Buffer
 	if node.Children != nil {
-		children := *node.Children
-		for i, child := range children {
-			buf.WriteString(v.Visit(child))
-			if i != len(children)-1 {
-				buf.WriteString(" AND ")
-			}
-		}
+		buf.WriteString(iterateVisitAndJoinOn(v, *node.Children, AND))
 	}
 	return buf.String()
 }
@@ -614,13 +527,7 @@ func visitationCountNode(v Visitor, node *CountNode) string {
 	if node.Distinct {
 		buf.WriteString("DISINCT ")
 	}
-	for i, expr := range node.Expressions {
-		buf.WriteString(v.Visit(expr))
-		// Join on ", "
-		if i != len(node.Expressions)-1 {
-			buf.WriteString(COMMA)
-		}
-	}
+	buf.WriteString(iterateVisitAndJoinOnComma(v, node.Expressions))
 	buf.WriteString(")")
 
 	if node.Alias != nil {
@@ -671,17 +578,17 @@ func visitationIntersectNode(v Visitor, node *IntersectNode) string {
 	return buf.String()
 }
 
-func visitationSelectManager(v Visitor, node *SelectManager) string {
+func visitationSelectManager(v Visitor, mgr *SelectManager) string {
 	var buf bytes.Buffer
 	buf.WriteString("(")
-	buf.WriteString(node.ToSql())
+	buf.WriteString(mgr.ToSql())
 	buf.WriteString(")")
 	return buf.String()
 }
 
-func visitationMultiStatementManager(v Visitor, node *MultiStatementManager) string {
+func visitationMultiStatementManager(v Visitor, mgr *MultiStatementManager) string {
 	var buf bytes.Buffer
-	buf.WriteString(node.ToSql())
+	buf.WriteString(mgr.ToSql())
 	return buf.String()
 }
 
@@ -743,13 +650,7 @@ func visitationHavingNode(v Visitor, node *HavingNode) string {
 func visitationExistsNode(v Visitor, node *ExistsNode) string {
 	var buf bytes.Buffer
 	buf.WriteString("EXISTS (")
-	for i, expr := range node.Expressions {
-		buf.WriteString(v.Visit(expr))
-		// Join on ", "
-		if i != len(node.Expressions)-1 {
-			buf.WriteString(COMMA)
-		}
-	}
+	buf.WriteString(iterateVisitAndJoinOnComma(v, node.Expressions))
 	buf.WriteString(")")
 
 	if node.Alias != nil {
@@ -799,12 +700,7 @@ func visitationJoinSourceNode(v Visitor, node *JoinSource) string {
 	if node.Left != nil {
 		buf.WriteString(v.Visit(node.Left))
 	}
-	for i, source := range node.Right {
-		buf.WriteString(v.Visit(source))
-		if i != len(node.Right)-1 {
-			buf.WriteString(SPACE)
-		}
-	}
+	buf.WriteString(iterateVisitAndJoinOn(v, node.Right, SPACE))
 	return buf.String()
 }
 
@@ -859,15 +755,7 @@ func visitationSelectCoreNode(v Visitor, node *SelectCoreNode) string {
 	// add select projections
 	if node.Selections != nil && len(*node.Selections) > 0 {
 		buf.WriteString(SPACE)
-		for i, selection := range *node.Selections {
-			if selection != nil {
-				buf.WriteString(v.Visit(selection))
-				// Join on ", "
-				if i != len(*node.Selections)-1 {
-					buf.WriteString(COMMA)
-				}
-			}
-		}
+		buf.WriteString(iterateVisitAndJoinOnComma(v, *node.Selections))
 	}
 
 	// add FROM statement to the buffer
@@ -882,25 +770,13 @@ func visitationSelectCoreNode(v Visitor, node *SelectCoreNode) string {
 	// add WHERE statement to the buffer
 	if node.Wheres != nil && len(*node.Wheres) > 0 {
 		buf.WriteString(WHERE)
-		for i, where := range *node.Wheres {
-			buf.WriteString(v.Visit(where))
-			// Join on ", "
-			if i != len(*node.Wheres)-1 {
-				buf.WriteString(COMMA)
-			}
-		}
+		buf.WriteString(iterateVisitAndJoinOnComma(v, *node.Wheres))
 	}
 
 	// add GROUP BY statement to the buffer
 	if node.Groups != nil && len(*node.Groups) > 0 {
 		buf.WriteString(GROUP_BY)
-		for i, group := range *node.Groups {
-			buf.WriteString(v.Visit(group))
-			// Join on ", "
-			if i != len(*node.Groups)-1 {
-				buf.WriteString(COMMA)
-			}
-		}
+		buf.WriteString(iterateVisitAndJoinOnComma(v, *node.Groups))
 	}
 
 	// add HAVING statement to the buffer
@@ -912,13 +788,7 @@ func visitationSelectCoreNode(v Visitor, node *SelectCoreNode) string {
 	// add WINDOW statements to the buffer
 	if node.Windows != nil && len(*node.Windows) > 0 {
 		buf.WriteString(WINDOW)
-		for i, window := range *node.Windows {
-			buf.WriteString(v.Visit(window))
-			// Join on ", "
-			if i != len(*node.Windows)-1 {
-				buf.WriteString(COMMA)
-			}
-		}
+		buf.WriteString(iterateVisitAndJoinOnComma(v, *node.Windows))
 	}
 
 	return buf.String()
@@ -945,12 +815,7 @@ func visitationSelectStatementNode(v Visitor, node *SelectStatementNode) string 
 	// add ORDER BY clauses to the buffer
 	if node.Orders != nil {
 		buf.WriteString(ORDER_BY)
-		for i, order := range *node.Orders {
-			buf.WriteString(v.Visit(order))
-			if (len(*node.Orders) - 1) != i {
-				buf.WriteString(COMMA)
-			}
-		}
+		buf.WriteString(iterateVisitAndJoinOnComma(v, *node.Orders))
 	}
 
 	// add LIMIT clause to the buffer
@@ -972,4 +837,16 @@ func visitationSelectStatementNode(v Visitor, node *SelectStatementNode) string 
 	}
 
 	return strings.TrimSpace(buf.String())
+}
+
+func iterateVisitAndJoinOnComma(v Visitor, vistables []Visitable) string {
+	return iterateVisitAndJoinOn(v, vistables, COMMA)
+}
+
+func iterateVisitAndJoinOn(v Visitor, visitables []Visitable, sep string) string {
+	rangevals := []string{}
+	for _, vis := range visitables {
+		rangevals = append(rangevals, v.Visit(vis))
+	}
+	return strings.Join(rangevals, sep)
 }
