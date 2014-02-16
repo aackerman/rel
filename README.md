@@ -15,15 +15,15 @@ import (
 )
 
 func main() {
-  users := rel.NewTable("users")
-  manager := users.Select(rel.Sql("*"))
-  fmt.Println(manager.ToSql()) // SELECT * FROM "users"
+  sql := rel.Select(rel.Star()).From("users").ToSql()
+  fmt.Println(sql) // SELECT * FROM "users"
 }
 ```
 
 ## Where
 
 ```go
+users := rel.NewTable("users")
 users.Where(users.Attr("name").Eq(rel.Sql("amy")))
 // SELECT * FROM "users" WHERE "users"."name" = "amy"
 ```

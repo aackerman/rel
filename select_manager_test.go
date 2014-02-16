@@ -8,36 +8,24 @@ import (
 )
 
 var _ = Describe("SelectManager", func() {
-	It("can bypass NewTable method", func() {
-		Expect(
-			Select(Star()).From("users").Offset(10).ToSql(),
-		).To(Equal(`SELECT * FROM "users" OFFSET 10`))
-	})
-
 	It("has a skip method", func() {
-		table := NewTable("users")
-		manager := table.From(table)
-		sql := manager.Skip(10).ToSql()
-		Expect(sql).To(Equal(`SELECT FROM "users" OFFSET 10`))
+		Expect(
+			Select().From("users").Skip(10).ToSql(),
+		).To(Equal(`SELECT FROM "users" OFFSET 10`))
 	})
 
 	It("has an exists method", func() {
-		table := NewTable("users")
-		manager := table.From(table)
-		manager.Project(Sql("*"))
-		m2 := NewSelectManager(RelEngine, nil)
-		m2.Project(manager.Exists())
-		sql := m2.ToSql()
-		expected := fmt.Sprintf(`SELECT EXISTS (%s)`, manager.ToSql())
+		mgr1 := Select(Star()).From("users")
+		mgr2 := Select(mgr1.Exists())
+		sql := mgr2.ToSql()
+		expected := fmt.Sprintf(`SELECT EXISTS (%s)`, mgr1.ToSql())
 		Expect(sql).To(Equal(expected))
 	})
 
 	It("has an offset method", func() {
-		table := NewTable("users")
-		manager := table.From(table)
-		sql := manager.Offset(10).ToSql()
-		expected := `SELECT FROM "users" OFFSET 10`
-		Expect(sql).To(Equal(expected))
+		Expect(
+			Select().From("users").Offset(10).ToSql(),
+		).To(Equal(`SELECT FROM "users" OFFSET 10`))
 	})
 
 	It("has a union method", func() {
@@ -348,17 +336,17 @@ var _ = Describe("SelectManager", func() {
 		repliesId := replies.Attr("id")
 
 		recursiveTerm := NewSelectManager(RelEngine, nil)
-		recursiveTerm.FromTable(comments).Project(commentsId, commentsParentId).Where(commentsId.Eq(Sql(42)))
+		recursiveTerm.From(comments).Project(commentsId, commentsParentId).Where(commentsId.Eq(Sql(42)))
 
 		nonRecursiveTerm := NewSelectManager(RelEngine, nil)
-		nonRecursiveTerm.FromTable(comments).Project(commentsId, commentsParentId).Join(replies).On(commentsParentId.Eq(repliesId))
+		nonRecursiveTerm.From(comments).Project(commentsId, commentsParentId).Join(replies).On(commentsParentId.Eq(repliesId))
 
 		union := recursiveTerm.Union(recursiveTerm.Ast, nonRecursiveTerm.Ast)
 
 		asStmt := &AsNode{Left: replies, Right: union}
 
 		mgr := NewSelectManager(RelEngine, nil)
-		mgr.WithRecursive(asStmt).FromTable(replies).Project(Star())
+		mgr.WithRecursive(asStmt).From(replies).Project(Star())
 
 		sql := mgr.ToSql()
 		expected := `WITH RECURSIVE "replies" AS ( SELECT "comments"."id", "comments"."parent_id" FROM "comments" WHERE "comments"."id" = 42 UNION SELECT "comments"."id", "comments"."parent_id" FROM "comments" INNER JOIN "replies" ON "comments"."parent_id" = "replies"."id" ) SELECT * FROM "replies"`
