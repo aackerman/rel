@@ -10,8 +10,8 @@ type InsertManager struct {
 	BaseVisitable
 }
 
-func Insert(column *AttributeNode, value interface{}) *InsertManager {
-	return NewInsertManager(RelEngine).Values(column, value)
+func Insert() *InsertManager {
+	return NewInsertManager(RelEngine)
 }
 
 func NewInsertManager(engine Engine) *InsertManager {

@@ -6,6 +6,10 @@ type DeleteManager struct {
 	BaseVisitable
 }
 
+func Delete() *DeleteManager {
+	return NewDeleteManager(RelEngine)
+}
+
 func NewDeleteManager(engine Engine) *DeleteManager {
 	return &DeleteManager{
 		Engine: engine,
