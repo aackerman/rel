@@ -11,6 +11,19 @@ type SelectManager struct {
 	BaseVisitable
 }
 
+func Select(visitables ...Visitable) *SelectManager {
+	mgr := NewSelectManager(nil, nil)
+
+	for _, selection := range visitables {
+		if mgr.Ctx.Selections == nil {
+			mgr.Ctx.Selections = &[]Visitable{}
+		}
+		*mgr.Ctx.Selections = append(*mgr.Ctx.Selections, selection)
+	}
+
+	return mgr
+}
+
 func NewSelectManager(engine Engine, table *Table) *SelectManager {
 	if engine == nil {
 		engine = RelEngine
@@ -22,7 +35,7 @@ func NewSelectManager(engine Engine, table *Table) *SelectManager {
 		Ctx:    stmt.Cores[len(stmt.Cores)-1],
 	}
 	// setup initial join source
-	manager.From(table)
+	manager.FromTable(table)
 	return &manager
 }
 
@@ -45,7 +58,13 @@ func (mgr *SelectManager) Select(visitables ...Visitable) *SelectManager {
 	return mgr
 }
 
-func (mgr *SelectManager) From(table *Table) *SelectManager {
+func (mgr *SelectManager) From(table string) *SelectManager {
+	var v Visitable = NewTable(table)
+	mgr.Ctx.Source.Left = v
+	return mgr
+}
+
+func (mgr *SelectManager) FromTable(table *Table) *SelectManager {
 	if table != nil {
 		var visitable Visitable = table
 		mgr.Ctx.Source.Left = visitable
