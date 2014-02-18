@@ -88,6 +88,24 @@ func (mgr *SelectManager) On(visitables ...Visitable) *SelectManager {
 	return mgr
 }
 
+func (mgr *SelectManager) Using(str string) *SelectManager {
+	right := mgr.Ctx.Source.Right
+
+	if len(right) > 0 {
+		last := right[len(right)-1]
+		switch val := last.(type) {
+		case *InnerJoinNode:
+			val.Right = &UsingNode{Expr: &QuotedNode{Raw: str}}
+		case *OuterJoinNode:
+			val.Right = &UsingNode{Expr: &QuotedNode{Raw: str}}
+		default:
+			log.Fatalf("Unable to call On with input type %T", val)
+		}
+	}
+
+	return mgr
+}
+
 func (mgr *SelectManager) Join(visitable Visitable) *SelectManager {
 	return mgr.InnerJoin(visitable)
 }

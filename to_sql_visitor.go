@@ -40,6 +40,8 @@ func (v *ToSqlVisitor) Visit(visitable Visitable) string {
 		return visitationAsNode(v, node)
 	case *LessThanNode:
 		return visitationLessThanNode(v, node)
+	case *UsingNode:
+		return visitationUsingNode(v, node)
 	case *UnionNode:
 		return visitationUnionNode(v, node)
 	case *UnionAllNode:

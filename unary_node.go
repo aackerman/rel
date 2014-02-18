@@ -11,6 +11,7 @@ type LimitNode UnaryNode
 type NotNode UnaryNode
 type OffsetNode UnaryNode
 type OnNode UnaryNode
+type UsingNode UnaryNode
 type OrderingNode UnaryNode
 type TopNode UnaryNode
 type LockNode UnaryNode

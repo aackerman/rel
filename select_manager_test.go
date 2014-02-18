@@ -94,6 +94,15 @@ var _ = Describe("SelectManager", func() {
 		Expect(sql).To(Equal(expected))
 	})
 
+	It("has a using method", func() {
+		users := NewTable("users")
+		preferences := NewTable("preferences")
+		manager := Select(Star()).From(users).Join(preferences).Using("user_id")
+		sql := manager.ToSql()
+		expected := `SELECT * FROM "users" INNER JOIN "preferences" USING ('user_id')`
+		Expect(sql).To(Equal(expected))
+	})
+
 	It("has an order method", func() {
 		table := NewTable("users")
 		mgr := table.Select(Star())

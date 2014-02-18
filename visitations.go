@@ -27,6 +27,14 @@ func visitationOrderingNode(v Visitor, node *OrderingNode) string {
 	return ""
 }
 
+func visitationUsingNode(v Visitor, node *UsingNode) string {
+	var buf bytes.Buffer
+	buf.WriteString("USING (")
+	buf.WriteString(v.Visit(node.Expr))
+	buf.WriteString(")")
+	return buf.String()
+}
+
 func visitationUnqualifiedColumnNode(v Visitor, node *UnqualifiedColumnNode) string {
 	return v.QuoteColumnName(node.Name())
 }
