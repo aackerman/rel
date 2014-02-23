@@ -107,9 +107,7 @@ import (
 
 func main() {
   rel.RegisterDatabase("postgresql")
-  users := rel.NewTable("users")
-  manager := users.Select(rel.Sql("*"))
-  fmt.Println(manager.ToSql()) // SELECT * FROM "users"
+  fmt.Println(Select(rel.Sql("*")).From("users").ToSql()) // SELECT * FROM "users"
 }
 ```
 
