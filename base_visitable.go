@@ -16,7 +16,7 @@ func (v BaseVisitable) NewFalseNode() *FalseNode {
 	return &FalseNode{}
 }
 
-func (v BaseVisitable) NewTableAliasNode(t *Table, name SqlLiteralNode) *TableAliasNode {
+func (v BaseVisitable) NewTableAliasNode(t *Table, name string) *TableAliasNode {
 	return &TableAliasNode{Relation: t, Name: name}
 }
 

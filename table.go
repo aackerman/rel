@@ -101,7 +101,7 @@ func (t *Table) Alias() *TableAliasNode {
 	buf.WriteString(strconv.Itoa(n + 2))
 
 	// create the alias
-	alias := &TableAliasNode{Relation: t, Name: Sql(buf.String()), Quoted: true}
+	alias := &TableAliasNode{Relation: t, Name: buf.String(), Quoted: true}
 
 	// append the new alias to the list of current aliases
 	*t.Aliases = append(*t.Aliases, alias)

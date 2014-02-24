@@ -15,7 +15,7 @@ var _ = Describe("Table", func() {
 	It("has a table alias", func() {
 		table := NewTable("users")
 		alias := table.Alias()
-		Expect(alias.Name.Raw).To(Equal("users_2"))
+		Expect(alias.Name).To(Equal("users_2"))
 	})
 
 	It("can set the table alias", func() {

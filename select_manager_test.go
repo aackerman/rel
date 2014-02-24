@@ -310,7 +310,7 @@ var _ = Describe("SelectManager", func() {
 		counts := comments.From(comments).Group(comments.Attr("user_id")).Project(
 			comments.Attr("user_id").As(Sql("user_id")),
 			comments.Attr("user_id").Count().As(Sql("count")),
-		).As(Sql("counts"))
+		).As("counts")
 		mgr := users.Join(counts).On(counts.Attr("user_id").Eq(Sql(10)))
 		sql := mgr.ToSql()
 		expected := `SELECT FROM "users" INNER JOIN (SELECT "comments"."user_id" AS user_id, COUNT("comments"."user_id") AS count FROM "comments" GROUP BY "comments"."user_id") counts ON counts."user_id" = 10`

@@ -696,7 +696,7 @@ func visitationTable(v Visitor, table *Table) string {
 		buf.WriteString(SPACE)
 		buf.WriteString(v.QuoteTableName(&TableAliasNode{
 			Relation: table,
-			Name:     Sql(table.TableAlias),
+			Name:     table.TableAlias,
 			Quoted:   true,
 		}))
 	}

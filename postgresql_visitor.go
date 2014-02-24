@@ -178,7 +178,7 @@ func (v *PostgreSQLVisitor) Visit(visitable Visitable) string {
 func (v PostgreSQLVisitor) QuoteTableName(visitable Visitable) string {
 	if alias, ok := visitable.(*TableAliasNode); ok {
 		if !alias.Quoted {
-			return alias.Name.Raw
+			return alias.Name
 		}
 	}
 	return v.Conn.QuoteTableName(visitable.String())

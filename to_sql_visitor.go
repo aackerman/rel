@@ -177,7 +177,7 @@ func (v *ToSqlVisitor) Visit(visitable Visitable) string {
 func (v ToSqlVisitor) QuoteTableName(visitable Visitable) string {
 	if alias, ok := visitable.(*TableAliasNode); ok {
 		if !alias.Quoted {
-			return alias.Name.Raw
+			return alias.Name
 		}
 	}
 	return v.Conn.QuoteTableName(visitable.String())
