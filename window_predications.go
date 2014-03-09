@@ -5,9 +5,9 @@ type Windower interface {
 	Visitable
 }
 
-func windowPredicationOver(node Windower, visitable Visitable) *OverNode {
+func windowPredicationOver(left Windower, right Visitable) *OverNode {
 	return &OverNode{
-		Left:  node,
-		Right: visitable,
+		Left:  left,
+		Right: right,
 	}
 }
