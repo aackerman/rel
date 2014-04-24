@@ -93,6 +93,12 @@ manager := users.Select(rel.Count())
 fmt.Println(manager.ToSql()) // SELECT COUNT(1) FROM "users"
 ```
 
+```go
+users := rel.NewTable("users")
+manager := users.Select(users.Attr("id").Count())
+fmt.Println(manager.ToSql()) // SELECT COUNT("users"."id") FROM "users"
+```
+
 ## Database Specific SQL
 
 Nearly every RDBMS has it's own quirks and non-standard features. For the most general cases we use the `ToSqlVisitor` to handle compiling the AST to a SQL statement. It's likely that consumers will want to be more specific, for example using PostgreSQL, MySQL, or SQLite.
