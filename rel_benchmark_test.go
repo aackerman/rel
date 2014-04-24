@@ -6,12 +6,14 @@ import (
 )
 
 func BenchmarkSelect(b *testing.B) {
+	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		Select().ToSql()
 	}
 }
 
 func BenchmarkSelectJoin(b *testing.B) {
+	b.ReportAllocs()
 	users := NewTable("users")
 	preferences := NewTable("preferences")
 	for i := 0; i < b.N; i++ {
