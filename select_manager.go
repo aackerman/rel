@@ -131,6 +131,10 @@ func (mgr *SelectManager) LockForUpdate() *SelectManager {
 }
 
 func (mgr *SelectManager) Take(i int) *SelectManager {
+	return mgr.Limit(i)
+}
+
+func (mgr *SelectManager) Limit(i int) *SelectManager {
 	mgr.Ast.Limit = NewLimitNode(Sql(i))
 	return mgr
 }
